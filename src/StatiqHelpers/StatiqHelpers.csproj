@@ -17,12 +17,12 @@
         <RepositoryUrl>https://github.com/AnkurSheel/StatiqHelpers</RepositoryUrl>
         <RepositoryType>git</RepositoryType>
         <PackageTags>c#, xUnit</PackageTags>
-        <PackageReleaseNotes/>
+        <PackageReleaseNotes />
         <TargetFrameworks>net5.0</TargetFrameworks>
         <LangVersion>9</LangVersion>
     </PropertyGroup>
     <ItemGroup>
-        <None Include="..\LICENSE" Pack="true" PackagePath="" />
+        <None Include="..\..\LICENSE" Pack="true" PackagePath="" />
     </ItemGroup>
 
 </Project>
