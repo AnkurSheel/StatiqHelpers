@@ -1,6 +1,6 @@
 ﻿using System.Text.RegularExpressions;
 
-namespace StatiqHelpers.ReadingTime
+namespace StatiqHelpers.ReadingTimeModule
 {
     public class ReadingTimeService : IReadingTimeService
     {

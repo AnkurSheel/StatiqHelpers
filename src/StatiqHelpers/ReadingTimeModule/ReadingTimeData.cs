@@ -1,4 +1,4 @@
-﻿namespace StatiqHelpers.ReadingTime
+﻿namespace StatiqHelpers.ReadingTimeModule
 {
     public record ReadingTimeData
     {

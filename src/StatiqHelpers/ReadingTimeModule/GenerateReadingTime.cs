@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Statiq.Common;
 
-namespace StatiqHelpers.ReadingTime
+namespace StatiqHelpers.ReadingTimeModule
 {
     public class GenerateReadingTime : ParallelModule
     {
