@@ -4,6 +4,25 @@
         <TargetFramework>net5.0</TargetFramework>
         <Nullable>enable</Nullable>
         <WarningsAsErrors>nullable</WarningsAsErrors>
+        <Version>0.0.1</Version>
+        <PackageId>Codinators.StatiqHelpers</PackageId>
+        <Authors>Ankur Sheel</Authors>
+        <Company>codinators</Company>
+        <Product>StatiqHelpers</Product>
+        <Description>Helpers for Statiq</Description>
+        <PackageLicenseFile>LICENSE</PackageLicenseFile>
+        <PackageProjectUrl>https://github.com/AnkurSheel/StatiqHelpers</PackageProjectUrl>
+        <IncludeSymbols>true</IncludeSymbols>
+        <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+        <RepositoryUrl>https://github.com/AnkurSheel/StatiqHelpers</RepositoryUrl>
+        <RepositoryType>git</RepositoryType>
+        <PackageTags>c#, xUnit</PackageTags>
+        <PackageReleaseNotes/>
+        <TargetFrameworks>net5.0</TargetFrameworks>
+        <LangVersion>9</LangVersion>
     </PropertyGroup>
+    <ItemGroup>
+        <None Include="..\LICENSE" Pack="true" PackagePath="" />
+    </ItemGroup>
 
 </Project>
