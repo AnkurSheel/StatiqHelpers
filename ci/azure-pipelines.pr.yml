@@ -1,0 +1,19 @@
+name: 'PR $(System.PullRequest.PullRequestId)'
+
+trigger:
+    branches:
+        exclude:
+            - '*'
+pr:
+    autoCancel: false
+    branches:
+        include:
+            - main
+
+variables:
+    - template: azure-pipelines.vars.yml
+
+jobs:
+    - template: azure-pipelines.common.yml
+      parameters:
+          message: 'PR $(System.PullRequest.PullRequestNumber) $(System.PullRequest.SourceBranch)'

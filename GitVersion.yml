@@ -1,0 +1,22 @@
+mode: ContinuousDelivery
+next-version: 0.0.1
+branches:
+    develop:
+        tag: beta
+        increment: None
+    main:
+        regex: ^master$|^main$
+        tag: ''
+        increment: Patch
+        prevent-increment-of-merged-branch-version: true
+        track-merge-target: false
+        tracks-release-branches: false
+        is-release-branch: false
+    pull-request:
+        tag: alpha
+        increment: Inherit
+        track-merge-target: false
+        tag-number-pattern: '[/-](?<number>\d+)[-/]'
+ignore:
+    sha: []
+merge-message-formats: {}

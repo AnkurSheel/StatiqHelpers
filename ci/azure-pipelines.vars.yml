@@ -1,0 +1,5 @@
+variables:
+    - name: 'Build_Configuration'
+      value: 'Release'
+    - name: 'libraryProject'
+      value: '$(Pipeline.Workspace)/src/StatiqHelpers/StatiqHelpers.csproj'
