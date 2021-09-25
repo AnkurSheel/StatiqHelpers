@@ -8,6 +8,9 @@ jobs:
       vmImage: 'windows-latest'
 
     steps:
+      - checkout: self
+        lfs: false
+
       - task: NuGetToolInstaller@1
 
       - script: dotnet tool install -g GitVersion.Tool
