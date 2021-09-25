@@ -24,5 +24,8 @@
     <ItemGroup>
         <None Include="..\..\LICENSE" Pack="true" PackagePath="" />
     </ItemGroup>
+    <ItemGroup>
+      <PackageReference Include="Statiq.Common" Version="1.0.0-beta.48" />
+    </ItemGroup>
 
 </Project>
