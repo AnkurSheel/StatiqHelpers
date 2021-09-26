@@ -1,0 +1,22 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StatiqHelpers", "src\StatiqHelpers\StatiqHelpers.csproj", "{F502ED63-8463-46A1-8ACB-4B38366FCFA8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StatiqHelpers.Unit.Tests", "src\StatiqHelpers.Unit.Tests\StatiqHelpers.Unit.Tests.csproj", "{4A775396-71D4-44FE-9EF9-C65D4E7D1CFC}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{F502ED63-8463-46A1-8ACB-4B38366FCFA8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F502ED63-8463-46A1-8ACB-4B38366FCFA8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F502ED63-8463-46A1-8ACB-4B38366FCFA8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F502ED63-8463-46A1-8ACB-4B38366FCFA8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4A775396-71D4-44FE-9EF9-C65D4E7D1CFC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4A775396-71D4-44FE-9EF9-C65D4E7D1CFC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4A775396-71D4-44FE-9EF9-C65D4E7D1CFC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4A775396-71D4-44FE-9EF9-C65D4E7D1CFC}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
