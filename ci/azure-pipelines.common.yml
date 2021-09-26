@@ -8,6 +8,18 @@ jobs:
       vmImage: 'windows-latest'
 
     steps:
+      - checkout: self
+        lfs: false
+
+      - script: dotnet test --logger trx
+        displayName: Run tests
+
+      - task: PublishTestResults@2
+        condition: succeededOrFailed()
+        inputs:
+          testRunner: VSTest
+          testResultsFiles: '**/*.trx'
+
       - task: NuGetToolInstaller@1
 
       - script: dotnet tool install -g GitVersion.Tool
