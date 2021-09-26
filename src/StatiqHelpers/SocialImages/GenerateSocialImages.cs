@@ -4,6 +4,7 @@ using System.IO;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Statiq.Common;
+using StatiqHelpers.Extensions;
 using StatiqHelpers.ImageHelpers;
 
 namespace StatiqHelpers.SocialImages

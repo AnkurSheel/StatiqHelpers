@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text.RegularExpressions;
 using Statiq.Common;
+using StatiqHelpers.Models;
 using StatiqHelpers.ReadingTimeModule;
 using Keys = StatiqHelpers.ReadingTimeModule.Keys;
 
-namespace StatiqHelpers
+namespace StatiqHelpers.Extensions
 {
     public static class DocumentExtensions
     {
@@ -48,5 +50,19 @@ namespace StatiqHelpers
 
         public static string GetImageTwitter(this IDocument document)
             => IExecutionContext.Current.GetLink($"{Constants.SocialImagesDirectory}/{document.GetSlug()}-twitter.png", true);
+
+        public static PageModel AsPagesModel(this IDocument document, IExecutionContext context, IReadOnlyList<IDocument> posts)
+            => new PageModel(document, context, posts);
+
+        public static BaseModel AsBaseModel(this IDocument document, IExecutionContext context)
+            => new BaseModel(document, context);
+
+        public static Tag AsTag(this IDocument document, IExecutionContext context)
+        {
+            var posts = document.GetChildren().OrderByDescending(x => x.GetPublishedDate()).Select(x => x.AsBaseModel(context)).ToList();
+
+            var name = document.GetString(MetaDataKeys.TagName);
+            return new Tag(document, context, name, new NormalizedPath($"/tags/{name}").OptimizeFileName().ToString(), posts);
+        }
     }
 }

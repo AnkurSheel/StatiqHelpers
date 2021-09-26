@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Statiq.Common;
 using Statiq.Feeds;
+using StatiqHelpers.Extensions;
 
 namespace StatiqHelpers.Rss
 {

@@ -4,7 +4,7 @@ using Statiq.Common;
 using Statiq.Web;
 using StatiqHelpers.Models;
 
-namespace StatiqHelpers
+namespace StatiqHelpers.Extensions
 {
     public static class ContextExtensions
     {

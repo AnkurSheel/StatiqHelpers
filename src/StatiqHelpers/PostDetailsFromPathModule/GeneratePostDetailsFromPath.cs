@@ -4,6 +4,7 @@ using System.Globalization;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Statiq.Common;
+using StatiqHelpers.Extensions;
 
 namespace StatiqHelpers.PostDetailsFromPathModule
 {
