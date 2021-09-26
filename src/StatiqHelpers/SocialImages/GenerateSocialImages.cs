@@ -4,7 +4,7 @@ using System.IO;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Statiq.Common;
-using StatiqHelpers.ImageSharp;
+using StatiqHelpers.ImageHelpers;
 
 namespace StatiqHelpers.SocialImages
 {

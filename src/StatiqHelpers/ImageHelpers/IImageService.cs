@@ -2,7 +2,7 @@
 using System.IO;
 using System.Threading.Tasks;
 
-namespace StatiqHelpers.ImageSharp
+namespace StatiqHelpers.ImageHelpers
 {
     public interface IImageService
     {

@@ -11,7 +11,7 @@ using SixLabors.ImageSharp.Drawing.Processing;
 using SixLabors.ImageSharp.PixelFormats;
 using SixLabors.ImageSharp.Processing;
 
-namespace StatiqHelpers.ImageSharp
+namespace StatiqHelpers.ImageHelpers
 {
     public class ImageService : IImageService
     {
