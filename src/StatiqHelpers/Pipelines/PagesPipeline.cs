@@ -24,7 +24,12 @@ namespace StatiqHelpers.Pipelines
                     new ExtractFrontMatter(new ParseYaml()),
                     new ExecuteIf(Config.FromDocument(doc => doc.Source.MediaType == MediaTypes.Markdown), new RenderMarkdown().UseExtensions()),
                     new OptimizeFileName(),
-                    new SetDestination(".html")
+                    new SetDestination(Config.FromDocument((document) =>
+                    {
+                        var relativeOutputPath = document.Destination.GetRelativeOutputPath().ToString();
+                        relativeOutputPath = relativeOutputPath.Replace("pages/", "");
+                        return new NormalizedPath(relativeOutputPath).ChangeExtension("html");
+                    } ))
                 }
             };
 
