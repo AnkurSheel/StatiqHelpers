@@ -24,7 +24,17 @@ namespace StatiqHelpers.Pipelines
                 {
                     new ExtractFrontMatter(new ParseYaml()),
                     new GeneratePageDetailsFromPath(),
-                    new ExecuteIf(Config.FromDocument(doc => doc.Source.MediaType == MediaTypes.Markdown), new RenderMarkdown().UseExtensions()),
+                    new ExecuteIf(
+                        Config.FromDocument(doc => doc.Source.MediaType == MediaTypes.Markdown),
+                        new ReplaceInContent(
+                            @"/images/",
+                            "/"),
+                        new ReplaceInContent(
+                                @"!\[(?<alt>.*)\]\(./(?<imagePath>.*)\)",
+                                Config.FromDocument(
+                                    (document, context) => $"![$1](/{Constants.PagesImagesDirectory}/{document.GetString(MetaDataKeys.Slug)}/$2)"))
+                            .IsRegex(),
+                        new RenderMarkdown().UseExtensions()),
                     new OptimizeFileName(MetaDataKeys.Slug),
                     new SetDestination(Config.FromDocument((doc, ctx) => new NormalizedPath($"{doc.GetString(MetaDataKeys.Slug)}.html")))
                 }

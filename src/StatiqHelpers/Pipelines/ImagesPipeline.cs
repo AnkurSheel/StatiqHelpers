@@ -31,7 +31,19 @@ namespace StatiqHelpers.Pipelines
                                         slug = slug.Replace("/images", "");
                                         return new NormalizedPath($"{Constants.PostImagesDirectory}/{slug}/{doc.Source.FileName}");
                                     })))
-                    .Else(new SetDestination(Config.FromDocument(document => new NormalizedPath(Constants.ImagesDirectory).Combine(document.Source.FileName))))
+                        .ElseIf(
+                            Config.FromDocument(doc => doc.Source.FullPath.Contains("pages")),
+                            new SetDestination(
+                                Config.FromDocument(
+                                    doc =>
+                                    {
+                                        var relativeInputPath = doc.Source.GetRelativeInputPath().ToString();
+                                        relativeInputPath = relativeInputPath.Replace("/images", "");
+                                        return new NormalizedPath($"{Constants.ImagesDirectory}/{relativeInputPath}");
+                                    })))
+                        .Else(
+                            new SetDestination(
+                                Config.FromDocument(document => new NormalizedPath(Constants.ImagesDirectory).Combine(document.Source.FileName))))
                 }
             };
 
