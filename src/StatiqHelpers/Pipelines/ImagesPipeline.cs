@@ -27,7 +27,8 @@ namespace StatiqHelpers.Pipelines
                                     doc =>
                                     {
                                         var postDetailsFromPath = doc.GetPostDetailsFromPath();
-                                        var slug = postDetailsFromPath["slug"];
+                                        var slug = postDetailsFromPath["slug"].ToString();
+                                        slug = slug.Replace("/images", "");
                                         return new NormalizedPath($"{Constants.PostImagesDirectory}/{slug}/{doc.Source.FileName}");
                                     })))
                     .Else(new SetDestination(Config.FromDocument(document => new NormalizedPath(Constants.ImagesDirectory).Combine(document.Source.FileName))))
