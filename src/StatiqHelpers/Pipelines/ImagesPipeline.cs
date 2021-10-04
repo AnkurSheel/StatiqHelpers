@@ -10,7 +10,7 @@ namespace StatiqHelpers.Pipelines
         {
             InputModules = new ModuleList
             {
-                new ReadFiles("**/*.{jpg,png,svg,ico}")
+                new ReadFiles("**/*.{jpg,png,svg,ico,gif}")
             };
 
             ProcessModules = new ModuleList
