@@ -16,7 +16,7 @@ namespace StatiqHelpers.Pipelines
         {
             InputModules = new ModuleList
             {
-                new ReadFiles("posts/**/*.md")
+                new ReadFiles("posts/**/*.mdx")
             };
 
             ProcessModules = new ModuleList
@@ -32,7 +32,7 @@ namespace StatiqHelpers.Pipelines
                     .IsRegex(),
                     new ReplaceInContent(
                             @"!\[(?<alt>.*)\]\(./(?<imagePath>.*)\)",
-                            Config.FromDocument((document, context) => $"![$1](../{Constants.PostImagesDirectory}/{document.GetString(MetaDataKeys.Slug)}/$2)"))
+                            Config.FromDocument((document, context) => $"![$1](/{Constants.PostImagesDirectory}/{document.GetString(MetaDataKeys.Slug)}/$2)"))
                         .IsRegex(),
                     new GenerateReadingTime(readingTimeService),
                     new RenderMarkdown().UseExtensions(),
