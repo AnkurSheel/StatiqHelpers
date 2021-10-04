@@ -15,7 +15,7 @@ namespace StatiqHelpers.Pipelines
         {
             InputModules = new ModuleList
             {
-                new ReadFiles("pages/**/*.{md,cshtml}")
+                new ReadFiles("pages/**/*.{md,mdx,cshtml}")
             };
 
             ProcessModules = new ModuleList
@@ -25,7 +25,7 @@ namespace StatiqHelpers.Pipelines
                     new ExtractFrontMatter(new ParseYaml()),
                     new GeneratePageDetailsFromPath(),
                     new ExecuteIf(
-                        Config.FromDocument(doc => doc.Source.MediaType == MediaTypes.Markdown),
+                        Config.FromDocument(doc => doc.Source.MediaType == MediaTypes.Markdown || doc.Source.MediaType == "text/x-mdx"),
                         new ReplaceInContent(
                             @"/images/",
                             "/"),
@@ -42,7 +42,7 @@ namespace StatiqHelpers.Pipelines
 
             PostProcessModules = new ModuleList
             {
-                new ExecuteIf(Config.FromDocument(doc => doc.Source.MediaType == MediaTypes.Markdown), new RenderRazor().WithBaseModel()).ElseIf(
+                new ExecuteIf(Config.FromDocument(doc => doc.Source.MediaType == MediaTypes.Markdown || doc.Source.MediaType == "text/x-mdx"), new RenderRazor().WithBaseModel()).ElseIf(
                     Config.FromDocument(doc => doc.Source.MediaType == MediaTypes.Razor),
                     new RenderRazor().WithModel(
                         Config.FromDocument(

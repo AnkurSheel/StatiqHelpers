@@ -16,7 +16,7 @@ namespace StatiqHelpers.Pipelines
         {
             InputModules = new ModuleList
             {
-                new ReadFiles("posts/**/*.mdx")
+                new ReadFiles("posts/**/*.{md,mdx}")
             };
 
             ProcessModules = new ModuleList
