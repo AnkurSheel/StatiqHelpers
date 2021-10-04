@@ -25,7 +25,7 @@ namespace StatiqHelpers.Pipelines
                     new ExtractFrontMatter(new ParseYaml()),
                     new GeneratePageDetailsFromPath(),
                     new ExecuteIf(Config.FromDocument(doc => doc.Source.MediaType == MediaTypes.Markdown), new RenderMarkdown().UseExtensions()),
-                    new OptimizeFileName(),
+                    new OptimizeFileName(MetaDataKeys.Slug),
                     new SetDestination(Config.FromDocument((doc, ctx) => new NormalizedPath($"{doc.GetString(MetaDataKeys.Slug)}.html")))
                 }
             };

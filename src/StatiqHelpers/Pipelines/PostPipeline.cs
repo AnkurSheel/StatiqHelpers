@@ -32,8 +32,8 @@ namespace StatiqHelpers.Pipelines
                         .IsRegex(),
                     new GenerateReadingTime(readingTimeService),
                     new RenderMarkdown().UseExtensions(),
-                    new OptimizeFileName(),
-                    new SetDestination(Config.FromDocument((doc, ctx) => new NormalizedPath(Constants.BlogPath).Combine($"{doc.GetString("slug")}.html"))),
+                    new OptimizeFileName(MetaDataKeys.Slug),
+                    new SetDestination(Config.FromDocument((doc, ctx) => new NormalizedPath(Constants.BlogPath).Combine($"{doc.GetString(MetaDataKeys.Slug)}.html"))),
                 }
             };
 
