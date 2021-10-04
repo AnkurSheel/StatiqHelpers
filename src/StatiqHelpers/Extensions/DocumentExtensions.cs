@@ -30,14 +30,23 @@ namespace StatiqHelpers.Extensions
         public static DateTime GetUpdatedTime(this IDocument document)
             => document.GetPublishedDate();
 
-        public static string GetCoverImagePath(this IDocument document)
-            => document.GetString(MetaDataKeys.CoverImage).TrimStart('.', '/');
+        public static string? GetCoverImagePath(this IDocument document)
+        {
+            var coverImage = document.GetString(MetaDataKeys.CoverImage);
+            return coverImage?.TrimStart('.', '/');
+        }
 
         public static string GetPageUrl(this IDocument document, bool relative = true)
             => document.GetLink(!relative);
 
-        public static string GetCoverImageLink(this IDocument document)
-            => $"/{Constants.PostImagesDirectory}/{document.GetSlug()}/{document.GetCoverImagePath()}";
+        public static string? GetCoverImageLink(this IDocument document)
+        {
+            var coverImagePath = document.GetCoverImagePath();
+
+            return coverImagePath != null
+                ? $"/{Constants.PostImagesDirectory}/{document.GetSlug()}/{coverImagePath}"
+                : null;
+        }
 
         public static IReadOnlyList<string> GetTags(this IDocument document)
             => document.GetList<string>(MetaDataKeys.Tags);
@@ -62,7 +71,12 @@ namespace StatiqHelpers.Extensions
             var posts = document.GetChildren().OrderByDescending(x => x.GetPublishedDate()).Select(x => x.AsBaseModel(context)).ToList();
 
             var name = document.GetString(MetaDataKeys.TagName);
-            return new Tag(document, context, name, new NormalizedPath($"/tags/{name}").OptimizeFileName().ToString(), posts);
+            return new Tag(
+                document,
+                context,
+                name,
+                new NormalizedPath($"/tags/{name}").OptimizeFileName().ToString(),
+                posts);
         }
     }
 }
