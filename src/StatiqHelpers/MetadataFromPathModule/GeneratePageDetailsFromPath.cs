@@ -11,7 +11,14 @@ namespace StatiqHelpers.PostDetailsFromPathModule
         {
             context.LogDebug($"Read file {input.Source}");
 
-            var slug = input.Source.GetRelativeInputPath().Parent.Combine(input.Source.FileNameWithoutExtension).ToString();
+            var path = input.Source.GetRelativeInputPath().Parent;
+
+            if (input.Source.MediaType == MediaTypes.Razor)
+            {
+                path = path.Combine(input.Source.FileNameWithoutExtension);
+            }
+
+            var slug = path.ToString();
             slug = slug.Replace("pages/", "");
 
             return Task.FromResult(
