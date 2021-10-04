@@ -21,3 +21,6 @@ feat: remove images sub folder from output for post images
 fix: optimize the slug name
 fix: use folder name for mdx pages
 feat: copy gifs
+## v0.4.0
+
+feat: read md or mdx files
