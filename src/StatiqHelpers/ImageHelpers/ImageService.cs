@@ -24,10 +24,48 @@ namespace StatiqHelpers.ImageHelpers
             _cookieFont = new FontCollection().Install("./input/assets/fonts/Cookie-Regular.ttf");
         }
 
-        public async Task<Stream> CreateImageDocument(int width, int height, string coverImagePath, string siteTitle, string centerText)
+        public async Task<Stream> CreateImageDocument(
+            int width,
+            int height,
+            string? coverImagePath,
+            string siteTitle,
+            string centerText)
         {
             Image template = new Image<Rgb24>(width, height);
-            using Image thumbnail = await Image.LoadAsync(coverImagePath);
+
+            template.Mutate(
+                async imageContext =>
+                {
+                    AddGradient(width, height, imageContext);
+
+                    if (coverImagePath != null)
+                    {
+                        using var thumbnail = await AddThumbnail(width, height, coverImagePath);
+                        imageContext.DrawImage(thumbnail, new Point(0, 0), 1f);
+                    }
+
+                    AddCenterText(
+                        imageContext,
+                        width,
+                        height,
+                        centerText);
+                    AddBrand(
+                        imageContext,
+                        width,
+                        height,
+                        siteTitle);
+                });
+
+            Stream output = new MemoryStream();
+
+            await template.SaveAsPngAsync(output);
+
+            return output;
+        }
+
+        private async Task<Image> AddThumbnail(int width, int height, string coverImagePath)
+        {
+            Image thumbnail = await Image.LoadAsync(coverImagePath);
 
             thumbnail.Mutate(
                 imageContext =>
@@ -47,21 +85,7 @@ namespace StatiqHelpers.ImageHelpers
                         });
                     DarkenImage(imageContext);
                 });
-
-            template.Mutate(
-                imageContext =>
-                {
-                    AddGradient(width, height, imageContext);
-                    imageContext.DrawImage(thumbnail, new Point(0, 0), 1f);
-                    AddCenterText(imageContext, width, height, centerText);
-                    AddBrand(imageContext, width, height, siteTitle);
-                });
-
-            Stream output = new MemoryStream();
-
-            await template.SaveAsPngAsync(output);
-
-            return output;
+            return thumbnail;
         }
 
         public async Task ResizeImages(IReadOnlyList<string> imagePaths, int newWidth, int newHeight)
@@ -101,7 +125,11 @@ namespace StatiqHelpers.ImageHelpers
                     percentChanged);
             }
 
-            _logger.Log(LogLevel.Information, "Resizing complete. Updated Size from {PreSize} to {PostSize}", ByteSize.FromBytes(totalPre).ToString(), ByteSize.FromBytes(totalPost).ToString());
+            _logger.Log(
+                LogLevel.Information,
+                "Resizing complete. Updated Size from {PreSize} to {PostSize}",
+                ByteSize.FromBytes(totalPre).ToString(),
+                ByteSize.FromBytes(totalPost).ToString());
         }
 
         private void AddGradient(int width, int height, IImageProcessingContext imageContext)
@@ -120,7 +148,11 @@ namespace StatiqHelpers.ImageHelpers
             imageContext.Brightness(0.5f);
         }
 
-        private void AddCenterText(IImageProcessingContext imageContext, int imageWidth, int imageHeight, string centerText)
+        private void AddCenterText(
+            IImageProcessingContext imageContext,
+            int imageWidth,
+            int imageHeight,
+            string centerText)
         {
             var fontSize = imageHeight / 10;
             var titleFont = new Font(_cookieFont, fontSize, FontStyle.Bold);
@@ -141,11 +173,25 @@ namespace StatiqHelpers.ImageHelpers
             };
 
             var verticalCenter = (imageHeight - titleFont.Size) / 2;
-            imageContext.DrawText(drawingOptions, centerText, titleFont, Color.MediumPurple, new PointF(xPadding + 2, verticalCenter + 2));
-            imageContext.DrawText(drawingOptions, centerText, titleFont, Color.White, new PointF(xPadding, verticalCenter));
+            imageContext.DrawText(
+                drawingOptions,
+                centerText,
+                titleFont,
+                Color.MediumPurple,
+                new PointF(xPadding + 2, verticalCenter + 2));
+            imageContext.DrawText(
+                drawingOptions,
+                centerText,
+                titleFont,
+                Color.White,
+                new PointF(xPadding, verticalCenter));
         }
 
-        private void AddBrand(IImageProcessingContext imageProcessingContext, int imageWidth, int imageHeight, string siteTitle)
+        private void AddBrand(
+            IImageProcessingContext imageProcessingContext,
+            int imageWidth,
+            int imageHeight,
+            string siteTitle)
         {
             DrawingOptions drawingOptions = new DrawingOptions
             {
@@ -165,9 +211,18 @@ namespace StatiqHelpers.ImageHelpers
             var font = new Font(_cookieFont, fontSize, FontStyle.Regular);
 
             var height = fontSize * 2;
-            var rectangularPolygon = new RectangularPolygon(0, imageHeight - height, imageWidth, height);
+            var rectangularPolygon = new RectangularPolygon(
+                0,
+                imageHeight - height,
+                imageWidth,
+                height);
             imageProcessingContext.Fill(Color.ParseHex("#134e5e"), rectangularPolygon);
-            imageProcessingContext.DrawText(drawingOptions, siteTitle, font, Color.ParseHex("#c44225"), new PointF(imageWidth - xPadding, imageHeight - fontSize));
+            imageProcessingContext.DrawText(
+                drawingOptions,
+                siteTitle,
+                font,
+                Color.ParseHex("#c44225"),
+                new PointF(imageWidth - xPadding, imageHeight - fontSize));
         }
     }
 }

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Statiq.Common;
@@ -27,13 +26,30 @@ namespace StatiqHelpers.SocialImages
 
             var stream = await _imageService.CreateImageDocument(1200, 630, coverImagePath, context.GetSiteTitle(), centerText);
 
-            var facebookDoc = context.CreateDocument(input.Source, $"./{Constants.SocialImagesDirectory}/{input.Destination.FileNameWithoutExtension}-facebook.png", context.GetContentProvider((Stream)stream));
+            var coverImagePath = input.GetCoverImagePath();
+
+            if (coverImagePath != null)
+            {
+                coverImagePath = coverImagePath.StartsWith(Constants.ImagesDirectory)
+                    ? $"{context.FileSystem.GetRootPath()}/input/{coverImagePath}"
+                    : $"{input.Source.Parent.FullPath}/{coverImagePath}";
+            }
+
+            var stream = await _imageService.CreateImageDocument(1200, 630, coverImagePath, context.GetSiteTitle(), centerText);
+
+            var facebookDoc = context.CreateDocument(
+                input.Source,
+                $"./{Constants.SocialImagesDirectory}/{input.Destination.FileNameWithoutExtension}-facebook.png",
+                context.GetContentProvider(stream));
 
             context.LogDebug($"Created {facebookDoc.Destination}");
 
             stream = await _imageService.CreateImageDocument(440, 220, coverImagePath, context.GetSiteTitle(), centerText);
 
-            var twitterDoc = context.CreateDocument(input.Source, $"./{Constants.SocialImagesDirectory}/{input.Destination.FileNameWithoutExtension}-twitter.png", context.GetContentProvider((Stream)stream));
+            var twitterDoc = context.CreateDocument(
+                input.Source,
+                $"./{Constants.SocialImagesDirectory}/{input.Destination.FileNameWithoutExtension}-twitter.png",
+                context.GetContentProvider(stream));
 
             context.LogDebug($"Created {twitterDoc.Destination}");
 

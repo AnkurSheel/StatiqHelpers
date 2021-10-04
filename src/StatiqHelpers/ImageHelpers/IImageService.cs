@@ -9,7 +9,7 @@ namespace StatiqHelpers.ImageHelpers
         Task<Stream> CreateImageDocument(
             int width,
             int height,
-            string coverImagePath,
+            string? coverImagePath,
             string siteTitle,
             string centerText);
 
