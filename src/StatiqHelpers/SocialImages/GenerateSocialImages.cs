@@ -21,10 +21,12 @@ namespace StatiqHelpers.SocialImages
         {
             context.LogDebug($"Read file {input.Source}");
 
-            var centerText = $"{input.GetTitle().ToUpper()}{Environment.NewLine}{input.GetReadingTime().RoundedMinutes} min";
-            var coverImagePath = $"{input.Source.Parent.FullPath}/{input.GetCoverImagePath()}";
+            var readingTimeData = input.GetReadingTime();
+            var centerText = $"{input.GetTitle().ToUpper()}{Environment.NewLine}";
 
-            var stream = await _imageService.CreateImageDocument(1200, 630, coverImagePath, context.GetSiteTitle(), centerText);
+            centerText += readingTimeData.RoundedMinutes < 1
+                ? $"{readingTimeData.Seconds} sec"
+                : $"{readingTimeData.RoundedMinutes} min";
 
             var coverImagePath = input.GetCoverImagePath();
 
