@@ -19,10 +19,13 @@ namespace StatiqHelpers.Pipelines
 
             ProcessModules = new ModuleList
             {
-                new ExtractFrontMatter(new ParseYaml()),
-                new ExecuteIf(Config.FromDocument(doc => doc.Source.MediaType == MediaTypes.Markdown), new RenderMarkdown().UseExtensions()),
-                new OptimizeFileName(),
-                new SetDestination(".html"),
+                new CacheDocuments
+                {
+                    new ExtractFrontMatter(new ParseYaml()),
+                    new ExecuteIf(Config.FromDocument(doc => doc.Source.MediaType == MediaTypes.Markdown), new RenderMarkdown().UseExtensions()),
+                    new OptimizeFileName(),
+                    new SetDestination(".html")
+                }
             };
 
             PostProcessModules = new ModuleList
