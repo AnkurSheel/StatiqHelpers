@@ -117,7 +117,7 @@ namespace StatiqHelpers.ImageHelpers
 
         private void DarkenImage(IImageProcessingContext imageContext)
         {
-            imageContext.Lightness(0.5f);
+            imageContext.Brightness(0.5f);
         }
 
         private void AddCenterText(IImageProcessingContext imageContext, int imageWidth, int imageHeight, string centerText)
