@@ -22,10 +22,10 @@ jobs:
 
       - task: NuGetToolInstaller@1
 
-      - script: dotnet tool install -g GitVersion.Tool
+      - script: dotnet tool restore
         displayName: Install GitVersion
 
-      - script: dotnet-gitversion /l console /output buildserver /nofetch
+      - script: dotnet dotnet-gitversion -l console -output buildserver -nofetch
         displayName: Get Build Version
 
       - script:
