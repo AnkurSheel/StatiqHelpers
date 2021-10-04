@@ -5,6 +5,7 @@ using Statiq.Markdown;
 using Statiq.Razor;
 using Statiq.Yaml;
 using StatiqHelpers.Extensions;
+using StatiqHelpers.PostDetailsFromPathModule;
 
 namespace StatiqHelpers.Pipelines
 {
@@ -22,14 +23,10 @@ namespace StatiqHelpers.Pipelines
                 new CacheDocuments
                 {
                     new ExtractFrontMatter(new ParseYaml()),
+                    new GeneratePageDetailsFromPath(),
                     new ExecuteIf(Config.FromDocument(doc => doc.Source.MediaType == MediaTypes.Markdown), new RenderMarkdown().UseExtensions()),
                     new OptimizeFileName(),
-                    new SetDestination(Config.FromDocument((document) =>
-                    {
-                        var relativeOutputPath = document.Destination.GetRelativeOutputPath().ToString();
-                        relativeOutputPath = relativeOutputPath.Replace("pages/", "");
-                        return new NormalizedPath(relativeOutputPath).ChangeExtension("html");
-                    } ))
+                    new SetDestination(Config.FromDocument((doc, ctx) => new NormalizedPath($"{doc.GetString(MetaDataKeys.Slug)}.html")))
                 }
             };
 
