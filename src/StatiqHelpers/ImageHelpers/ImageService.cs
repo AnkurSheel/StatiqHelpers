@@ -90,8 +90,8 @@ namespace StatiqHelpers.ImageHelpers
 
         public async Task ResizeImages(IReadOnlyList<string> imagePaths, int newWidth, int newHeight)
         {
-            var totalPre = 0l;
-            var totalPost = 0l;
+            var totalPre = 0L;
+            var totalPost = 0L;
 
             foreach (var imagePath in imagePaths)
             {
