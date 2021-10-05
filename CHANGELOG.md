@@ -24,3 +24,7 @@ feat: copy gifs
 ## v0.4.0
 
 feat: read md or mdx files
+## v0.5.0
+
+feat: extend post list pipeline by adding options
+feat: add BootstrapperExtensions
