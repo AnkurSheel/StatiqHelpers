@@ -18,7 +18,7 @@ namespace StatiqHelpers.Pipelines
             ProcessModules = new ModuleList
             {
                 new ConcatDocuments(Dependencies.ToArray()),
-                new GenerateSocialImages(_imageService)
+                new CacheDocuments(new GenerateSocialImages(_imageService))
             };
 
             OutputModules = new ModuleList
