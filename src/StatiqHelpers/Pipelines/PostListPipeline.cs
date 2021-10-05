@@ -9,8 +9,11 @@ namespace StatiqHelpers.Pipelines
 {
     public class PostListPipeline : Pipeline
     {
-        public PostListPipeline()
+        private readonly PostListOptions _options;
+
+        public PostListPipeline(PostListOptions options)
         {
+            _options = options;
             Dependencies.Add(nameof(PostPipeline));
 
             InputModules = new ModuleList
@@ -21,7 +24,7 @@ namespace StatiqHelpers.Pipelines
             ProcessModules = new ModuleList
             {
                 new SetDestination("blog.html"),
-                new SetMetadata("Title", "All Summaries")
+                new SetMetadata("Title", _options.Title)
             };
 
             PostProcessModules = new ModuleList
@@ -30,7 +33,13 @@ namespace StatiqHelpers.Pipelines
                     Config.FromDocument(
                         (document, context) =>
                         {
-                            var allPosts = context.Outputs.FromPipeline(nameof(PostPipeline)).OrderBy(x => x.GetTitle()).Select(x => x.AsBaseModel(context)).ToList();
+                            var documentList = context.Outputs.FromPipeline(nameof(PostPipeline));
+
+                            documentList = _options.Descending
+                                ? documentList.OrderByDescending(_options.OrderFunction).ToDocumentList()
+                                : documentList.OrderBy(_options.OrderFunction).ToDocumentList();
+
+                            var allPosts = documentList.Select(x => x.AsBaseModel(context)).ToList();
                             return new Posts(allPosts, document, context);
                         })),
             };

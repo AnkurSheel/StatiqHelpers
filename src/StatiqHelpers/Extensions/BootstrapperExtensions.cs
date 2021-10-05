@@ -36,6 +36,7 @@ namespace StatiqHelpers.Extensions
                 {
                     services.AddTransient<IImageService, ImageService>();
                     services.AddTransient<IReadingTimeService, ReadingTimeService>();
+                    services.AddSingleton(new PostListOptions(document => document.GetTitle()));
                 });
             return bootstrapper;
         }
