@@ -21,10 +21,16 @@ feat: remove images sub folder from output for post images
 fix: optimize the slug name
 fix: use folder name for mdx pages
 feat: copy gifs
+
 ## v0.4.0
 
 feat: read md or mdx files
+
 ## v0.5.0
 
 feat: extend post list pipeline by adding options
 feat: add BootstrapperExtensions
+
+## v0.5.1
+
+fix: override title from frontmatter
