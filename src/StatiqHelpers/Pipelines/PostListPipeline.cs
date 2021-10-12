@@ -1,7 +1,9 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using Statiq.Common;
 using Statiq.Core;
 using Statiq.Razor;
+using Statiq.Yaml;
 using StatiqHelpers.Extensions;
 using StatiqHelpers.Models;
 
@@ -23,8 +25,8 @@ namespace StatiqHelpers.Pipelines
 
             ProcessModules = new ModuleList
             {
+                new ExtractFrontMatter(new ParseYaml()),
                 new SetDestination("blog.html"),
-                new SetMetadata("Title", _options.Title)
             };
 
             PostProcessModules = new ModuleList
