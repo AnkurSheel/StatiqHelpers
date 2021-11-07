@@ -1,5 +1,6 @@
 ﻿using Statiq.Common;
 using Statiq.Core;
+using Statiq.Highlight;
 using Statiq.Markdown;
 using Statiq.Razor;
 using Statiq.Yaml;
@@ -36,6 +37,7 @@ namespace StatiqHelpers.Pipelines
                         .IsRegex(),
                     new GenerateReadingTime(readingTimeService),
                     new RenderMarkdown().UseExtensions(),
+                    new HighlightCode(),
                     new OptimizeFileName(MetaDataKeys.Slug),
                     new SetDestination(Config.FromDocument((doc, ctx) => new NormalizedPath(Constants.BlogPath).Combine($"{doc.GetString(MetaDataKeys.Slug)}.html"))),
                 }
