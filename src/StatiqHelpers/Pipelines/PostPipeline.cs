@@ -37,6 +37,7 @@ namespace StatiqHelpers.Pipelines
                         .IsRegex(),
                     new GenerateReadingTime(readingTimeService),
                     new RenderMarkdown().UseExtensions(),
+                    new ProcessShortcodes(),
                     new HighlightCode(),
                     new OptimizeFileName(MetaDataKeys.Slug),
                     new SetDestination(Config.FromDocument((doc, ctx) => new NormalizedPath(Constants.BlogPath).Combine($"{doc.GetString(MetaDataKeys.Slug)}.html"))),
