@@ -34,3 +34,11 @@ feat: add BootstrapperExtensions
 ## v0.5.1
 
 fix: override title from frontmatter
+
+## v0.6.0
+
+feat: add support to highlight code in posts
+
+## v0.7.0
+
+feat: add support to process shortcodes
