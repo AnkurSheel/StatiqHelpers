@@ -42,3 +42,7 @@ feat: add support to highlight code in posts
 ## v0.7.0
 
 feat: add support to process shortcodes
+
+## v0.8.0
+
+feat: add shortcode for responsive Youtube videos
