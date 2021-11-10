@@ -46,3 +46,6 @@ feat: add support to process shortcodes
 ## v0.8.0
 
 feat: add shortcode for responsive Youtube videos
+## v0.8.1
+
+fix: content does not show after using responsive youtube shortcode
