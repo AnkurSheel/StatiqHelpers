@@ -49,3 +49,6 @@ feat: add shortcode for responsive Youtube videos
 ## v0.8.1
 
 fix: content does not show after using responsive youtube shortcode
+## v0.9.0
+
+feat: add support for override published date with updated on date
