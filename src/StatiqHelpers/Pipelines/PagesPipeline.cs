@@ -27,8 +27,9 @@ namespace StatiqHelpers.Pipelines
                     new ExecuteIf(
                         Config.FromDocument(doc => doc.Source.MediaType == MediaTypes.Markdown || doc.Source.MediaType == "text/x-mdx"),
                         new ReplaceInContent(
-                            @"/images/",
-                            "/"),
+                                @"!\[(?<alt>.*)\]\(./images/(?<imagePath>.*)\)",
+                                Config.FromDocument((document, context) => $"![$1](./$2)"))
+                            .IsRegex(),
                         new ReplaceInContent(
                                 @"!\[(?<alt>.*)\]\(./(?<imagePath>.*)\)",
                                 Config.FromDocument(
