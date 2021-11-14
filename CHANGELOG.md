@@ -52,3 +52,6 @@ fix: content does not show after using responsive youtube shortcode
 ## v0.9.0
 
 feat: add support for override published date with updated on date
+## v0.9.1
+
+fix : do not replaces images form path for pages when its an absolute path
