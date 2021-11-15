@@ -18,6 +18,7 @@ namespace StatiqHelpers.Extensions
                 .AddPipeline<ImagesPipeline>()
                 .AddPipeline<CssPipeline>()
                 .AddPipeline<FontsPipeline>()
+                .AddPipeline<DownloadsPipeline>()
                 .AddPipeline<ScriptsPipeline>()
                 .AddPipeline<RssPipeline>()
                 .AddPipeline<HomePipeline>()

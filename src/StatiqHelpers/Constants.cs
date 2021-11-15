@@ -9,6 +9,7 @@
         public static readonly string PagesImagesDirectory = $"{ImagesDirectory}/pages";
         public static readonly string SocialImagesDirectory = $"{ImagesDirectory}/social";
         public static readonly string FontsDirectory = $"{AssetsDirectory}/fonts";
+        public static readonly string DownloadsDirectory = $"{AssetsDirectory}/downloads";
         public static readonly string BlogPath = "blog";
     }
 }
