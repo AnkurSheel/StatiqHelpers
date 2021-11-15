@@ -55,3 +55,8 @@ feat: add support for override published date with updated on date
 ## v0.9.1
 
 fix : do not replaces images form path for pages when its an absolute path
+## v0.10.0
+
+feat: add support for Google tag manager
+fix: process shortcodes for pages
+feat: add a downloads pipeline and directory
