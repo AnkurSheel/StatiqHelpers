@@ -25,5 +25,12 @@ namespace StatiqHelpers.Extensions
 
         public static string GetTwitterUserName(this IExecutionContext context)
             => context.GetString("TwitterUsername");
+
+        public static string? GetGoogleTagManagerId(this IExecutionContext context)
+        {
+            return context.GetString("Environment") != "Development"
+                ? context.GetString("GoogleTagManagerId")
+                : null;
+        }
     }
 }
