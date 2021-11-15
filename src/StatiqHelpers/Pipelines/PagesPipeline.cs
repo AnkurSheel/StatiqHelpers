@@ -24,18 +24,14 @@ namespace StatiqHelpers.Pipelines
                 {
                     new ExtractFrontMatter(new ParseYaml()),
                     new GeneratePageDetailsFromPath(),
-                    new ExecuteIf(
-                        Config.FromDocument(doc => doc.Source.MediaType == MediaTypes.Markdown || doc.Source.MediaType == "text/x-mdx"),
-                        new ReplaceInContent(
-                                @"!\[(?<alt>.*)\]\(./images/(?<imagePath>.*)\)",
-                                Config.FromDocument((document, context) => $"![$1](./$2)"))
-                            .IsRegex(),
-                        new ReplaceInContent(
-                                @"!\[(?<alt>.*)\]\(./(?<imagePath>.*)\)",
-                                Config.FromDocument(
-                                    (document, context) => $"![$1](/{Constants.PagesImagesDirectory}/{document.GetString(MetaDataKeys.Slug)}/$2)"))
-                            .IsRegex(),
-                        new RenderMarkdown().UseExtensions()),
+                    new ExecuteIf(Config.FromDocument(doc => doc.Source.MediaType == MediaTypes.Markdown || doc.Source.MediaType == "text/x-mdx"), new
+                        ReplaceInContent(
+                            @"!\[(?<alt>.*)\]\(./images/(?<imagePath>.*)\)",
+                            Config.FromDocument((document, context) => "![$1](./$2)")).IsRegex(), new ReplaceInContent(
+                            @"!\[(?<alt>.*)\]\(./(?<imagePath>.*)\)",
+                            Config.FromDocument((document, context) => $"![$1](/{Constants.PagesImagesDirectory}/{document.GetString(MetaDataKeys.Slug)}/$2)"))
+                        .IsRegex(), new RenderMarkdown().UseExtensions(),
+                    new ProcessShortcodes()),
                     new OptimizeFileName(MetaDataKeys.Slug),
                     new SetDestination(Config.FromDocument((doc, ctx) => new NormalizedPath($"{doc.GetString(MetaDataKeys.Slug)}.html")))
                 }
@@ -43,7 +39,9 @@ namespace StatiqHelpers.Pipelines
 
             PostProcessModules = new ModuleList
             {
-                new ExecuteIf(Config.FromDocument(doc => doc.Source.MediaType == MediaTypes.Markdown || doc.Source.MediaType == "text/x-mdx"), new RenderRazor().WithBaseModel()).ElseIf(
+                new ExecuteIf(
+                    Config.FromDocument(doc => doc.Source.MediaType == MediaTypes.Markdown || doc.Source.MediaType == "text/x-mdx"),
+                    new RenderRazor().WithBaseModel()).ElseIf(
                     Config.FromDocument(doc => doc.Source.MediaType == MediaTypes.Razor),
                     new RenderRazor().WithModel(
                         Config.FromDocument(
