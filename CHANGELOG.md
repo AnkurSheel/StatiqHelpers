@@ -60,3 +60,7 @@ fix : do not replaces images form path for pages when its an absolute path
 feat: add support for Google tag manager
 fix: process shortcodes for pages
 feat: add a downloads pipeline and directory
+## v0.11.0
+
+feat: do not publish posts in the future
+feat: resize image command works on pngs
