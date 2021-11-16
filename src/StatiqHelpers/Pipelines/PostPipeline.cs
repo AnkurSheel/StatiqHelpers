@@ -1,4 +1,5 @@
-﻿using Statiq.Common;
+﻿using System;
+using Statiq.Common;
 using Statiq.Core;
 using Statiq.Highlight;
 using Statiq.Markdown;
@@ -26,6 +27,7 @@ namespace StatiqHelpers.Pipelines
                 {
                     new ExtractFrontMatter(new ParseYaml()),
                     new GeneratePostDetailsFromPath(),
+                    new FilterDocuments(Config.FromDocument((document) => document.GetPublishedDate() <= DateTime.Today)),
                     new GenerateRssMetaData(),
                     new ReplaceInContent(
                     @"!\[(?<alt>.*)\]\(./images/(?<imagePath>.*)\)",
