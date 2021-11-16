@@ -4,7 +4,7 @@ using Statiq.App;
 
 namespace StatiqHelpers.ImageHelpers
 {
-    public class ResizeJpegSettings : EngineCommandSettings
+    public class ResizeImageSettings : EngineCommandSettings
     {
         [CommandArgument(0, "<width>")]
         [Description("Specify the target width")]

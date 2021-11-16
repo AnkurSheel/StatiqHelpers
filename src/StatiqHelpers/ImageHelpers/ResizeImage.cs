@@ -16,11 +16,11 @@ namespace StatiqHelpers.ImageHelpers
 {
     [Description(
         "Resizes the jpegs. Passing zero for one of height or width within the resize options will automatically preserve the aspect ratio of the original image or the nearest possible ratio")]
-    public class ResizeJpeg : EngineCommand<ResizeJpegSettings>
+    public class ResizeImage : EngineCommand<ResizeImageSettings>
     {
         private IImageService? _imageService;
 
-        public ResizeJpeg(IConfiguratorCollection configurators, Settings settings, IServiceCollection serviceCollection, Bootstrapper bootstrapper) : base(
+        public ResizeImage(IConfiguratorCollection configurators, Settings settings, IServiceCollection serviceCollection, Bootstrapper bootstrapper) : base(
             configurators,
             settings,
             serviceCollection,
@@ -28,26 +28,26 @@ namespace StatiqHelpers.ImageHelpers
         {
         }
 
-        protected override async Task<int> ExecuteEngineAsync(CommandContext commandContext, ResizeJpegSettings commandSettings, IEngineManager engineManager)
+        protected override async Task<int> ExecuteEngineAsync(CommandContext commandContext, ResizeImageSettings commandSettings, IEngineManager engineManager)
         {
             _imageService = engineManager.Engine.Services.GetRequiredService<IImageService>();
 
             Engine engine = engineManager.Engine;
-            var jpegs = GetImages(!commandSettings.AllFiles, engine.FileSystem);
+            var images = GetImages(!commandSettings.AllFiles, engine.FileSystem);
 
             var message = commandSettings.AllFiles
                 ? "all files"
                 : "checked out files";
-            engineManager.Engine.Logger.Log(LogLevel.Information, "Beginning resizing of images on {message} : {count}", message, jpegs.Count);
+            engineManager.Engine.Logger.Log(LogLevel.Information, "Beginning resizing of images on {message} : {count}", message, images.Count);
 
-            await _imageService.ResizeImages(jpegs, commandSettings.Width, commandSettings.Height);
+            await _imageService.ResizeImages(images, commandSettings.Width, commandSettings.Height);
 
             return 0;
         }
 
         private IReadOnlyList<string> GetImages(bool onlyCheckedOutFiles, IFileSystem fileSystem)
         {
-            var jpegs = fileSystem.GetInputFiles("**/*.{jpg, jpeg}").Select(x => x.Path).ToList();
+            var images = fileSystem.GetInputFiles("**/*.{jpg,jpeg,png}").Select(x => x.Path).ToList();
 
             if (onlyCheckedOutFiles)
             {
@@ -55,13 +55,17 @@ namespace StatiqHelpers.ImageHelpers
                 using var repo = new Repository(rootPath);
                 var status = repo.RetrieveStatus();
 
-                var modifiedJpegs = status.Where(x => Path.GetExtension((string?)x.FilePath) == ".jpg" && x.State != FileStatus.Ignored)
+                var modifiedImages = status.Where(x =>
+                    {
+                        var extension = Path.GetExtension((string?)x.FilePath);
+                        return (extension is ".jpg" or "jpeg" || extension == "png") && x.State != FileStatus.Ignored;
+                    })
                     .Select(x => new NormalizedPath(Path.Combine(rootPath, x.FilePath))).ToList();
 
-                jpegs = jpegs.Where(x => modifiedJpegs.Contains(x)).ToList();
+                images = images.Where(x => modifiedImages.Contains(x)).ToList();
             }
 
-            return jpegs.Select(x => x.FullPath).ToList();
+            return images.Select(x => x.FullPath).ToList();
         }
     }
 }

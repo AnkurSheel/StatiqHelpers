@@ -95,12 +95,25 @@ namespace StatiqHelpers.ImageHelpers
 
             foreach (var imagePath in imagePaths)
             {
-                var preSize = new FileInfo(imagePath).Length;
-                totalPre += preSize;
-
+                var fileInfo = new FileInfo(imagePath);
+                var preSize = 0L;
                 var image = await Image.LoadAsync(imagePath);
 
                 var originalSize = image.Size();
+
+                if ((originalSize.Width == newWidth && (newHeight == 0 || originalSize.Height == newHeight))||(originalSize.Height == newHeight && (newWidth == 0 || originalSize.Width == newWidth)))
+                {
+                    // _logger.Log(
+                    //     LogLevel.Information,
+                    //     "No change in size for {Path}. Ignoring",
+                    //     imagePath);
+
+                    continue;
+                }
+                preSize = fileInfo.Length;
+
+                totalPre += preSize;
+
                 var resizeOptions = new ResizeOptions
                 {
                     Size = new Size(newWidth, newHeight),
@@ -109,8 +122,26 @@ namespace StatiqHelpers.ImageHelpers
 
                 image.Mutate(imageContext => imageContext.Resize(resizeOptions));
 
-                await image.SaveAsJpegAsync(imagePath);
-                var postSize = new FileInfo(imagePath).Length;
+                switch (fileInfo.Extension)
+                {
+                    case ".jpg":
+                    case ".jpeg":
+                        await image.SaveAsJpegAsync(imagePath);
+                        break;
+                    case ".png":
+                        await image.SaveAsPngAsync(imagePath);
+                        break;
+                    default:
+                        _logger.Log(
+                            LogLevel.Error,
+                            "No support for extension {Extension} in {Path}",
+                            fileInfo.Extension,
+                            imagePath);
+                        break;
+                }
+
+                fileInfo = new FileInfo(imagePath);
+                var postSize = fileInfo.Length;
                 totalPost += postSize;
 
                 var percentChanged = Math.Abs(postSize - preSize) / (decimal)preSize;
