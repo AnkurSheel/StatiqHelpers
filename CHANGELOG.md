@@ -64,3 +64,6 @@ feat: add a downloads pipeline and directory
 
 feat: do not publish posts in the future
 feat: resize image command works on pngs
+## v0.12.0
+
+feat: get GoatCounterCode if it exists
