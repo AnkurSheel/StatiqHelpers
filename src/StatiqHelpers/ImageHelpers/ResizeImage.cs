@@ -58,7 +58,7 @@ namespace StatiqHelpers.ImageHelpers
                 var modifiedImages = status.Where(x =>
                     {
                         var extension = Path.GetExtension((string?)x.FilePath);
-                        return (extension is ".jpg" or "jpeg" || extension == "png") && x.State != FileStatus.Ignored;
+                        return extension is ".jpg" or ".jpeg" or ".png" && x.State != FileStatus.Ignored;
                     })
                     .Select(x => new NormalizedPath(Path.Combine(rootPath, x.FilePath))).ToList();
 
