@@ -23,8 +23,17 @@ namespace StatiqHelpers.Extensions
         public static string GetCanonicalUrl(this IExecutionContext context, IDocument document)
             => context.GetString("canonicalUrl") ?? document.GetPageUrl(false);
 
-        public static string GetTwitterUserName(this IExecutionContext context)
+        public static string GetTwitterUsername(this IExecutionContext context)
             => context.GetString("TwitterUsername");
+
+        public static string GetLinkedInUsername(this IExecutionContext context)
+            => context.GetString("LinkedInUsername");
+
+        public static string GetBuyMeACoffeeUsername(this IExecutionContext context)
+            => context.GetString("BuyMeACoffeeUsername");
+
+        public static string GetGithubUserName(this IExecutionContext context)
+            => context.GetString("GithubUsername");
 
         public static string? GetGoogleTagManagerId(this IExecutionContext context)
             => context.GetString("Environment") != "Development"
