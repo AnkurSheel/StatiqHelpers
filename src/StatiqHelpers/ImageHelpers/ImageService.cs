@@ -8,6 +8,8 @@ using SixLabors.Fonts;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Drawing;
 using SixLabors.ImageSharp.Drawing.Processing;
+using SixLabors.ImageSharp.Formats.Jpeg;
+using SixLabors.ImageSharp.Formats.Png;
 using SixLabors.ImageSharp.PixelFormats;
 using SixLabors.ImageSharp.Processing;
 
@@ -126,10 +128,10 @@ namespace StatiqHelpers.ImageHelpers
                 {
                     case ".jpg":
                     case ".jpeg":
-                        await image.SaveAsJpegAsync(imagePath);
+                        await image.SaveAsJpegAsync(imagePath, new JpegEncoder(){Quality = 80, Subsample = JpegSubsample.Ratio444});
                         break;
                     case ".png":
-                        await image.SaveAsPngAsync(imagePath);
+                        await image.SaveAsPngAsync(imagePath, new PngEncoder(){CompressionLevel = PngCompressionLevel.BestCompression});
                         break;
                     default:
                         _logger.Log(
