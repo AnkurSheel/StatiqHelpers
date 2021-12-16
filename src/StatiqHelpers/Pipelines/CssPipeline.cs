@@ -1,6 +1,5 @@
 ﻿using Statiq.Common;
 using Statiq.Core;
-using Statiq.Minification;
 
 namespace StatiqHelpers.Pipelines
 {
@@ -11,11 +10,6 @@ namespace StatiqHelpers.Pipelines
             InputModules = new ModuleList
             {
                 new ReadFiles("assets/**/{*,!_*}.css")
-            };
-
-            ProcessModules = new ModuleList
-            {
-                new MinifyCss(),
             };
 
             OutputModules = new ModuleList
