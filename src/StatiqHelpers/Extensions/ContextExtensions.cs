@@ -36,9 +36,12 @@ namespace StatiqHelpers.Extensions
             => context.GetString("GithubUsername");
 
         public static string? GetGoogleTagManagerId(this IExecutionContext context)
-            => context.GetString("Environment") != "Development"
+            => context.IsDevelopment()
                 ? context.GetString("GoogleTagManagerId")
                 : null;
+
+        public static bool IsDevelopment(this IExecutionContext context)
+            => context.GetString("Environment") != "Development";
 
         public static string? GetGoatCounterCode(this IExecutionContext context)
             => context.GetString("GoatCounterCode");

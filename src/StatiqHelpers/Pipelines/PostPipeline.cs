@@ -1,4 +1,5 @@
 ﻿using System;
+using Polly;
 using Statiq.Common;
 using Statiq.Core;
 using Statiq.Highlight;
@@ -27,7 +28,7 @@ namespace StatiqHelpers.Pipelines
                 {
                     new ExtractFrontMatter(new ParseYaml()),
                     new GeneratePostDetailsFromPath(),
-                    new FilterDocuments(Config.FromDocument((document) => document.GetPublishedDate() <= DateTime.Today)),
+                    new FilterDocuments(Config.FromDocument((document, context) => !context.IsDevelopment() || document.GetPublishedDate() <= DateTime.Today)),
                     new GenerateRssMetaData(),
                     new ReplaceInContent(
                     @"!\[(?<alt>.*)\]\(./images/(?<imagePath>.*)\)",
