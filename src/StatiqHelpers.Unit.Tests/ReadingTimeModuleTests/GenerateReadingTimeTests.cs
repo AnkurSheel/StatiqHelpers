@@ -1,48 +1,30 @@
-using System.Linq;
+﻿using System.Linq;
+using System.Threading.Tasks;
+using Moq;
+using Statiq.Common;
+using Statiq.Testing;
 using StatiqHelpers.ReadingTimeModule;
 using Xunit;
-using xUnitHelpers;
 
 namespace StatiqHelpers.Unit.Tests.ReadingTimeModuleTests
 {
-    public class ReadingTimeServiceTests
+    public class GenerateReadingTimeTests : BaseFixture
     {
-        private readonly IReadingTimeService _readingTimeService;
-
-        public ReadingTimeServiceTests()
+        [Fact]
+        public async Task Sets_ReadingTime_Key()
         {
-            _readingTimeService = new ReadingTimeService();
-        }
+            var readingTimeService = new Mock<IReadingTimeService>();
+            const int numberOfWords = 250;
+            var readingTimeData = new ReadingTimeData(5, 10, numberOfWords);
+            readingTimeService.Setup(x => x.GetReadingTime(It.IsAny<string>(), It.IsAny<int>())).Returns(readingTimeData);
 
-        [Theory]
-        [InlineData(100, 200, 0, 30)]
-        [InlineData(200, 200, 1, 0)]
-        [InlineData(300, 200, 1, 30)]
-        [InlineData(400, 200, 2, 0)]
-        [InlineData(568, 200, 2, 50)]
-        public void ReadingTime_is_calculated_correctly(int numberOfWords, int wordsPerMinute, int expectedMinutes, int expectedSeconds)
-        {
-            string input = string.Concat(Enumerable.Repeat("a ", numberOfWords));
+            var content = string.Concat(Enumerable.Repeat("a ", numberOfWords));
+            var input = new TestDocument(content);
+            var generateReadingTime = new GenerateReadingTime(readingTimeService.Object);
 
-            var readingTimeData = _readingTimeService.GetReadingTime(input, wordsPerMinute);
+            var result = await ExecuteAsync(input, generateReadingTime).SingleAsync();
 
-            AssertHelper.AssertMultiple(
-                () => Assert.Equal(expectedMinutes, readingTimeData.Minutes),
-                () => Assert.Equal(expectedSeconds, readingTimeData.Seconds),
-                () => Assert.Equal(numberOfWords, readingTimeData.Words));
-        }
-
-        [Theory]
-        [InlineData(29, 0)]
-        [InlineData(30, 1)]
-        [InlineData(31, 1)]
-        public void RoundedMinutes_is_calculated_correctly(int numberOfWords, int expectedRoundedMinutes)
-        {
-            string input = string.Concat(Enumerable.Repeat("a ", numberOfWords));
-
-            var readingTimeData = _readingTimeService.GetReadingTime(input, 60);
-
-            Assert.Equal(expectedRoundedMinutes, readingTimeData.RoundedMinutes);
+            Assert.Equal(readingTimeData, result["ReadingTime"]);
         }
     }
 }
