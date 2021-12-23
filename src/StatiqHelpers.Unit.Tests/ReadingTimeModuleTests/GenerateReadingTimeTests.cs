@@ -3,7 +3,7 @@ using StatiqHelpers.ReadingTimeModule;
 using Xunit;
 using xUnitHelpers;
 
-namespace StatiqHelpers.Unit.Tests
+namespace StatiqHelpers.Unit.Tests.ReadingTimeModuleTests
 {
     public class ReadingTimeServiceTests
     {
