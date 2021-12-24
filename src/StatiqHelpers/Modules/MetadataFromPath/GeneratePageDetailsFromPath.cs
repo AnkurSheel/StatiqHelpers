@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Statiq.Common;
@@ -19,6 +20,12 @@ namespace StatiqHelpers.Modules.MetadataFromPath
             }
 
             var slug = path.ToString();
+
+            if (string.Compare(slug, "pages") == 0)
+            {
+                throw new NotSupportedException("Markdown files should be in a sub folder");
+            }
+
             slug = slug.Replace("pages/", "");
 
             return Task.FromResult(
