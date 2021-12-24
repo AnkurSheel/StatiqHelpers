@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using Moq;
 using Statiq.Common;
 using Statiq.Testing;
-using StatiqHelpers.ReadingTimeModule;
+using StatiqHelpers.Modules.ReadingTime;
 using Xunit;
 
 namespace StatiqHelpers.Unit.Tests.ReadingTimeModuleTests

@@ -5,7 +5,7 @@ using Statiq.Markdown;
 using Statiq.Razor;
 using Statiq.Yaml;
 using StatiqHelpers.Extensions;
-using StatiqHelpers.PostDetailsFromPathModule;
+using StatiqHelpers.Modules.MetadataFromPath;
 
 namespace StatiqHelpers.Pipelines
 {

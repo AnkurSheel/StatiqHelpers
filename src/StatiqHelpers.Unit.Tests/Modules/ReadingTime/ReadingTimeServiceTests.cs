@@ -1,5 +1,5 @@
 using System.Linq;
-using StatiqHelpers.ReadingTimeModule;
+using StatiqHelpers.Modules.ReadingTime;
 using Xunit;
 using xUnitHelpers;
 

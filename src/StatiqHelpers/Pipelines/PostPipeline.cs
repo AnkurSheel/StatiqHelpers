@@ -7,9 +7,9 @@ using Statiq.Markdown;
 using Statiq.Razor;
 using Statiq.Yaml;
 using StatiqHelpers.Extensions;
-using StatiqHelpers.PostDetailsFromPathModule;
-using StatiqHelpers.ReadingTimeModule;
-using StatiqHelpers.Rss;
+using StatiqHelpers.Modules.MetadataFromPath;
+using StatiqHelpers.Modules.ReadingTime;
+using StatiqHelpers.Modules.Rss;
 
 namespace StatiqHelpers.Pipelines
 {

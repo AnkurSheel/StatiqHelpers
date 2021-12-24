@@ -4,8 +4,8 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using Statiq.Common;
 using StatiqHelpers.Models;
-using StatiqHelpers.ReadingTimeModule;
-using Keys = StatiqHelpers.ReadingTimeModule.Keys;
+using StatiqHelpers.Modules.ReadingTime;
+using Keys = StatiqHelpers.Modules.ReadingTime.Keys;
 
 namespace StatiqHelpers.Extensions
 {
