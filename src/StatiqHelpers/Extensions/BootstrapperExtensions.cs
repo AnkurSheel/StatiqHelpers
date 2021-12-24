@@ -4,8 +4,8 @@ using Statiq.Common;
 using Statiq.Core;
 using Statiq.Web.Pipelines;
 using StatiqHelpers.ImageHelpers;
+using StatiqHelpers.Modules.ReadingTime;
 using StatiqHelpers.Pipelines;
-using StatiqHelpers.ReadingTimeModule;
 
 namespace StatiqHelpers.Extensions
 {

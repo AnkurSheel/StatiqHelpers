@@ -1,5 +1,4 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using Statiq.Common;
 using Statiq.Core;
 using Statiq.Razor;

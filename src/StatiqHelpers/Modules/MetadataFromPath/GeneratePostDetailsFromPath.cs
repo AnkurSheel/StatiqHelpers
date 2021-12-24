@@ -6,7 +6,7 @@ using Microsoft.Extensions.Logging;
 using Statiq.Common;
 using StatiqHelpers.Extensions;
 
-namespace StatiqHelpers.PostDetailsFromPathModule
+namespace StatiqHelpers.Modules.MetadataFromPath
 {
     public class GeneratePostDetailsFromPath : ParallelModule
     {

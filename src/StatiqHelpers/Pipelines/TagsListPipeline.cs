@@ -30,7 +30,11 @@ namespace StatiqHelpers.Pipelines
                     Config.FromDocument(
                         (document, context) =>
                         {
-                            var tags = context.Outputs.FromPipeline(nameof(TagsPipeline)).Select(x => x.AsTag(context)).OrderByDescending(x => x.Posts.Count).ThenBy(x => x.Name).ToList();
+                            var tags = context.Outputs.FromPipeline(nameof(TagsPipeline))
+                                .Select(x => x.AsTag(context))
+                                .OrderByDescending(x => x.Posts.Count)
+                                .ThenBy(x => x.Name)
+                                .ToList();
                             return new Tags(document, context, tags);
                         })),
             };

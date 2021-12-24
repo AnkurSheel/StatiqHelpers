@@ -12,10 +12,11 @@ namespace StatiqHelpers.Unit.Tests
         public static void Initialize()
         {
             VerifierSettings.DerivePathInfo(
-                (sourceFile, projectDirectory, type, method) => new PathInfo(
-                    directory: Path.Combine(Path.GetDirectoryName(sourceFile)!, "Snapshots"),
-                    typeName: type.Name,
-                    methodName: method.Name));
+                (
+                    sourceFile,
+                    projectDirectory,
+                    type,
+                    method) => new PathInfo(Path.Combine(Path.GetDirectoryName(sourceFile)!, "Snapshots"), type.Name, method.Name));
 
             DiffRunner.Disabled = true;
             VerifierSettings.OnFirstVerify(
@@ -34,10 +35,11 @@ namespace StatiqHelpers.Unit.Tests
 
         private static void AutoApproveFile(FilePair filePair)
         {
-            if(File.Exists(filePair.Verified))
+            if (File.Exists(filePair.Verified))
             {
                 File.Delete(filePair.Verified);
             }
+
             File.Copy(filePair.Received, filePair.Verified);
             // File.Delete(filePair.Received);
         }

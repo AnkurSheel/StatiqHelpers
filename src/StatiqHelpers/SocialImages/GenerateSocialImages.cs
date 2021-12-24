@@ -56,7 +56,11 @@ namespace StatiqHelpers.SocialImages
 
             context.LogDebug($"Created {twitterDoc.Destination}");
 
-            return new[] { facebookDoc, twitterDoc };
+            return new[]
+            {
+                facebookDoc,
+                twitterDoc
+            };
         }
     }
 }

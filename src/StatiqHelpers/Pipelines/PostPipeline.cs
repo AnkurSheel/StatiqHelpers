@@ -1,5 +1,4 @@
 ﻿using System;
-using Polly;
 using Statiq.Common;
 using Statiq.Core;
 using Statiq.Highlight;
@@ -7,9 +6,9 @@ using Statiq.Markdown;
 using Statiq.Razor;
 using Statiq.Yaml;
 using StatiqHelpers.Extensions;
-using StatiqHelpers.PostDetailsFromPathModule;
-using StatiqHelpers.ReadingTimeModule;
-using StatiqHelpers.Rss;
+using StatiqHelpers.Modules.MetadataFromPath;
+using StatiqHelpers.Modules.ReadingTime;
+using StatiqHelpers.Modules.Rss;
 
 namespace StatiqHelpers.Pipelines
 {
@@ -30,10 +29,7 @@ namespace StatiqHelpers.Pipelines
                     new GeneratePostDetailsFromPath(),
                     new FilterDocuments(Config.FromDocument((document, context) => !context.IsDevelopment() || document.GetPublishedDate() <= DateTime.Today)),
                     new GenerateRssMetaData(),
-                    new ReplaceInContent(
-                    @"!\[(?<alt>.*)\]\(./images/(?<imagePath>.*)\)",
-                    Config.FromDocument((document, context) => $"![$1](./$2)"))
-                    .IsRegex(),
+                    new ReplaceInContent(@"!\[(?<alt>.*)\]\(./images/(?<imagePath>.*)\)", Config.FromDocument((document, context) => "![$1](./$2)")).IsRegex(),
                     new ReplaceInContent(
                             @"!\[(?<alt>.*)\]\(./(?<imagePath>.*)\)",
                             Config.FromDocument((document, context) => $"![$1](/{Constants.PostImagesDirectory}/{document.GetString(MetaDataKeys.Slug)}/$2)"))
@@ -43,7 +39,8 @@ namespace StatiqHelpers.Pipelines
                     new ProcessShortcodes(),
                     new HighlightCode(),
                     new OptimizeFileName(MetaDataKeys.Slug),
-                    new SetDestination(Config.FromDocument((doc, ctx) => new NormalizedPath(Constants.BlogPath).Combine($"{doc.GetString(MetaDataKeys.Slug)}.html"))),
+                    new SetDestination(
+                        Config.FromDocument((doc, ctx) => new NormalizedPath(Constants.BlogPath).Combine($"{doc.GetString(MetaDataKeys.Slug)}.html"))),
                 }
             };
 

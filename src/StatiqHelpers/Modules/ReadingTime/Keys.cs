@@ -1,4 +1,4 @@
-﻿namespace StatiqHelpers.ReadingTimeModule
+﻿namespace StatiqHelpers.Modules.ReadingTime
 {
     public static class Keys
     {

@@ -16,11 +16,10 @@ namespace StatiqHelpers.Pipelines
             ProcessModules = new ModuleList
             {
                 new MinifyJs(),
-                new ExecuteIf(Config.FromDocument(doc =>
-                    doc.Source.Name.Contains("sw.js")))
-                    {
-                        new SetDestination("sw.js")
-                    }
+                new ExecuteIf(Config.FromDocument(doc => doc.Source.Name.Contains("sw.js")))
+                {
+                    new SetDestination("sw.js")
+                }
             };
 
             OutputModules = new ModuleList
