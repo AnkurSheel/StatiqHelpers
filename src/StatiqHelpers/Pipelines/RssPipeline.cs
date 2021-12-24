@@ -14,7 +14,7 @@ namespace StatiqHelpers.Pipelines
             ProcessModules = new ModuleList
             {
                 new ConcatDocuments(Dependencies.ToArray()),
-                new OrderDocuments(Config.FromDocument(doc => doc.GetPublishedDate())).Descending(),
+                new OrderDocuments(Config.FromDocument(doc => doc.GetLastUpdatedDate())).Descending(),
                 new GenerateFeeds().WithRssPath("rss.xml").WithAtomPath(null)
             };
 

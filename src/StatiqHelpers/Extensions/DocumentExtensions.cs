@@ -25,7 +25,10 @@ namespace StatiqHelpers.Extensions
             => document.GetString(MetaDataKeys.Slug);
 
         public static DateTime GetPublishedDate(this IDocument document)
-            => document.GetDateTime(MetaDataKeys.UpdatedOnDate, document.GetDateTime(MetaDataKeys.PublishedDate));
+            => document.GetDateTime(MetaDataKeys.PublishedDate);
+
+        public static DateTime GetLastUpdatedDate(this IDocument document)
+            => document.GetDateTime(MetaDataKeys.UpdatedOnDate, document.GetPublishedDate());
 
         public static string? GetCoverImagePath(this IDocument document)
         {
@@ -65,7 +68,7 @@ namespace StatiqHelpers.Extensions
 
         public static Tag AsTag(this IDocument document, IExecutionContext context)
         {
-            var posts = document.GetChildren().OrderByDescending(x => x.GetPublishedDate()).Select(x => x.AsBaseModel(context)).ToList();
+            var posts = document.GetChildren().OrderByDescending(x => x.GetLastUpdatedDate()).Select(x => x.AsBaseModel(context)).ToList();
 
             var name = document.GetString(MetaDataKeys.TagName);
             return new Tag(document, context, name, new NormalizedPath($"/tags/{name}").OptimizeFileName().ToString(), posts);
