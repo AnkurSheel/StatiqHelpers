@@ -2,14 +2,14 @@
 {
     public class NavigationLink
     {
-        public NavigationLink(string title, string relativeUrl)
+        public NavigationLink(string title, string url)
         {
             Title = title;
-            RelativeUrl = relativeUrl;
+            Url = url;
         }
 
         public string Title { get; }
 
-        public string RelativeUrl { get; }
+        public string Url { get; }
     }
 }
