@@ -9,7 +9,6 @@ using Microsoft.Extensions.Logging;
 using Spectre.Console.Cli;
 using Statiq.App;
 using Statiq.Common;
-using Statiq.Core;
 using LogLevel = Microsoft.Extensions.Logging.LogLevel;
 
 namespace StatiqHelpers.ImageHelpers
@@ -20,11 +19,12 @@ namespace StatiqHelpers.ImageHelpers
     {
         private IImageService? _imageService;
 
-        public ResizeImage(IConfiguratorCollection configurators, Settings settings, IServiceCollection serviceCollection, Bootstrapper bootstrapper) : base(
-            configurators,
-            settings,
-            serviceCollection,
-            bootstrapper)
+        public ResizeImage(
+            IConfiguratorCollection configurators,
+            Settings settings,
+            IServiceCollection serviceCollection,
+            IFileSystem fileSystem,
+            Bootstrapper bootstrapper) : base(configurators, settings, serviceCollection, fileSystem, bootstrapper)
         {
         }
 
@@ -32,7 +32,7 @@ namespace StatiqHelpers.ImageHelpers
         {
             _imageService = engineManager.Engine.Services.GetRequiredService<IImageService>();
 
-            Engine engine = engineManager.Engine;
+            var engine = engineManager.Engine;
             var images = GetImages(!commandSettings.AllFiles, engine.FileSystem);
 
             var message = commandSettings.AllFiles
@@ -45,7 +45,7 @@ namespace StatiqHelpers.ImageHelpers
             return 0;
         }
 
-        private IReadOnlyList<string> GetImages(bool onlyCheckedOutFiles, IFileSystem fileSystem)
+        private IReadOnlyList<string> GetImages(bool onlyCheckedOutFiles, IReadOnlyFileSystem fileSystem)
         {
             var images = fileSystem.GetInputFiles("**/*.{jpg,jpeg,png}").Select(x => x.Path).ToList();
 
@@ -55,12 +55,14 @@ namespace StatiqHelpers.ImageHelpers
                 using var repo = new Repository(rootPath);
                 var status = repo.RetrieveStatus();
 
-                var modifiedImages = status.Where(x =>
-                    {
-                        var extension = Path.GetExtension((string?)x.FilePath);
-                        return extension is ".jpg" or ".jpeg" or ".png" && x.State != FileStatus.Ignored;
-                    })
-                    .Select(x => new NormalizedPath(Path.Combine(rootPath, x.FilePath))).ToList();
+                var modifiedImages = status.Where(
+                        x =>
+                        {
+                            var extension = Path.GetExtension((string?)x.FilePath);
+                            return extension is ".jpg" or ".jpeg" or ".png" && x.State != FileStatus.Ignored;
+                        })
+                    .Select(x => new NormalizedPath(Path.Combine(rootPath, x.FilePath)))
+                    .ToList();
 
                 images = images.Where(x => modifiedImages.Contains(x)).ToList();
             }

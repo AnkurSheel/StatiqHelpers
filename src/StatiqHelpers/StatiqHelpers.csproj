@@ -25,12 +25,12 @@
         <None Include="..\..\LICENSE" Pack="true" PackagePath="" />
     </ItemGroup>
     <ItemGroup>
-        <PackageReference Include="ByteSize" Version="2.1.0" />
-        <PackageReference Include="LibGit2Sharp" Version="0.26.2" />
-        <PackageReference Include="SixLabors.ImageSharp" Version="1.0.3" />
-        <PackageReference Include="SixLabors.ImageSharp.Drawing" Version="1.0.0-beta13" />
-        <PackageReference Include="Statiq.Highlight" Version="1.0.0-beta.51" />
-        <PackageReference Include="Statiq.Web" Version="1.0.0-beta.36" />
+        <PackageReference Include="ByteSize" Version="2.1.0"/>
+        <PackageReference Include="LibGit2Sharp" Version="0.26.2"/>
+        <PackageReference Include="SixLabors.ImageSharp" Version="1.0.3"/>
+        <PackageReference Include="SixLabors.ImageSharp.Drawing" Version="1.0.0-beta13"/>
+        <PackageReference Include="Statiq.Highlight" Version="1.0.0-beta.55"/>
+        <PackageReference Include="Statiq.Web" Version="1.0.0-beta.41"/>
     </ItemGroup>
 
 </Project>
