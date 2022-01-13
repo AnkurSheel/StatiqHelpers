@@ -51,6 +51,9 @@ namespace StatiqHelpers.Extensions
         public static IReadOnlyList<string> GetTags(this IDocument document)
             => document.GetList<string>(MetaDataKeys.Tags);
 
+        public static string GetCategory(this IDocument document)
+            => document.GetString(MetaDataKeys.Category) ?? "Uncategorized";
+
         public static ReadingTimeData GetReadingTime(this IDocument document)
             => document.Get<ReadingTimeData>(Keys.ReadingTime);
 
