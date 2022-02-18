@@ -9,7 +9,8 @@ namespace StatiqHelpers.Pipelines
         {
             InputModules = new ModuleList
             {
-                new ReadFiles("assets/**/*.ttf")
+                new ReadFiles("assets/**/*.{ttf,woff2}"),
+
             };
 
             ProcessModules = new ModuleList
