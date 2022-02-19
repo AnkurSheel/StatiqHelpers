@@ -18,7 +18,8 @@ namespace StatiqHelpers.Rss
                         new MetadataItems
                         {
                             { FeedKeys.Description, input.GetExcerpt() },
-                            { FeedKeys.Published, input.GetLastUpdatedDate() },
+                            { FeedKeys.Published, input.GetPublishedDate() },
+                            { FeedKeys.Updated, input.GetLastUpdatedDate() },
                             { FeedKeys.Image, input.GetCoverImageLink() }
                         })
                     .Yield());
