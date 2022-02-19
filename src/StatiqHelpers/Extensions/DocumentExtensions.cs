@@ -43,9 +43,14 @@ namespace StatiqHelpers.Extensions
         {
             var coverImagePath = document.GetCoverImagePath();
 
-            return coverImagePath != null
-                ? $"/{Constants.PostImagesDirectory}/{document.GetSlug()}/{coverImagePath}"
-                : null;
+            if (coverImagePath != null)
+            {
+                return coverImagePath.StartsWith(Constants.ImagesDirectory)
+                    ? coverImagePath
+                    : $"/{Constants.PostImagesDirectory}/{document.GetSlug()}/{coverImagePath}";
+            }
+
+            return null;
         }
 
         public static IReadOnlyList<string> GetTags(this IDocument document)

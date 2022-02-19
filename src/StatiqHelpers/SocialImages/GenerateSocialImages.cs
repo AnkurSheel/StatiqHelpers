@@ -30,6 +30,7 @@ namespace StatiqHelpers.SocialImages
 
             var coverImagePath = input.GetCoverImagePath();
 
+            //Todo: Check if this can be replaced with GetCoverImageLink
             if (coverImagePath != null)
             {
                 coverImagePath = coverImagePath.StartsWith(Constants.ImagesDirectory)
