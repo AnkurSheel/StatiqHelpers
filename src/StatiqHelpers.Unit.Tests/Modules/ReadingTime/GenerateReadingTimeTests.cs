@@ -6,7 +6,7 @@ using Statiq.Testing;
 using StatiqHelpers.Modules.ReadingTime;
 using Xunit;
 
-namespace StatiqHelpers.Unit.Tests.ReadingTimeModuleTests
+namespace StatiqHelpers.Unit.Tests.Modules.ReadingTime
 {
     public class GenerateReadingTimeTests : BaseFixture
     {

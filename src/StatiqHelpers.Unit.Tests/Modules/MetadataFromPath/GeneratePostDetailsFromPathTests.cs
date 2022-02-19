@@ -2,10 +2,11 @@
 using System.Threading.Tasks;
 using Statiq.Common;
 using Statiq.Testing;
+using StatiqHelpers.Modules.MetadataFromPath;
 using Xunit;
 using xUnitHelpers;
 
-namespace StatiqHelpers.Modules.MetadataFromPath
+namespace StatiqHelpers.Unit.Tests.Modules.MetadataFromPath
 {
     public class GeneratePostDetailsFromPathTests : BaseFixture
     {
