@@ -2,30 +2,25 @@
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Statiq.Common;
+using Statiq.Feeds;
+using StatiqHelpers.Extensions;
 
-namespace StatiqHelpers.PostDetailsFromPathModule
+namespace StatiqHelpers.Modules.Rss
 {
-    public class GeneratePageDetailsFromPath : ParallelModule
+    public class GenerateRssMetaData : ParallelModule
     {
         protected override Task<IEnumerable<IDocument>> ExecuteInputAsync(IDocument input, IExecutionContext context)
         {
             context.LogDebug($"Read file {input.Source}");
 
-            var path = input.Source.GetRelativeInputPath().Parent;
-
-            if (input.Source.MediaType == MediaTypes.Razor)
-            {
-                path = path.Combine(input.Source.FileNameWithoutExtension);
-            }
-
-            var slug = path.ToString();
-            slug = slug.Replace("pages/", "");
-
             return Task.FromResult(
                 input.Clone(
                         new MetadataItems
                         {
-                            { MetaDataKeys.Slug, slug }
+                            { FeedKeys.Description, input.GetExcerpt() },
+                            { FeedKeys.Published, input.GetPublishedDate() },
+                            { FeedKeys.Updated, input.GetLastUpdatedDate() },
+                            { FeedKeys.Image, input.GetCoverImageLink() }
                         })
                     .Yield());
         }

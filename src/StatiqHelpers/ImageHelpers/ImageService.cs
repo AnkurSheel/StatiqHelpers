@@ -46,16 +46,8 @@ namespace StatiqHelpers.ImageHelpers
                         imageContext.DrawImage(thumbnail, new Point(0, 0), 1f);
                     }
 
-                    AddCenterText(
-                        imageContext,
-                        width,
-                        height,
-                        centerText);
-                    AddBrand(
-                        imageContext,
-                        width,
-                        height,
-                        siteTitle);
+                    AddCenterText(imageContext, width, height, centerText);
+                    AddBrand(imageContext, width, height, siteTitle);
                 });
 
             Stream output = new MemoryStream();
@@ -103,7 +95,8 @@ namespace StatiqHelpers.ImageHelpers
 
                 var originalSize = image.Size();
 
-                if ((originalSize.Width == newWidth && (newHeight == 0 || originalSize.Height == newHeight))||(originalSize.Height == newHeight && (newWidth == 0 || originalSize.Width == newWidth)))
+                if (originalSize.Width == newWidth && (newHeight == 0 || originalSize.Height == newHeight)
+                    || originalSize.Height == newHeight && (newWidth == 0 || originalSize.Width == newWidth))
                 {
                     // _logger.Log(
                     //     LogLevel.Information,
@@ -112,6 +105,7 @@ namespace StatiqHelpers.ImageHelpers
 
                     continue;
                 }
+
                 preSize = fileInfo.Length;
 
                 totalPre += preSize;
@@ -128,17 +122,24 @@ namespace StatiqHelpers.ImageHelpers
                 {
                     case ".jpg":
                     case ".jpeg":
-                        await image.SaveAsJpegAsync(imagePath, new JpegEncoder(){Quality = 80, Subsample = JpegSubsample.Ratio444});
+                        await image.SaveAsJpegAsync(
+                            imagePath,
+                            new JpegEncoder
+                            {
+                                Quality = 80,
+                                Subsample = JpegSubsample.Ratio444
+                            });
                         break;
                     case ".png":
-                        await image.SaveAsPngAsync(imagePath, new PngEncoder(){CompressionLevel = PngCompressionLevel.BestCompression});
+                        await image.SaveAsPngAsync(
+                            imagePath,
+                            new PngEncoder
+                            {
+                                CompressionLevel = PngCompressionLevel.BestCompression
+                            });
                         break;
                     default:
-                        _logger.Log(
-                            LogLevel.Error,
-                            "No support for extension {Extension} in {Path}",
-                            fileInfo.Extension,
-                            imagePath);
+                        _logger.Log(LogLevel.Error, "No support for extension {Extension} in {Path}", fileInfo.Extension, imagePath);
                         break;
                 }
 
@@ -146,7 +147,7 @@ namespace StatiqHelpers.ImageHelpers
                 var postSize = fileInfo.Length;
                 totalPost += postSize;
 
-                var percentChanged = Math.Abs(postSize - preSize) / (decimal)preSize;
+                var percentChanged = Math.Abs(postSize - preSize) / (decimal) preSize;
 
                 _logger.Log(
                     LogLevel.Information,
@@ -206,18 +207,8 @@ namespace StatiqHelpers.ImageHelpers
             };
 
             var verticalCenter = (imageHeight - titleFont.Size) / 2;
-            imageContext.DrawText(
-                drawingOptions,
-                centerText,
-                titleFont,
-                Color.MediumPurple,
-                new PointF(xPadding + 2, verticalCenter + 2));
-            imageContext.DrawText(
-                drawingOptions,
-                centerText,
-                titleFont,
-                Color.White,
-                new PointF(xPadding, verticalCenter));
+            imageContext.DrawText(drawingOptions, centerText, titleFont, Color.MediumPurple, new PointF(xPadding + 2, verticalCenter + 2));
+            imageContext.DrawText(drawingOptions, centerText, titleFont, Color.White, new PointF(xPadding, verticalCenter));
         }
 
         private void AddBrand(
@@ -244,11 +235,7 @@ namespace StatiqHelpers.ImageHelpers
             var font = new Font(_cookieFont, fontSize, FontStyle.Regular);
 
             var height = fontSize * 2;
-            var rectangularPolygon = new RectangularPolygon(
-                0,
-                imageHeight - height,
-                imageWidth,
-                height);
+            var rectangularPolygon = new RectangularPolygon(0, imageHeight - height, imageWidth, height);
             imageProcessingContext.Fill(Color.ParseHex("#134e5e"), rectangularPolygon);
             imageProcessingContext.DrawText(
                 drawingOptions,

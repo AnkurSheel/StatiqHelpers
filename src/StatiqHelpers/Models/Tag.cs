@@ -5,7 +5,12 @@ namespace StatiqHelpers.Models
 {
     public record Tag : BaseModel
     {
-        public Tag(IDocument document, IExecutionContext context, string name, string url, IReadOnlyList<BaseModel> posts) : base(document, context)
+        public Tag(
+            IDocument document,
+            IExecutionContext context,
+            string name,
+            string url,
+            IReadOnlyList<BaseModel> posts) : base(document, context)
         {
             Name = name;
             Url = url;

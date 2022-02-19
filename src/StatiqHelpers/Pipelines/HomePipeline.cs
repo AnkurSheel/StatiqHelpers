@@ -24,11 +24,13 @@ namespace StatiqHelpers.Pipelines
 
             PostProcessModules = new ModuleList
             {
-                new RenderRazor().WithModel(Config.FromDocument(((document, context) =>
-                {
-                    var posts = context.Outputs.FromPipeline(nameof(PostPipeline)).ToList();
-                    return document.AsPagesModel(context, posts);
-                })))
+                new RenderRazor().WithModel(
+                    Config.FromDocument(
+                        (document, context) =>
+                        {
+                            var posts = context.Outputs.FromPipeline(nameof(PostPipeline)).ToList();
+                            return document.AsPagesModel(context, posts);
+                        }))
             };
 
             OutputModules = new ModuleList

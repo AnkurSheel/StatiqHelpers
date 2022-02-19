@@ -1,5 +1,5 @@
 using System.Linq;
-using StatiqHelpers.ReadingTimeModule;
+using StatiqHelpers.Modules.ReadingTime;
 using Xunit;
 using xUnitHelpers;
 
@@ -20,9 +20,13 @@ namespace StatiqHelpers.Unit.Tests.ReadingTimeModuleTests
         [InlineData(300, 200, 1, 30)]
         [InlineData(400, 200, 2, 0)]
         [InlineData(568, 200, 2, 50)]
-        public void ReadingTime_is_calculated_correctly(int numberOfWords, int wordsPerMinute, int expectedMinutes, int expectedSeconds)
+        public void ReadingTime_is_calculated_correctly(
+            int numberOfWords,
+            int wordsPerMinute,
+            int expectedMinutes,
+            int expectedSeconds)
         {
-            string input = string.Concat(Enumerable.Repeat("a ", numberOfWords));
+            var input = string.Concat(Enumerable.Repeat("a ", numberOfWords));
 
             var readingTimeData = _readingTimeService.GetReadingTime(input, wordsPerMinute);
 
@@ -38,7 +42,7 @@ namespace StatiqHelpers.Unit.Tests.ReadingTimeModuleTests
         [InlineData(31, 1)]
         public void RoundedMinutes_is_calculated_correctly(int numberOfWords, int expectedRoundedMinutes)
         {
-            string input = string.Concat(Enumerable.Repeat("a ", numberOfWords));
+            var input = string.Concat(Enumerable.Repeat("a ", numberOfWords));
 
             var readingTimeData = _readingTimeService.GetReadingTime(input, 60);
 

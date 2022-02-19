@@ -83,7 +83,16 @@ namespace StatiqHelpers.Commands
         private void AddTagsToFrontmatter(StringBuilder frontMatter)
         {
             var tagsAsString = AnsiConsole.Ask<string>("Enter comma seperated [green]tags[/]");
-            var tags = tagsAsString.Split(new[] { ',', ';', '|' }, StringSplitOptions.RemoveEmptyEntries).Select(i => i.Trim()).ToArray();
+            var tags = tagsAsString.Split(
+                    new[]
+                    {
+                        ',',
+                        ';',
+                        '|'
+                    },
+                    StringSplitOptions.RemoveEmptyEntries)
+                .Select(i => i.Trim())
+                .ToArray();
             frontMatter.AppendLine("tags:");
 
             foreach (var tag in tags)

@@ -5,7 +5,7 @@ using Statiq.Markdown;
 using Statiq.Razor;
 using Statiq.Yaml;
 using StatiqHelpers.Extensions;
-using StatiqHelpers.PostDetailsFromPathModule;
+using StatiqHelpers.Modules.MetadataFromPath;
 
 namespace StatiqHelpers.Pipelines
 {
@@ -24,14 +24,18 @@ namespace StatiqHelpers.Pipelines
                 {
                     new ExtractFrontMatter(new ParseYaml()),
                     new GeneratePageDetailsFromPath(),
-                    new ExecuteIf(Config.FromDocument(doc => doc.Source.MediaType == MediaTypes.Markdown || doc.Source.MediaType == "text/x-mdx"), new
-                        ReplaceInContent(
+                    new ExecuteIf(
+                        Config.FromDocument(doc => doc.Source.MediaType == MediaTypes.Markdown || doc.Source.MediaType == "text/x-mdx"),
+                        new ReplaceInContent(
                             @"!\[(?<alt>.*)\]\(./images/(?<imagePath>.*)\)",
-                            Config.FromDocument((document, context) => "![$1](./$2)")).IsRegex(), new ReplaceInContent(
-                            @"!\[(?<alt>.*)\]\(./(?<imagePath>.*)\)",
-                            Config.FromDocument((document, context) => $"![$1](/{Constants.PagesImagesDirectory}/{document.GetString(MetaDataKeys.Slug)}/$2)"))
-                        .IsRegex(), new RenderMarkdown().UseExtensions(),
-                    new ProcessShortcodes()),
+                            Config.FromDocument((document, context) => "![$1](./$2)")).IsRegex(),
+                        new ReplaceInContent(
+                                @"!\[(?<alt>.*)\]\(./(?<imagePath>.*)\)",
+                                Config.FromDocument(
+                                    (document, context) => $"![$1](/{Constants.PagesImagesDirectory}/{document.GetString(MetaDataKeys.Slug)}/$2)"))
+                            .IsRegex(),
+                        new RenderMarkdown().UseExtensions(),
+                        new ProcessShortcodes()),
                     new OptimizeFileName(MetaDataKeys.Slug),
                     new SetDestination(Config.FromDocument((doc, ctx) => new NormalizedPath($"{doc.GetString(MetaDataKeys.Slug)}.html")))
                 }
