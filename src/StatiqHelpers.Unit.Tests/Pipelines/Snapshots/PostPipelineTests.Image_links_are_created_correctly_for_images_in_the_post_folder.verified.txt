@@ -1,0 +1,2 @@
+﻿<p><img src="/assets/images/posts/this-will-be-the-slug/image1.jpg" alt="Alt text 1" /></p>
+<p><img src="/assets/images/posts/this-will-be-the-slug/image2.jpg" alt="Alt text 2" /></p>
