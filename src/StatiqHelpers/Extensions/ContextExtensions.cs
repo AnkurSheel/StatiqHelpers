@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Statiq.Common;
 using Statiq.Web;
@@ -41,7 +42,7 @@ namespace StatiqHelpers.Extensions
                 : null;
 
         public static bool IsDevelopment(this IExecutionContext context)
-            => context.GetString("Environment") != "Development";
+            => context.GetString("Environment")?.Equals("Development", StringComparison.InvariantCultureIgnoreCase) ?? true;
 
         public static string? GetGoatCounterCode(this IExecutionContext context)
             => context.GetString("GoatCounterCode");

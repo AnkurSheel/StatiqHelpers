@@ -25,10 +25,10 @@ namespace StatiqHelpers.Extensions
             => document.GetString(MetaDataKeys.Slug);
 
         public static DateTime GetPublishedDate(this IDocument document)
-            => document.GetDateTime(MetaDataKeys.PublishedDate);
+            => DateTime.SpecifyKind(document.GetDateTime(MetaDataKeys.PublishedDate), DateTimeKind.Utc);
 
         public static DateTime GetLastUpdatedDate(this IDocument document)
-            => document.GetDateTime(MetaDataKeys.UpdatedOnDate, document.GetPublishedDate());
+            => DateTime.SpecifyKind(document.GetDateTime(MetaDataKeys.UpdatedOnDate, document.GetPublishedDate()), DateTimeKind.Utc);
 
         public static string? GetCoverImagePath(this IDocument document)
         {
