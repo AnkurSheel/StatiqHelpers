@@ -37,7 +37,7 @@ namespace StatiqHelpers.Pipelines
                     new GenerateReadingTime(readingTimeService),
                     new RenderMarkdown().UseExtensions(),
                     new ProcessShortcodes(),
-                    new HighlightCode(),
+                    new HighlightCode().WithAutoHighlightUnspecifiedLanguage(true),
                     new OptimizeFileName(MetaDataKeys.Slug),
                     new SetDestination(
                         Config.FromDocument((doc, ctx) => new NormalizedPath(Constants.BlogPath).Combine($"{doc.GetString(MetaDataKeys.Slug)}.html"))),
