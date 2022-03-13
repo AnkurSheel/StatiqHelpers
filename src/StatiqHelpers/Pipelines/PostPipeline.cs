@@ -27,7 +27,7 @@ namespace StatiqHelpers.Pipelines
                 {
                     new ExtractFrontMatter(new ParseYaml()),
                     new GeneratePostDetailsFromPath(),
-                    new FilterDocuments(Config.FromDocument((document, context) => !context.IsDevelopment() || document.GetPublishedDate() <= DateTime.Today)),
+                    new FilterDocuments(Config.FromDocument((document, context) => context.IsDevelopment() || document.GetPublishedDate() <= DateTime.UtcNow.Date)),
                     new GenerateRssMetaData(),
                     new ReplaceInContent(@"!\[(?<alt>.*)\]\(./images/(?<imagePath>.*)\)", Config.FromDocument((document, context) => "![$1](./$2)")).IsRegex(),
                     new ReplaceInContent(
@@ -37,7 +37,7 @@ namespace StatiqHelpers.Pipelines
                     new GenerateReadingTime(readingTimeService),
                     new RenderMarkdown().UseExtensions(),
                     new ProcessShortcodes(),
-                    new HighlightCode(),
+                    new HighlightCode().WithAutoHighlightUnspecifiedLanguage(true),
                     new OptimizeFileName(MetaDataKeys.Slug),
                     new SetDestination(
                         Config.FromDocument((doc, ctx) => new NormalizedPath(Constants.BlogPath).Combine($"{doc.GetString(MetaDataKeys.Slug)}.html"))),
