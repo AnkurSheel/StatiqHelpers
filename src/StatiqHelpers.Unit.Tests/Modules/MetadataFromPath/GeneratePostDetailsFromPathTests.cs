@@ -5,7 +5,6 @@ using Statiq.Testing;
 using StatiqHelpers.Modules.MetadataFromPath;
 using Xunit;
 using xUnitHelpers;
-using Assert = Xunit.Assert;
 
 namespace StatiqHelpers.Unit.Tests.Modules.MetadataFromPath
 {

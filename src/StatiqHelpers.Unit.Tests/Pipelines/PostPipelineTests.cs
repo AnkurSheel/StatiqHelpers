@@ -10,7 +10,6 @@ using StatiqHelpers.Pipelines;
 using VerifyXunit;
 using Xunit;
 using xUnitHelpers;
-using Assert = Xunit.Assert;
 
 namespace StatiqHelpers.Unit.Tests.Pipelines
 {

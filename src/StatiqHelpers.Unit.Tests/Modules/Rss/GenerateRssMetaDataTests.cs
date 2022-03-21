@@ -6,7 +6,6 @@ using Statiq.Testing;
 using StatiqHelpers.Modules.Rss;
 using Xunit;
 using xUnitHelpers;
-using Assert = Xunit.Assert;
 
 namespace StatiqHelpers.Unit.Tests.Modules.Rss
 {

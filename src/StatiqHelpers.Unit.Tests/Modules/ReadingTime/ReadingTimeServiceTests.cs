@@ -2,7 +2,6 @@ using System.Linq;
 using StatiqHelpers.Modules.ReadingTime;
 using Xunit;
 using xUnitHelpers;
-using Assert = Xunit.Assert;
 
 namespace StatiqHelpers.Unit.Tests.Modules.ReadingTime
 {
