@@ -5,7 +5,7 @@ using Statiq.Common;
 using Statiq.Feeds;
 using StatiqHelpers.Extensions;
 
-namespace StatiqHelpers.Modules.Rss
+namespace StatiqHelpers.Modules
 {
     public class GenerateRssMetaData : ParallelModule
     {

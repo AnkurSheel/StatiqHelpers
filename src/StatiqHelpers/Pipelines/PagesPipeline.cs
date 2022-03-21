@@ -6,7 +6,6 @@ using Statiq.Razor;
 using Statiq.Yaml;
 using StatiqHelpers.Extensions;
 using StatiqHelpers.Modules;
-using StatiqHelpers.Modules.MetadataFromPath;
 
 namespace StatiqHelpers.Pipelines
 {
