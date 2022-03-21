@@ -9,7 +9,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Codinators.XunitHelpers" Version="1.0.19" />
+        <PackageReference Include="Codinators.XunitHelpers" Version="1.2.0" />
         <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.7.1" />
         <PackageReference Include="Moq" Version="4.16.1" />
         <PackageReference Include="Verify.Xunit" Version="11.27.0" />
