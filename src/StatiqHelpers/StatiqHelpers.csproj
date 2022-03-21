@@ -16,9 +16,9 @@
         <SymbolPackageFormat>snupkg</SymbolPackageFormat>
         <RepositoryUrl>https://github.com/AnkurSheel/StatiqHelpers</RepositoryUrl>
         <RepositoryType>git</RepositoryType>
-        <PackageTags>c#, xUnit</PackageTags>
+        <PackageTags>c#, Statiq, Static Site Generation</PackageTags>
         <PackageReleaseNotes />
-        <TargetFrameworks>net5.0</TargetFrameworks>
+        <TargetFramework>net5.0</TargetFramework>
         <LangVersion>9</LangVersion>
     </PropertyGroup>
     <ItemGroup>
