@@ -44,17 +44,7 @@ namespace StatiqHelpers.Pipelines
 
             PostProcessModules = new ModuleList
             {
-                new ExecuteIf(
-                    Config.FromDocument(doc => doc.Source.MediaType == MediaTypes.Markdown || doc.Source.MediaType == "text/x-mdx"),
-                    new RenderRazor().WithBaseModel()).ElseIf(
-                    Config.FromDocument(doc => doc.Source.MediaType == MediaTypes.Razor),
-                    new RenderRazor().WithModel(
-                        Config.FromDocument(
-                            (document, context) =>
-                            {
-                                var posts = context.Outputs.FromPipeline(nameof(PostPipeline)).ToList();
-                                return document.AsPagesModel(context, posts);
-                            })))
+                new RenderRazor().WithBaseModel()
             };
 
             OutputModules = new ModuleList
