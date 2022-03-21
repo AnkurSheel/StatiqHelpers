@@ -1,15 +1,11 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
-using Moq;
 using Statiq.App;
 using Statiq.Common;
 using Statiq.Feeds;
 using Statiq.Testing;
 using StatiqHelpers.Extensions;
-using StatiqHelpers.ImageHelpers;
 using StatiqHelpers.Pipelines;
 using VerifyXunit;
 using Xunit;
@@ -38,16 +34,7 @@ namespace StatiqHelpers.Unit.Tests.Pipelines
 Article Content 
 ";
 
-            _bootstrapper = Bootstrapper.Factory.InitStatiq(Array.Empty<string>());
-            _bootstrapper.ConfigureAnalyzers(
-                collection =>
-                {
-                    foreach (var (key, value) in collection)
-                    {
-                        value.LogLevel = LogLevel.None;
-                    }
-                });
-            _bootstrapper.ConfigureServices(services => services.AddSingleton(Mock.Of<IImageService>()));
+            _bootstrapper = PipelineTestHelpersStatic.GetBootstrapper();
         }
 
         [Fact]
@@ -63,7 +50,7 @@ excerpt: {excerpt}
 Article Content 
 ";
 
-            var fileProvider = GetFileProvider(_path, content);
+            var fileProvider = PipelineTestHelpersStatic.GetFileProvider(_path, content);
 
             var result = await _bootstrapper.RunTestAsync(fileProvider);
 
@@ -76,7 +63,7 @@ Article Content
         [Fact]
         public async Task Sets_metadata_from_path()
         {
-            var fileProvider = GetFileProvider(_path, _content);
+            var fileProvider = PipelineTestHelpersStatic.GetFileProvider(_path, _content);
 
             var result = await _bootstrapper.RunTestAsync(fileProvider);
 
@@ -95,7 +82,7 @@ Article Content
         {
             var publishedDate = DateTime.SpecifyKind(DateTime.Today.AddDays(1), DateTimeKind.Utc);
             var path = $"/input/posts/{publishedDate.Year}/{publishedDate:yyyy-MM-dd}-{_slug}/filename.md";
-            var fileProvider = GetFileProvider(path, _content);
+            var fileProvider = PipelineTestHelpersStatic.GetFileProvider(path, _content);
 
             _bootstrapper.AddSetting("Environment", "Test");
             var result = await _bootstrapper.RunTestAsync(fileProvider);
@@ -111,7 +98,7 @@ Article Content
         {
             var publishedDate = DateTime.SpecifyKind(DateTime.Today.AddDays(1), DateTimeKind.Utc);
             var path = $"/input/posts/{publishedDate.Year}/{publishedDate:yyyy-MM-dd}-{_slug}/filename.md";
-            var fileProvider = GetFileProvider(path, _content);
+            var fileProvider = PipelineTestHelpersStatic.GetFileProvider(path, _content);
 
             _bootstrapper.AddSetting("Environment", "Development");
             var result = await _bootstrapper.RunTestAsync(fileProvider);
@@ -127,7 +114,7 @@ Article Content
         {
             var publishedDate = DateTime.SpecifyKind(DateTime.Today.AddDays(1), DateTimeKind.Utc);
             var path = $"/input/posts/{publishedDate.Year}/{publishedDate:yyyy-MM-dd}-{_slug}/filename.md";
-            var fileProvider = GetFileProvider(path, _content);
+            var fileProvider = PipelineTestHelpersStatic.GetFileProvider(path, _content);
 
             var result = await _bootstrapper.RunTestAsync(fileProvider);
 
@@ -150,7 +137,7 @@ coverImage: ./{coverImage}
 ---
 Article Content 
 ";
-            var fileProvider = GetFileProvider(_path, content);
+            var fileProvider = PipelineTestHelpersStatic.GetFileProvider(_path, content);
 
             var result = await _bootstrapper.RunTestAsync(fileProvider);
 
@@ -173,7 +160,7 @@ Article Content
 
 ![Alt text 2](./image2.jpg)
 ";
-            var fileProvider = GetFileProvider(_path, content);
+            var fileProvider = PipelineTestHelpersStatic.GetFileProvider(_path, content);
 
             var result = await _bootstrapper.RunTestAsync(fileProvider);
 
@@ -192,7 +179,7 @@ Article Content
 
 ![Alt text 2](./images/image2.jpg)
 ";
-            var fileProvider = GetFileProvider(_path, content);
+            var fileProvider = PipelineTestHelpersStatic.GetFileProvider(_path, content);
 
             var result = await _bootstrapper.RunTestAsync(fileProvider);
 
@@ -211,7 +198,7 @@ Article Content
 {body} 
 ";
 
-            var fileProvider = GetFileProvider(_path, content);
+            var fileProvider = PipelineTestHelpersStatic.GetFileProvider(_path, content);
 
             var result = await _bootstrapper.RunTestAsync(fileProvider);
 
@@ -231,7 +218,7 @@ int foo = 1
 ```
 ";
 
-            var fileProvider = GetFileProvider(_path, content);
+            var fileProvider = PipelineTestHelpersStatic.GetFileProvider(_path, content);
 
             var result = await _bootstrapper.RunTestAsync(fileProvider);
 
@@ -252,7 +239,7 @@ int foo = 1
 ```
 ";
 
-            var fileProvider = GetFileProvider(_path, content);
+            var fileProvider = PipelineTestHelpersStatic.GetFileProvider(_path, content);
 
             var result = await _bootstrapper.RunTestAsync(fileProvider);
 
@@ -268,7 +255,7 @@ int foo = 1
         {
             var slug = "This is tHe Slug With MiXeD CapS";
             var path = $"/input/posts/{_publishedDate.Year}/{_publishedDate:yyyy-MM-dd}-{slug}/FileName With MiXeD CapS.md";
-            var fileProvider = GetFileProvider(path, _content);
+            var fileProvider = PipelineTestHelpersStatic.GetFileProvider(path, _content);
 
             var result = await _bootstrapper.RunTestAsync(fileProvider);
 
@@ -276,11 +263,5 @@ int foo = 1
             var document = result.Outputs[nameof(PostPipeline)][Phase.Output].Single();
             Assert.Equal("blog/this-is-the-slug-with-mixed-caps.html", document.Destination);
         }
-
-        private TestFileProvider GetFileProvider(NormalizedPath path, string content)
-            => new TestFileProvider
-            {
-                { path, content },
-            };
     }
 }

@@ -21,18 +21,7 @@ namespace StatiqHelpers.Unit.Tests.Pipelines
         public ImagePipelineTests()
         {
             BaseSetUp();
-
-
-            _bootstrapper = Bootstrapper.Factory.InitStatiq(Array.Empty<string>());
-            _bootstrapper.ConfigureAnalyzers(
-                collection =>
-                {
-                    foreach (var (key, value) in collection)
-                    {
-                        value.LogLevel = LogLevel.None;
-                    }
-                });
-            _bootstrapper.ConfigureServices(services => services.AddSingleton(Mock.Of<IImageService>()));
+            _bootstrapper = PipelineTestHelpersStatic.GetBootstrapper();
         }
 
         [Fact]
@@ -40,7 +29,7 @@ namespace StatiqHelpers.Unit.Tests.Pipelines
         {
             var path = "/input/assets/images/favicon.ico";
 
-            var fileProvider = GetFileProvider(path);
+            var fileProvider = PipelineTestHelpersStatic.GetFileProvider(path);
 
             var result = await _bootstrapper.RunTestAsync(fileProvider);
 
@@ -55,7 +44,7 @@ namespace StatiqHelpers.Unit.Tests.Pipelines
         {
             var path = "/input/posts/2021/2021-11-19-slug/cover.jpg";
 
-            var fileProvider = GetFileProvider(path);
+            var fileProvider = PipelineTestHelpersStatic.GetFileProvider(path);
 
             var result = await _bootstrapper.RunTestAsync(fileProvider);
 
@@ -70,7 +59,7 @@ namespace StatiqHelpers.Unit.Tests.Pipelines
         {
             var path = "/input/posts/2021/2021-11-19-slug/images/cover.jpg";
 
-            var fileProvider = GetFileProvider(path);
+            var fileProvider =PipelineTestHelpersStatic.GetFileProvider(path);
 
             var result = await _bootstrapper.RunTestAsync(fileProvider);
 
@@ -86,7 +75,7 @@ namespace StatiqHelpers.Unit.Tests.Pipelines
         {
             var path = "/input/pages/slug/cover.jpg";
 
-            var fileProvider = GetFileProvider(path);
+            var fileProvider = PipelineTestHelpersStatic.GetFileProvider(path);
 
             var result = await _bootstrapper.RunTestAsync(fileProvider);
 
@@ -101,7 +90,7 @@ namespace StatiqHelpers.Unit.Tests.Pipelines
         {
             var path = "/input/pages/slug/images/cover.jpg";
 
-            var fileProvider = GetFileProvider(path);
+            var fileProvider = PipelineTestHelpersStatic.GetFileProvider(path);
 
             var result = await _bootstrapper.RunTestAsync(fileProvider);
 
@@ -116,7 +105,7 @@ namespace StatiqHelpers.Unit.Tests.Pipelines
         {
             var path = "/input/assets/images/cover.jpg";
 
-            var fileProvider = GetFileProvider(path);
+            var fileProvider = PipelineTestHelpersStatic.GetFileProvider(path);
 
             var result = await _bootstrapper.RunTestAsync(fileProvider);
 
@@ -125,11 +114,5 @@ namespace StatiqHelpers.Unit.Tests.Pipelines
 
             Assert.Equal("assets/images/cover.jpg", document.Destination);
         }
-
-        private TestFileProvider GetFileProvider(NormalizedPath path)
-            => new TestFileProvider
-            {
-                path,
-            };
     }
 }
