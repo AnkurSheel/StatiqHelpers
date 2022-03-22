@@ -11,5 +11,20 @@
         public static readonly string FontsDirectory = $"{AssetsDirectory}/fonts";
         public static readonly string DownloadsDirectory = $"{AssetsDirectory}/downloads";
         public static readonly string BlogPath = "blog";
+
+        public static readonly string[] StopWords =
+        {
+            "how",
+            "to",
+            "a",
+            "from",
+            "I",
+            "and",
+            "why",
+            "with",
+            "of",
+            "the",
+            "is"
+        };
     }
 }

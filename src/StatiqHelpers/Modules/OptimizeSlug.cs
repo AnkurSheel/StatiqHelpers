@@ -3,11 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Statiq.Common;
+using StatiqHelpers.Extensions;
 
 namespace StatiqHelpers.Modules
 {
     public class OptimizeSlug : ParallelModule
     {
+
         protected override Task<IEnumerable<IDocument>> ExecuteInputAsync(IDocument input, IExecutionContext context)
         {
             var path = input.GetPath(MetaDataKeys.Slug);
@@ -17,9 +19,7 @@ namespace StatiqHelpers.Modules
                 throw new ArgumentNullException(MetaDataKeys.Slug);
             }
 
-            var optimizedSegments = path.Segments.Select(segment => NormalizedPath.OptimizeFileName(segment.ToString())).ToList();
-
-            path = string.Join("/", optimizedSegments);
+            path = path.OptimizeSlug();
 
             return Task.FromResult(
                 input.Clone(

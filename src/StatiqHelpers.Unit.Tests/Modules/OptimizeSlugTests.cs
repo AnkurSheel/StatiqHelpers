@@ -69,10 +69,38 @@ namespace StatiqHelpers.Unit.Tests.Modules
             Assert.Equal("folder-name/file-name", result[MetaDataKeys.Slug].ToString());
         }
 
+        [Theory]
+        [MemberData(nameof(FillerWords))]
+        public async Task Filler_words_are_removed(string slug)
+        {
+            var document = ModuleTestHelpersStatic.GetTestDocument(GetMetadata($"{slug} file name"));
+
+            var optimizeSlug = new OptimizeSlug();
+
+            var result = await ExecuteAsync(document, optimizeSlug).SingleAsync();
+
+            Assert.Equal("file-name", result[MetaDataKeys.Slug].ToString());
+        }
+
+        [Theory]
+        [MemberData(nameof(FillerWords))]
+        public async Task Filler_words_that_are_part_of_another_word_are_not_removed(string slug)
+        {
+            var document = ModuleTestHelpersStatic.GetTestDocument(GetMetadata($"{slug}file name"));
+
+            var optimizeSlug = new OptimizeSlug();
+
+            var result = await ExecuteAsync(document, optimizeSlug).SingleAsync();
+
+            Assert.Equal($"{slug}file-name", result[MetaDataKeys.Slug].ToString(), true);
+        }
+
         private KeyValuePair<string, object>[] GetMetadata(string slug)
         {
             return new[] { new KeyValuePair<string, object>(MetaDataKeys.Slug, slug) };
         }
+
+        public static readonly IEnumerable<object[]> FillerWords = Constants.StopWords.Select(x => new object[] { x }).ToArray();
 
         public static readonly IEnumerable<object[]> ReservedChars =
             NormalizedPath.OptimizeFileNameReservedChars.Where(x => x != '\\' && x != '/').Select(x => new object[] { x }).ToArray();
