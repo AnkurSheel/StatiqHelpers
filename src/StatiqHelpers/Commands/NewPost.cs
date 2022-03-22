@@ -10,6 +10,8 @@ using Spectre.Console;
 using Spectre.Console.Cli;
 using Statiq.App;
 using Statiq.Common;
+using StatiqHelpers.Extensions;
+using StatiqHelpers.Modules;
 
 namespace StatiqHelpers.Commands
 {
@@ -64,8 +66,8 @@ namespace StatiqHelpers.Commands
             var fileSystem = engineManager.Engine.FileSystem;
             var rootPath = fileSystem.GetRootPath();
 
-            var optimizedTitle = NormalizedPath.OptimizeFileName(title);
-            var filePath = $"{rootPath}/input/posts/{date.Year}/{date:yyyy-MM-dd}-{optimizedTitle}/{optimizedTitle}.md";
+            title = new NormalizedPath(title).OptimizeSlug().ToString();
+            var filePath = new NormalizedPath($"{rootPath}/input/posts/{date.Year}/{date:yyyy-MM-dd}-{title}/{title}.md");
 
             return fileSystem.GetFile(filePath);
         }
