@@ -5,7 +5,7 @@ using Statiq.Markdown;
 using Statiq.Razor;
 using Statiq.Yaml;
 using StatiqHelpers.Extensions;
-using StatiqHelpers.Modules.MetadataFromPath;
+using StatiqHelpers.Modules;
 
 namespace StatiqHelpers.Pipelines
 {
@@ -36,24 +36,14 @@ namespace StatiqHelpers.Pipelines
                             .IsRegex(),
                         new RenderMarkdown().UseExtensions(),
                         new ProcessShortcodes()),
-                    new OptimizeFileName(MetaDataKeys.Slug),
+                    new OptimizeSlug(),
                     new SetDestination(Config.FromDocument((doc, ctx) => new NormalizedPath($"{doc.GetString(MetaDataKeys.Slug)}.html")))
                 }
             };
 
             PostProcessModules = new ModuleList
             {
-                new ExecuteIf(
-                    Config.FromDocument(doc => doc.Source.MediaType == MediaTypes.Markdown || doc.Source.MediaType == "text/x-mdx"),
-                    new RenderRazor().WithBaseModel()).ElseIf(
-                    Config.FromDocument(doc => doc.Source.MediaType == MediaTypes.Razor),
-                    new RenderRazor().WithModel(
-                        Config.FromDocument(
-                            (document, context) =>
-                            {
-                                var posts = context.Outputs.FromPipeline(nameof(PostPipeline)).ToList();
-                                return document.AsPagesModel(context, posts);
-                            })))
+                new RenderRazor().WithBaseModel()
             };
 
             OutputModules = new ModuleList

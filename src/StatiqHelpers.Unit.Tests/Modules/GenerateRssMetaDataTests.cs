@@ -3,12 +3,11 @@ using System.Threading.Tasks;
 using Statiq.Common;
 using Statiq.Feeds;
 using Statiq.Testing;
-using StatiqHelpers.Modules.Rss;
+using StatiqHelpers.Modules;
 using Xunit;
 using xUnitHelpers;
-using Assert = Xunit.Assert;
 
-namespace StatiqHelpers.Unit.Tests.Modules.Rss
+namespace StatiqHelpers.Unit.Tests.Modules
 {
     public class GenerateRssMetaDataTests : BaseFixture
     {

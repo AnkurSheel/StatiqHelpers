@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Statiq.Common;
 
-namespace StatiqHelpers.Modules.MetadataFromPath
+namespace StatiqHelpers.Modules
 {
     public class GeneratePageDetailsFromPath : ParallelModule
     {
@@ -21,7 +21,7 @@ namespace StatiqHelpers.Modules.MetadataFromPath
 
             var slug = path.ToString();
 
-            if (string.Compare(slug, "pages") == 0)
+            if (string.Compare(slug, "pages", StringComparison.InvariantCultureIgnoreCase) == 0)
             {
                 throw new NotSupportedException("Markdown files should be in a sub folder");
             }

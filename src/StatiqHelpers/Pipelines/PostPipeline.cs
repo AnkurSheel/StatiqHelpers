@@ -6,9 +6,8 @@ using Statiq.Markdown;
 using Statiq.Razor;
 using Statiq.Yaml;
 using StatiqHelpers.Extensions;
-using StatiqHelpers.Modules.MetadataFromPath;
+using StatiqHelpers.Modules;
 using StatiqHelpers.Modules.ReadingTime;
-using StatiqHelpers.Modules.Rss;
 
 namespace StatiqHelpers.Pipelines
 {
@@ -38,7 +37,7 @@ namespace StatiqHelpers.Pipelines
                     new RenderMarkdown().UseExtensions(),
                     new ProcessShortcodes(),
                     new HighlightCode().WithAutoHighlightUnspecifiedLanguage(true),
-                    new OptimizeFileName(MetaDataKeys.Slug),
+                    new OptimizeSlug(),
                     new SetDestination(
                         Config.FromDocument((doc, ctx) => new NormalizedPath(Constants.BlogPath).Combine($"{doc.GetString(MetaDataKeys.Slug)}.html"))),
                 }
