@@ -23,7 +23,7 @@ namespace StatiqHelpers.Unit.Tests.Pipelines
         {
             BaseSetUp();
 
-            _slug = "this-will-be-the-slug";
+            _slug = "slug";
             _path = $"/input/pages/{_slug}/filename.md";
 
             _bootstrapper = PipelineTestHelpersStatic.GetBootstrapper();
@@ -109,7 +109,7 @@ Article Content
         [Fact]
         public async Task Destination_is_taken_from_the_slug_for_markdown_files()
         {
-            var slug = "folder 1/This is tHe Slug With MiXeD CapS";
+            var slug = "folder 1/Slug MiXeD CapS";
             var path = $"/input/pages/{slug}/FileName.md";
             var fileProvider = PipelineTestHelpersStatic.GetFileProvider(path);
 
@@ -117,7 +117,7 @@ Article Content
 
             Assert.Equal((int)ExitCode.Normal, result.ExitCode);
             var document = result.Outputs[PipelineName][Phase.Output].Single();
-            Assert.Equal("folder-1/this-is-the-slug-with-mixed-caps.html", document.Destination);
+            Assert.Equal("folder-1/slug-mixed-caps.html", document.Destination);
         }
 
         [Fact]

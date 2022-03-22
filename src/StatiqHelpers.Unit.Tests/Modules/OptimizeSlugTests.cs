@@ -15,14 +15,14 @@ namespace StatiqHelpers.Unit.Tests.Modules
         [Fact]
         public async Task Slug_is_converted_to_lower_case()
         {
-            const string slug = "FolDeR With MiXeD CapS/FileName With MiXeD CapS";
+            const string slug = "FolDeR MiXeD CapS/FileName MiXeD CapS";
             var document = ModuleTestHelpersStatic.GetTestDocument(GetMetadata(slug));
 
             var optimizeSlug = new OptimizeSlug();
 
             var result = await ExecuteAsync(document, optimizeSlug).SingleAsync();
 
-            Assert.Equal("folder-with-mixed-caps/filename-with-mixed-caps", result[MetaDataKeys.Slug].ToString());
+            Assert.Equal("folder-mixed-caps/filename-mixed-caps", result[MetaDataKeys.Slug].ToString());
         }
 
         [Theory]

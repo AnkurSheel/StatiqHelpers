@@ -16,6 +16,7 @@ namespace StatiqHelpers.Unit.Tests.Pipelines
     [UsesVerify]
     public class PostPipelineTests : BaseFixture
     {
+        private const string PipelineName = nameof(PostPipeline);
         private readonly Bootstrapper _bootstrapper;
         private readonly NormalizedPath _path;
         private readonly string _content;
@@ -26,7 +27,7 @@ namespace StatiqHelpers.Unit.Tests.Pipelines
         {
             BaseSetUp();
 
-            _slug = "this-will-be-the-slug";
+            _slug = "slug";
             _publishedDate = DateTime.SpecifyKind(new DateTime(2021, 11, 19), DateTimeKind.Utc);
             _path = $"/input/posts/{_publishedDate.Year}/{_publishedDate:yyyy-MM-dd}-{_slug}/filename.md";
             _content = @"
@@ -55,7 +56,7 @@ Article Content
             var result = await _bootstrapper.RunTestAsync(fileProvider);
 
             Assert.Equal((int)ExitCode.Normal, result.ExitCode);
-            var document = result.Outputs[nameof(PostPipeline)][Phase.PostProcess].Single();
+            var document = result.Outputs[PipelineName][Phase.PostProcess].Single();
 
             AssertHelper.AssertMultiple(() => Assert.Equal(title, document.GetTitle()), () => Assert.Equal(excerpt, document.GetExcerpt()));
         }
@@ -68,7 +69,7 @@ Article Content
             var result = await _bootstrapper.RunTestAsync(fileProvider);
 
             Assert.Equal((int)ExitCode.Normal, result.ExitCode);
-            var document = result.Outputs[nameof(PostPipeline)][Phase.PostProcess].Single();
+            var document = result.Outputs[PipelineName][Phase.PostProcess].Single();
 
             AssertHelper.AssertMultiple(
                 () => Assert.Equal(_slug, document.GetSlug()),
@@ -88,7 +89,7 @@ Article Content
             var result = await _bootstrapper.RunTestAsync(fileProvider);
 
             Assert.Equal((int)ExitCode.Normal, result.ExitCode);
-            var outputs = result.Outputs[nameof(PostPipeline)];
+            var outputs = result.Outputs[PipelineName];
 
             AssertHelper.AssertMultiple(() => Assert.Empty(outputs[Phase.PostProcess]), () => Assert.Empty(outputs[Phase.Output]));
         }
@@ -104,7 +105,7 @@ Article Content
             var result = await _bootstrapper.RunTestAsync(fileProvider);
 
             Assert.Equal((int)ExitCode.Normal, result.ExitCode);
-            var outputs = result.Outputs[nameof(PostPipeline)];
+            var outputs = result.Outputs[PipelineName];
 
             AssertHelper.AssertMultiple(() => Assert.Single(outputs[Phase.PostProcess]), () => Assert.Single(outputs[Phase.Output]));
         }
@@ -119,7 +120,7 @@ Article Content
             var result = await _bootstrapper.RunTestAsync(fileProvider);
 
             Assert.Equal((int)ExitCode.Normal, result.ExitCode);
-            var outputs = result.Outputs[nameof(PostPipeline)];
+            var outputs = result.Outputs[PipelineName];
 
             AssertHelper.AssertMultiple(() => Assert.Single(outputs[Phase.PostProcess]), () => Assert.Single(outputs[Phase.Output]));
         }
@@ -142,7 +143,7 @@ Article Content
             var result = await _bootstrapper.RunTestAsync(fileProvider);
 
             Assert.Equal((int)ExitCode.Normal, result.ExitCode);
-            var document = result.Outputs[nameof(PostPipeline)][Phase.PostProcess].Single();
+            var document = result.Outputs[PipelineName][Phase.PostProcess].Single();
 
             AssertHelper.AssertMultiple(
                 () => Assert.Equal(excerpt, document.Get(FeedKeys.Description)),
@@ -165,7 +166,7 @@ Article Content
             var result = await _bootstrapper.RunTestAsync(fileProvider);
 
             Assert.Equal((int)ExitCode.Normal, result.ExitCode);
-            var document = result.Outputs[nameof(PostPipeline)][Phase.PostProcess].Single();
+            var document = result.Outputs[PipelineName][Phase.PostProcess].Single();
             var body = await document.GetContentStringAsync();
             await Verifier.Verify(body);
         }
@@ -184,7 +185,7 @@ Article Content
             var result = await _bootstrapper.RunTestAsync(fileProvider);
 
             Assert.Equal((int)ExitCode.Normal, result.ExitCode);
-            var document = result.Outputs[nameof(PostPipeline)][Phase.PostProcess].Single();
+            var document = result.Outputs[PipelineName][Phase.PostProcess].Single();
             var body = await document.GetContentStringAsync();
             await Verifier.Verify(body);
         }
@@ -203,7 +204,7 @@ Article Content
             var result = await _bootstrapper.RunTestAsync(fileProvider);
 
             Assert.Equal((int)ExitCode.Normal, result.ExitCode);
-            var document = result.Outputs[nameof(PostPipeline)][Phase.PostProcess].Single();
+            var document = result.Outputs[PipelineName][Phase.PostProcess].Single();
 
             Assert.Equal(1, document.GetReadingTime().RoundedMinutes);
         }
@@ -223,7 +224,7 @@ int foo = 1
             var result = await _bootstrapper.RunTestAsync(fileProvider);
 
             Assert.Equal((int)ExitCode.Normal, result.ExitCode);
-            var document = result.Outputs[nameof(PostPipeline)][Phase.Process].Single();
+            var document = result.Outputs[PipelineName][Phase.Process].Single();
 
             var body = await document.GetContentStringAsync();
             await Verifier.Verify(body);
@@ -244,7 +245,7 @@ int foo = 1
             var result = await _bootstrapper.RunTestAsync(fileProvider);
 
             Assert.Equal((int)ExitCode.Normal, result.ExitCode);
-            var document = result.Outputs[nameof(PostPipeline)][Phase.Process].Single();
+            var document = result.Outputs[PipelineName][Phase.Process].Single();
 
             var body = await document.GetContentStringAsync();
             await Verifier.Verify(body);
@@ -253,15 +254,15 @@ int foo = 1
         [Fact]
         public async Task Destination_is_taken_from_the_slug_and_is_placed_in_the_blog_path()
         {
-            var slug = "This is tHe Slug With MiXeD CapS";
+            var slug = "Slug MiXeD CapS";
             var path = $"/input/posts/{_publishedDate.Year}/{_publishedDate:yyyy-MM-dd}-{slug}/FileName With MiXeD CapS.md";
             var fileProvider = PipelineTestHelpersStatic.GetFileProvider(path, _content);
 
             var result = await _bootstrapper.RunTestAsync(fileProvider);
 
             Assert.Equal((int)ExitCode.Normal, result.ExitCode);
-            var document = result.Outputs[nameof(PostPipeline)][Phase.Output].Single();
-            Assert.Equal("blog/this-is-the-slug-with-mixed-caps.html", document.Destination);
+            var document = result.Outputs[PipelineName][Phase.Output].Single();
+            Assert.Equal("blog/slug-mixed-caps.html", document.Destination);
         }
     }
 }
