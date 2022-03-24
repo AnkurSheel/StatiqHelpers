@@ -1,0 +1,6 @@
+﻿[
+  GatherDocuments,
+  ExtractFrontMatter,
+  SetDestination,
+  GatherDocuments
+]

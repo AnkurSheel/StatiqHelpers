@@ -10,12 +10,12 @@ using Xunit;
 namespace StatiqHelpers.Unit.Tests.Pipelines
 {
     [UsesVerify]
-    public class CssPipelineTests : BaseFixture
+    public class PostListPipelineTests : BaseFixture
     {
-        private const string PipelineName = nameof(CssPipeline);
         private readonly Bootstrapper _bootstrapper;
+        private const string PipelineName = nameof(PostListPipeline);
 
-        public CssPipelineTests()
+        public PostListPipelineTests()
         {
             BaseSetUp();
             _bootstrapper = PipelineTestHelpersStatic.GetBootstrapper();
@@ -52,33 +52,23 @@ namespace StatiqHelpers.Unit.Tests.Pipelines
         }
 
         [Fact]
-        public async Task Css_files_are_copied_to_the_root()
+        public async Task Sets_destination_to_blog()
         {
-            var path = "/input/assets/styles.css";
-
-            var fileProvider = PipelineTestHelpersStatic.GetFileProvider(path);
-
+            var fileProvider = GetFileProvider();
             var result = await _bootstrapper.RunTestAsync(fileProvider);
 
             Assert.Equal((int)ExitCode.Normal, result.ExitCode);
             var document = result.Outputs[PipelineName][Phase.Output].Single();
-
-            Assert.Equal("assets/styles.css", document.Destination);
+            Assert.Equal("blog.html", document.Destination);
         }
 
-        [Fact]
-        public async Task Css_files_staring_with_underscore_are_not_copied_to_the_root()
+        private TestFileProvider GetFileProvider()
         {
-            var path = "/input/assets/images/_site.css";
-
-            var fileProvider = PipelineTestHelpersStatic.GetFileProvider(path);
-
-            var result = await _bootstrapper.RunTestAsync(fileProvider);
-
-            Assert.Equal((int)ExitCode.Normal, result.ExitCode);
-            var documents = result.Outputs[PipelineName][Phase.Output];
-
-            Assert.Empty(documents);
+            var fileProvider = new TestFileProvider
+            {
+                "/input/Blog.cshtml",
+            };
+            return fileProvider;
         }
     }
 }

@@ -32,7 +32,10 @@ An opinionated wrapper around Statiq
     - Post Images are copied to assets/images/posts/slug/.
         - Images can be in the same folder as the markdown file or in a yyyy-mm-dd-slug/images folder.
     - Reading Time is generated for the articles.
-- RSS Feed
+- Index page is taken from Index.cshtml and has access to the list of posts.
+- Blog page is taken from Blog.cshtml and has access to the list of posts.
+  - The grouping and ordering of the posts can be configured.
+- A rss.xml is created for the RSS Feed
     - Set title from Post title.
     - Sets description from Post description.
     - Sets image from post image or shared image in assets/images folder.
@@ -55,3 +58,4 @@ An opinionated wrapper around Statiq
      - trimming and collapsing whitespaces.
      - turning spaces into dashes.
      - removing multiple dashes.
+     - removing filler words.

@@ -10,11 +10,8 @@ namespace StatiqHelpers.Pipelines
 {
     public class PostListPipeline : Pipeline
     {
-        private readonly PostListOptions _options;
-
         public PostListPipeline(PostListOptions options)
         {
-            _options = options;
             Dependencies.Add(nameof(PostPipeline));
 
             InputModules = new ModuleList
@@ -36,9 +33,9 @@ namespace StatiqHelpers.Pipelines
                         {
                             var documentList = context.Outputs.FromPipeline(nameof(PostPipeline));
 
-                            documentList = _options.Descending
-                                ? documentList.OrderByDescending(_options.OrderFunction).ToDocumentList()
-                                : documentList.OrderBy(_options.OrderFunction).ToDocumentList();
+                            documentList = options.Descending
+                                ? documentList.OrderByDescending(options.OrderFunction).ToDocumentList()
+                                : documentList.OrderBy(options.OrderFunction).ToDocumentList();
 
                             var allPosts = documentList.Select(x => x.AsBaseModel(context)).ToList();
                             return new Posts(allPosts, document, context);

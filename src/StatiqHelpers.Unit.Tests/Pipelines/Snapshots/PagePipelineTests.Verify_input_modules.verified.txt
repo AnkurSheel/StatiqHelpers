@@ -1,0 +1,5 @@
+﻿[
+  GatherDocuments,
+  ReadFiles,
+  GatherDocuments
+]

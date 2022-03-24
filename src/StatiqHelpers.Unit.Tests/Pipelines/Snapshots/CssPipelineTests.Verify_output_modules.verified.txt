@@ -1,0 +1,5 @@
+﻿[
+  GatherDocuments,
+  WriteFiles,
+  GatherDocuments
+]

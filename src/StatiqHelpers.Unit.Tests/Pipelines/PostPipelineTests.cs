@@ -3,9 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Statiq.App;
 using Statiq.Common;
-using Statiq.Feeds;
 using Statiq.Testing;
-using StatiqHelpers.Extensions;
 using StatiqHelpers.Pipelines;
 using VerifyXunit;
 using Xunit;
@@ -39,43 +37,33 @@ Article Content
         }
 
         [Fact]
-        public async Task Sets_metadata_from_front_matter()
+        public async Task Verify_dependencies()
         {
-            var title = "This is the title";
-            var excerpt = "This is the excerpt";
-
-            var content = $@"
-title: {title}
-excerpt: {excerpt}
----
-Article Content 
-";
-
-            var fileProvider = PipelineTestHelpersStatic.GetFileProvider(_path, content);
-
-            var result = await _bootstrapper.RunTestAsync(fileProvider);
-
-            Assert.Equal((int)ExitCode.Normal, result.ExitCode);
-            var document = result.Outputs[PipelineName][Phase.PostProcess].Single();
-
-            AssertHelper.AssertMultiple(() => Assert.Equal(title, document.GetTitle()), () => Assert.Equal(excerpt, document.GetExcerpt()));
+            await PipelineCommonTests.Verify_dependencies(_bootstrapper, PipelineName);
         }
 
         [Fact]
-        public async Task Sets_metadata_from_path()
+        public async Task Verify_input_modules()
         {
-            var fileProvider = PipelineTestHelpersStatic.GetFileProvider(_path, _content);
+            await PipelineCommonTests.Verify_input_modules(_bootstrapper, PipelineName);
+        }
 
-            var result = await _bootstrapper.RunTestAsync(fileProvider);
+        [Fact]
+        public async Task Verify_process_modules_cache()
+        {
+            await PipelineCommonTests.Verify_process_modules_cache(_bootstrapper, PipelineName);
+        }
 
-            Assert.Equal((int)ExitCode.Normal, result.ExitCode);
-            var document = result.Outputs[PipelineName][Phase.PostProcess].Single();
+        [Fact]
+        public async Task Verify_post_process_modules()
+        {
+            await PipelineCommonTests.Verify_post_process_modules(_bootstrapper, PipelineName);
+        }
 
-            AssertHelper.AssertMultiple(
-                () => Assert.Equal(_slug, document.GetSlug()),
-                () => Assert.Equal(_publishedDate, document.GetPublishedDate()),
-                () => Assert.Equal($"/assets/images/social/{_slug}-facebook.png", document.GetImageFacebook()),
-                () => Assert.Equal($"/assets/images/social/{_slug}-twitter.png", document.GetImageTwitter()));
+        [Fact]
+        public async Task Verify_output_modules()
+        {
+            await PipelineCommonTests.Verify_output_modules(_bootstrapper, PipelineName);
         }
 
         [Fact]
@@ -126,33 +114,6 @@ Article Content
         }
 
         [Fact]
-        public async Task Sets_rss_metadata()
-        {
-            var title = "This is the title";
-            var excerpt = "This is the excerpt";
-            var coverImage = @"image.jpg";
-            var content = $@"
-title: {title}
-excerpt: {excerpt}
-coverImage: ./{coverImage}
----
-Article Content 
-";
-            var fileProvider = PipelineTestHelpersStatic.GetFileProvider(_path, content);
-
-            var result = await _bootstrapper.RunTestAsync(fileProvider);
-
-            Assert.Equal((int)ExitCode.Normal, result.ExitCode);
-            var document = result.Outputs[PipelineName][Phase.PostProcess].Single();
-
-            AssertHelper.AssertMultiple(
-                () => Assert.Equal(excerpt, document.Get(FeedKeys.Description)),
-                () => Assert.Equal(_publishedDate, document.Get(FeedKeys.Published)),
-                () => Assert.Equal(_publishedDate, document.Get(FeedKeys.Updated)),
-                () => Assert.Equal($"/assets/images/posts/{_slug}/{coverImage}", document.Get(FeedKeys.Image)));
-        }
-
-        [Fact]
         public async Task Image_links_are_created_correctly_for_images_in_the_post_folder()
         {
             var content = @"
@@ -186,46 +147,6 @@ Article Content
 
             Assert.Equal((int)ExitCode.Normal, result.ExitCode);
             var document = result.Outputs[PipelineName][Phase.PostProcess].Single();
-            var body = await document.GetContentStringAsync();
-            await Verifier.Verify(body);
-        }
-
-        [Fact]
-        public async Task Sets_reading_time_from_content()
-        {
-            var body = string.Concat(Enumerable.Repeat("a ", 200));
-            var content = $@"
----
-{body} 
-";
-
-            var fileProvider = PipelineTestHelpersStatic.GetFileProvider(_path, content);
-
-            var result = await _bootstrapper.RunTestAsync(fileProvider);
-
-            Assert.Equal((int)ExitCode.Normal, result.ExitCode);
-            var document = result.Outputs[PipelineName][Phase.PostProcess].Single();
-
-            Assert.Equal(1, document.GetReadingTime().RoundedMinutes);
-        }
-
-        [Fact]
-        public async Task Code_blocks_with_language_are_highlighted()
-        {
-            var content = @"
----
-```csharp
-int foo = 1
-```
-";
-
-            var fileProvider = PipelineTestHelpersStatic.GetFileProvider(_path, content);
-
-            var result = await _bootstrapper.RunTestAsync(fileProvider);
-
-            Assert.Equal((int)ExitCode.Normal, result.ExitCode);
-            var document = result.Outputs[PipelineName][Phase.Process].Single();
-
             var body = await document.GetContentStringAsync();
             await Verifier.Verify(body);
         }

@@ -1,0 +1,10 @@
+﻿[
+  GatherDocuments,
+  CacheDocuments,
+  GatherDocuments,
+  ExtractFrontMatter,
+  GeneratePageDetailsFromPath,
+  ExecuteIf,
+  OptimizeSlug,
+  SetDestination
+]

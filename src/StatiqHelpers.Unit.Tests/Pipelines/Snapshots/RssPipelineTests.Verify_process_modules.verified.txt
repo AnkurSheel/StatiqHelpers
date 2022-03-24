@@ -1,0 +1,7 @@
+﻿[
+  GatherDocuments,
+  ConcatDocuments,
+  OrderDocuments,
+  GenerateFeeds,
+  GatherDocuments
+]

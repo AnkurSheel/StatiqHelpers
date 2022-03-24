@@ -1,0 +1,17 @@
+﻿[
+  GatherDocuments,
+  CacheDocuments,
+  GatherDocuments,
+  ExtractFrontMatter,
+  GeneratePostDetailsFromPath,
+  FilterDocuments,
+  GenerateRssMetaData,
+  ReplaceInContent,
+  ReplaceInContent,
+  GenerateReadingTime,
+  RenderMarkdown,
+  ProcessShortcodes,
+  HighlightCode,
+  OptimizeSlug,
+  SetDestination
+]
