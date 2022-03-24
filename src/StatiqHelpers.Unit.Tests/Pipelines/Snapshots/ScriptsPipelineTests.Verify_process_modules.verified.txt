@@ -1,0 +1,6 @@
+﻿[
+  GatherDocuments,
+  MinifyJs,
+  ExecuteIf,
+  GatherDocuments
+]
