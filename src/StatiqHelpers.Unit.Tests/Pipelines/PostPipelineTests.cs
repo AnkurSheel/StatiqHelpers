@@ -49,9 +49,9 @@ Article Content
         }
 
         [Fact]
-        public async Task Verify_process_modules_cache()
+        public async Task Verify_process_modules()
         {
-            await PipelineCommonTests.Verify_process_modules_cache(_bootstrapper, PipelineName);
+            await PipelineCommonTests.Verify_process_modules(_bootstrapper, PipelineName);
         }
 
         [Fact]

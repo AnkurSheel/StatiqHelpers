@@ -1,5 +1,3 @@
 ﻿[
-  GatherDocuments,
-  ReadFiles,
-  GatherDocuments
+  ReadFiles
 ]

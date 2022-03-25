@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using Statiq.App;
 using Statiq.Common;
+using Statiq.Core;
 using Statiq.Testing;
 using StatiqHelpers.Pipelines;
 using VerifyXunit;
@@ -40,9 +41,9 @@ namespace StatiqHelpers.Unit.Tests.Pipelines
         }
 
         [Fact]
-        public async Task Verify_process_modules_cache()
+        public async Task Verify_process_modules()
         {
-            await PipelineCommonTests.Verify_process_modules_cache(_bootstrapper, PipelineName);
+            await PipelineCommonTests.Verify_process_modules(_bootstrapper, PipelineName);
         }
 
         [Fact]

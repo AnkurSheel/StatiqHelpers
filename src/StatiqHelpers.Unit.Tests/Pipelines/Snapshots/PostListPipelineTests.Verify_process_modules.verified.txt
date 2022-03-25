@@ -1,6 +1,4 @@
 ﻿[
-  GatherDocuments,
   ExtractFrontMatter,
-  SetDestination,
-  GatherDocuments
+  SetDestination
 ]
