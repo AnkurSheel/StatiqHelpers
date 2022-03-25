@@ -28,11 +28,7 @@ namespace StatiqHelpers.Pipelines
                     new GeneratePostDetailsFromPath(),
                     new FilterDocuments(Config.FromDocument((document, context) => context.IsDevelopment() || document.GetPublishedDate() <= DateTime.UtcNow.Date)),
                     new GenerateRssMetaData(),
-                    new ReplaceInContent(@"!\[(?<alt>.*)\]\(./images/(?<imagePath>.*)\)", Config.FromDocument((document, context) => "![$1](./$2)")).IsRegex(),
-                    new ReplaceInContent(
-                            @"!\[(?<alt>.*)\]\(./(?<imagePath>.*)\)",
-                            Config.FromDocument((document, context) => $"![$1](/{Constants.PostImagesDirectory}/{document.GetString(MetaDataKeys.Slug)}/$2)"))
-                        .IsRegex(),
+                    new ReplaceImageLinks(Constants.PostImagesDirectory),
                     new GenerateReadingTime(readingTimeService),
                     new RenderMarkdown().UseExtensions(),
                     new ProcessShortcodes(),

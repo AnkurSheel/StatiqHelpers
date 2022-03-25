@@ -5,8 +5,7 @@
   ExecuteIf,
   OptimizeSlug,
   SetDestination,
-  ReplaceInContent,
-  ReplaceInContent,
+  ReplaceImageLinks,
   RenderMarkdown,
   ProcessShortcodes
 ]
