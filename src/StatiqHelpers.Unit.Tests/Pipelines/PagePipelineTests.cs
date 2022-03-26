@@ -11,51 +11,46 @@ using Xunit;
 namespace StatiqHelpers.Unit.Tests.Pipelines
 {
     [UsesVerify]
-    public class PagePipelineTests : BaseFixture
+    public class PagePipelineTests : PipelineBaseFixture
     {
         private const string PipelineName = nameof(PagesPipeline);
-        private readonly Bootstrapper _bootstrapper;
         private readonly NormalizedPath _path;
         private readonly string _slug;
 
         public PagePipelineTests()
         {
-            BaseSetUp();
-
             _slug = "slug";
             _path = $"/input/pages/{_slug}/filename.md";
-
-            _bootstrapper = PipelineTestHelpersStatic.GetBootstrapper();
         }
 
         [Fact]
         public async Task Verify_dependencies()
         {
-            await PipelineCommonTests.Verify_dependencies(_bootstrapper, PipelineName);
+            await VerifyDependencies(PipelineName);
         }
 
         [Fact]
         public async Task Verify_input_modules()
         {
-            await PipelineCommonTests.Verify_input_modules(_bootstrapper, PipelineName);
+            await VerifyInputModules(PipelineName);
         }
 
         [Fact]
         public async Task Verify_process_modules()
         {
-            await PipelineCommonTests.Verify_process_modules(_bootstrapper, PipelineName);
+            await VerifyProcessModules(PipelineName);
         }
 
         [Fact]
         public async Task Verify_post_process_modules()
         {
-            await PipelineCommonTests.Verify_post_process_modules(_bootstrapper, PipelineName);
+            await VerifyPostProcessModules(PipelineName);
         }
 
         [Fact]
         public async Task Verify_output_modules()
         {
-            await PipelineCommonTests.Verify_output_modules(_bootstrapper, PipelineName);
+            await VerifyOutputModules(PipelineName);
         }
 
 
@@ -70,7 +65,7 @@ namespace StatiqHelpers.Unit.Tests.Pipelines
 ";
             var fileProvider = PipelineTestHelpersStatic.GetFileProvider(_path, content);
 
-            var result = await _bootstrapper.RunTestAsync(fileProvider);
+            var result = await Bootstrapper.RunTestAsync(fileProvider);
 
             Assert.Equal((int)ExitCode.Normal, result.ExitCode);
             var document = result.Outputs[PipelineName][Phase.PostProcess].Single();
@@ -89,7 +84,7 @@ namespace StatiqHelpers.Unit.Tests.Pipelines
 ";
             var fileProvider = PipelineTestHelpersStatic.GetFileProvider(_path, content);
 
-            var result = await _bootstrapper.RunTestAsync(fileProvider);
+            var result = await Bootstrapper.RunTestAsync(fileProvider);
 
             Assert.Equal((int)ExitCode.Normal, result.ExitCode);
             var document = result.Outputs[PipelineName][Phase.PostProcess].Single();
@@ -104,7 +99,7 @@ namespace StatiqHelpers.Unit.Tests.Pipelines
             var path = $"/input/pages/{slug}/FileName.md";
             var fileProvider = PipelineTestHelpersStatic.GetFileProvider(path);
 
-            var result = await _bootstrapper.RunTestAsync(fileProvider);
+            var result = await Bootstrapper.RunTestAsync(fileProvider);
 
             Assert.Equal((int)ExitCode.Normal, result.ExitCode);
             var document = result.Outputs[PipelineName][Phase.Output].Single();
@@ -117,7 +112,7 @@ namespace StatiqHelpers.Unit.Tests.Pipelines
             var path = $"/input/pages/{_slug}/filename.cshtml";
             var fileProvider = PipelineTestHelpersStatic.GetFileProvider(path);
 
-            var result = await _bootstrapper.RunTestAsync(fileProvider);
+            var result = await Bootstrapper.RunTestAsync(fileProvider);
 
             Assert.Equal((int)ExitCode.Normal, result.ExitCode);
             var document = result.Outputs[PipelineName][Phase.Output].Single();
