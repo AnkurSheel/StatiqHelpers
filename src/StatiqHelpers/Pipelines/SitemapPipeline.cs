@@ -2,7 +2,8 @@
 using System.Linq;
 using Statiq.Common;
 using Statiq.Core;
-using Statiq.Web;
+using StatiqHelpers.Extensions;
+using StatiqHelpers.Modules;
 
 namespace StatiqHelpers.Pipelines
 {
@@ -14,26 +15,7 @@ namespace StatiqHelpers.Pipelines
             ProcessModules = new ModuleList
             {
                 new ConcatDocuments(Dependencies.ToArray()),
-                new SetMetadata(
-                    Keys.SitemapItem,
-                    Config.FromDocument(
-                        (document, context) =>
-                        {
-                            var sitemapItem = new SitemapItem(document.GetLink(true));
-
-                            if (document.ContainsKey(MetaDataKeys.PublishedDate))
-                            {
-                                var originalDate = document.GetDateTime(MetaDataKeys.PublishedDate);
-                                var publishedDate = document.GetPublishedDate();
-
-                                if (originalDate.Date <= publishedDate.Date)
-                                {
-                                    sitemapItem.LastModUtc = DateTime.SpecifyKind(publishedDate, DateTimeKind.Utc);
-                                }
-                            }
-
-                            return sitemapItem;
-                        })),
+                new GenerateSitemapMetaData(),
                 new GenerateSitemap()
             };
 
