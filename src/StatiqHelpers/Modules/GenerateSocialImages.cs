@@ -6,7 +6,7 @@ using Statiq.Common;
 using StatiqHelpers.Extensions;
 using StatiqHelpers.ImageHelpers;
 
-namespace StatiqHelpers.SocialImages
+namespace StatiqHelpers.Modules
 {
     public class GenerateSocialImages : ParallelModule
     {

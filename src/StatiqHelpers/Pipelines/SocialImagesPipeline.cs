@@ -2,7 +2,7 @@
 using Statiq.Common;
 using Statiq.Core;
 using StatiqHelpers.ImageHelpers;
-using StatiqHelpers.SocialImages;
+using StatiqHelpers.Modules;
 
 namespace StatiqHelpers.Pipelines
 {
