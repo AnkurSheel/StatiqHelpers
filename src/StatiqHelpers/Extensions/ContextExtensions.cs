@@ -10,7 +10,7 @@ namespace StatiqHelpers.Extensions
     public static class ContextExtensions
     {
         public static string GetSiteTitle(this IExecutionContext context)
-            => context.GetString(Keys.Title);
+            => context.GetString(Keys.Title, "");
 
         public static IReadOnlyList<NavigationLink> GetNavigationLinks(this IExecutionContext context)
             => context.GetDocumentList("HeaderLinks").Select(x => new NavigationLink(x.GetString("Title"), x.GetString("Url"))).ToList();
