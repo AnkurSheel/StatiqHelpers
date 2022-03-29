@@ -1,12 +1,7 @@
-﻿using System;
-using System.Linq;
-using System.Threading.Tasks;
-using Statiq.App;
+﻿using Statiq.App;
 using Statiq.Common;
 using Statiq.Testing;
 using StatiqHelpers.Pipelines;
-using VerifyXunit;
-using Xunit;
 using xUnitHelpers;
 
 namespace StatiqHelpers.Unit.Tests.Pipelines

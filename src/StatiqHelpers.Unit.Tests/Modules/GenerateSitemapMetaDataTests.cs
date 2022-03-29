@@ -1,10 +1,7 @@
-﻿using System;
-using System.Threading.Tasks;
-using Statiq.Common;
+﻿using Statiq.Common;
 using Statiq.Core;
 using Statiq.Testing;
 using StatiqHelpers.Modules;
-using Xunit;
 using xUnitHelpers;
 
 namespace StatiqHelpers.Unit.Tests.Modules

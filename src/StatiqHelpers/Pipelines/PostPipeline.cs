@@ -1,5 +1,4 @@
-﻿using System;
-using Statiq.Common;
+﻿using Statiq.Common;
 using Statiq.Core;
 using Statiq.Highlight;
 using Statiq.Markdown;

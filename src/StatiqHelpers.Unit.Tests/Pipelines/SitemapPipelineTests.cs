@@ -1,7 +1,4 @@
-﻿using System.Threading.Tasks;
-using StatiqHelpers.Pipelines;
-using VerifyXunit;
-using Xunit;
+﻿using StatiqHelpers.Pipelines;
 
 namespace StatiqHelpers.Unit.Tests.Pipelines;
 

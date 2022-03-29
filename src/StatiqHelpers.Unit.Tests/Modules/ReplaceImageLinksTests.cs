@@ -1,8 +1,6 @@
-﻿using System.Threading.Tasks;
-using Statiq.Common;
+﻿using Statiq.Common;
 using Statiq.Testing;
 using StatiqHelpers.Modules;
-using Xunit;
 
 namespace StatiqHelpers.Unit.Tests.Modules
 {

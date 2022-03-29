@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using Statiq.Testing;
+﻿using Statiq.Testing;
 using StatiqHelpers.Shortcodes;
-using VerifyXunit;
-using Xunit;
 
 namespace StatiqHelpers.Unit.Tests.Shortcodes
 {

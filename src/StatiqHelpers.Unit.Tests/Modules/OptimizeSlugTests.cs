@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.Logging;
 using Statiq.Common;
 using Statiq.Testing;
 using StatiqHelpers.Modules;
-using Xunit;
 
 namespace StatiqHelpers.Unit.Tests.Modules
 {

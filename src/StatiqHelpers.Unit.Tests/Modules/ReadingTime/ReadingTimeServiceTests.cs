@@ -1,6 +1,4 @@
-using System.Linq;
 using StatiqHelpers.Modules.ReadingTime;
-using Xunit;
 using xUnitHelpers;
 
 namespace StatiqHelpers.Unit.Tests.Modules.ReadingTime

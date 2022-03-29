@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using Statiq.Common;
+﻿using Statiq.Common;
 
 namespace StatiqHelpers.Models
 {

@@ -1,13 +1,9 @@
-﻿using System;
-using System.Linq;
-using System.Threading.Tasks;
-using Moq;
+﻿using Moq;
 using Statiq.Common;
 using Statiq.Testing;
 using StatiqHelpers.ImageHelpers;
 using StatiqHelpers.Modules;
 using StatiqHelpers.Modules.ReadingTime;
-using Xunit;
 using xUnitHelpers;
 using Keys = Statiq.Common.Keys;
 
