@@ -8,7 +8,7 @@ An opinionated wrapper around Statiq
 - Javascript files should be present in the "assets/js" folder and are copied into the "assets/js" folder.
     - Service worker file (sw.js) is copied to the root if present.
 - Stylesheets are copied to the assets folder.
-    - Files starting with _ are ignored.
+    - Files starting with \_ are ignored.
 - TTF and WOFF2 fonts are copied to assets/fonts.
 - Binary files with extensions pdf, zip, rar or exe are copied to assets/downloads.
 - Slugs are optimized
@@ -19,7 +19,7 @@ An opinionated wrapper around Statiq
         - Generates the slug from the folder name for markdown files.
     - The slug and filename are used for setting the destination for razor pages.
     - Generates the slug from the file name for razor files.
-    - nested folders can be used to generate a route.
+    - Nested folders can be used to generate a route.
     - Page Images are copied to assets/images/pages/slug/.
         - Images can be in the same folder as the markdown file or in a slug/images folder.
 - Posts
@@ -32,15 +32,18 @@ An opinionated wrapper around Statiq
     - Post Images are copied to assets/images/posts/slug/.
         - Images can be in the same folder as the markdown file or in a yyyy-mm-dd-slug/images folder.
     - Reading Time is generated for the articles.
+    - Social share images for facebook and twitter are created.
 - Index page is taken from Index.cshtml and has access to the list of posts.
 - Blog page is taken from Blog.cshtml and has access to the list of posts.
-  - The grouping and ordering of the posts can be configured.
+    - The grouping and ordering of the posts can be configured.
 - A rss.xml is created for the RSS Feed
     - Set title from Post title.
     - Sets description from Post description.
     - Sets image from post image or shared image in assets/images folder.
     - Sets published date from post directory date.
     - Sets updated date from updated date from post frontmatter. Defaults to published date.
+- A sitemap.xml is created
+    - Sets the path and last modified date from the document.
 
 ## Modules
 
@@ -52,10 +55,24 @@ An opinionated wrapper around Statiq
     - Makes you tube videos responsive with a 16:9 aspect ratio and full width.
     - pass in the id and the title.
 3. Optimize Slug
-   - Optimizes the destination slug by 
-     - converting reserved characters to -.
-     - converting to lower case.
-     - trimming and collapsing whitespaces.
-     - turning spaces into dashes.
-     - removing multiple dashes.
-     - removing filler words.
+    - Optimizes the destination slug by
+        - converting reserved characters to -.
+        - converting to lower case.
+        - trimming and collapsing whitespaces.
+        - turning spaces into dashes.
+        - removing multiple dashes.
+        - removing filler words.
+4. Replace Image Links
+    - Replaces relative Image Links in markdown file to point to the correct folder in the images directory.
+    - Absolute Image Links in markdown file are not replaced.
+5. GenerateRssMetaData
+    - Sets the title, description, updatedDate and image for the RSS feed from the post metadata.
+6. GenerateSitemapMetaData
+    - Sets the path and last modified date from the document.
+7. GeneratePageDetailsFromPath
+    - Sets the slug from the folder path for pages.
+8. GeneratePostDetailsFromPath
+    - Sets the slug and published date from the path.
+9. GenerateSocialImages
+    - Creates images to share on facebook and twitter.
+    - Can pass in a cover image to use as the background

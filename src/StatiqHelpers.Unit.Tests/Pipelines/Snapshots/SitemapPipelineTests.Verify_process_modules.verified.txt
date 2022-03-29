@@ -1,0 +1,5 @@
+﻿[
+  ConcatDocuments,
+  GenerateSitemapMetaData,
+  GenerateSitemap
+]

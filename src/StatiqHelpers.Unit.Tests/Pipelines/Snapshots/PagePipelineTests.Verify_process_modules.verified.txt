@@ -1,10 +1,11 @@
 ﻿[
-  GatherDocuments,
   CacheDocuments,
-  GatherDocuments,
   ExtractFrontMatter,
   GeneratePageDetailsFromPath,
   ExecuteIf,
   OptimizeSlug,
-  SetDestination
+  SetDestination,
+  ReplaceImageLinks,
+  RenderMarkdown,
+  ProcessShortcodes
 ]

@@ -1,12 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Microsoft.Extensions.Logging;
 using Statiq.Common;
 using StatiqHelpers.Extensions;
 using StatiqHelpers.ImageHelpers;
 
-namespace StatiqHelpers.SocialImages
+namespace StatiqHelpers.Modules
 {
     public class GenerateSocialImages : ParallelModule
     {
@@ -19,8 +18,7 @@ namespace StatiqHelpers.SocialImages
 
         protected override async Task<IEnumerable<IDocument>> ExecuteInputAsync(IDocument input, IExecutionContext context)
         {
-            context.LogDebug($"Read file {input.Source}");
-
+            var siteTitle = context.GetSiteTitle();
             var readingTimeData = input.GetReadingTime();
             var centerText = $"{input.GetTitle().ToUpper()}{Environment.NewLine}";
 
@@ -30,7 +28,6 @@ namespace StatiqHelpers.SocialImages
 
             var coverImagePath = input.GetCoverImagePath();
 
-            //Todo: Check if this can be replaced with GetCoverImageLink
             if (coverImagePath != null)
             {
                 coverImagePath = coverImagePath.StartsWith(Constants.ImagesDirectory)
@@ -38,23 +35,19 @@ namespace StatiqHelpers.SocialImages
                     : $"{input.Source.Parent.FullPath}/{coverImagePath}";
             }
 
-            var stream = await _imageService.CreateImageDocument(1200, 630, coverImagePath, context.GetSiteTitle(), centerText);
+            var stream = await _imageService.CreateImageDocument(1200, 630, coverImagePath, siteTitle, centerText);
 
             var facebookDoc = context.CreateDocument(
                 input.Source,
                 $"./{Constants.SocialImagesDirectory}/{input.Destination.FileNameWithoutExtension}-facebook.png",
                 context.GetContentProvider(stream));
 
-            context.LogDebug($"Created {facebookDoc.Destination}");
-
-            stream = await _imageService.CreateImageDocument(440, 220, coverImagePath, context.GetSiteTitle(), centerText);
+            stream = await _imageService.CreateImageDocument(440, 220, coverImagePath, siteTitle, centerText);
 
             var twitterDoc = context.CreateDocument(
                 input.Source,
                 $"./{Constants.SocialImagesDirectory}/{input.Destination.FileNameWithoutExtension}-twitter.png",
                 context.GetContentProvider(stream));
-
-            context.LogDebug($"Created {twitterDoc.Destination}");
 
             return new[]
             {

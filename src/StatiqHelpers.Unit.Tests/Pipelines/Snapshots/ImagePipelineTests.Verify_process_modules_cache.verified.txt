@@ -1,6 +1,0 @@
-﻿[
-  GatherDocuments,
-  CacheDocuments,
-  GatherDocuments,
-  ExecuteIf
-]

@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using Statiq.Common;
+﻿using Statiq.Common;
 using Statiq.Core;
 using Statiq.Markdown;
 using Statiq.Razor;
@@ -26,14 +25,7 @@ namespace StatiqHelpers.Pipelines
                     new GeneratePageDetailsFromPath(),
                     new ExecuteIf(
                         Config.FromDocument(doc => doc.Source.MediaType == MediaTypes.Markdown || doc.Source.MediaType == "text/x-mdx"),
-                        new ReplaceInContent(
-                            @"!\[(?<alt>.*)\]\(./images/(?<imagePath>.*)\)",
-                            Config.FromDocument((document, context) => "![$1](./$2)")).IsRegex(),
-                        new ReplaceInContent(
-                                @"!\[(?<alt>.*)\]\(./(?<imagePath>.*)\)",
-                                Config.FromDocument(
-                                    (document, context) => $"![$1](/{Constants.PagesImagesDirectory}/{document.GetString(MetaDataKeys.Slug)}/$2)"))
-                            .IsRegex(),
+                        new ReplaceImageLinks(Constants.PagesImagesDirectory),
                         new RenderMarkdown().UseExtensions(),
                         new ProcessShortcodes()),
                     new OptimizeSlug(),

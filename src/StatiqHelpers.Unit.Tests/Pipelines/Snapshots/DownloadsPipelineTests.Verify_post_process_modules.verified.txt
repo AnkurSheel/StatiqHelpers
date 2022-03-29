@@ -1,4 +1,1 @@
-﻿[
-  GatherDocuments,
-  GatherDocuments
-]
+﻿[]

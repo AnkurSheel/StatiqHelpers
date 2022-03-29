@@ -1,6 +1,5 @@
 ﻿[
-  GatherDocuments,
   MinifyJs,
   ExecuteIf,
-  GatherDocuments
+  SetDestination
 ]
