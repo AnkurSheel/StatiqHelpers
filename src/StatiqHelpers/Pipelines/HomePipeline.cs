@@ -17,6 +17,7 @@ namespace StatiqHelpers.Pipelines
 
             ProcessModules = new ModuleList
             {
+                new OptimizeFileName(),
                 new SetDestination(".html"),
             };
 
