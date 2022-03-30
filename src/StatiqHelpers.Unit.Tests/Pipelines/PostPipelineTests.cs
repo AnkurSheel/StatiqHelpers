@@ -66,7 +66,7 @@ Article Content
             Bootstrapper.AddSetting("Environment", "Test");
             var result = await Bootstrapper.RunTestAsync(fileProvider);
 
-            Assert.Equal((int) ExitCode.Normal, result.ExitCode);
+            Assert.Equal((int)ExitCode.Normal, result.ExitCode);
             var outputs = result.Outputs[PipelineName];
 
             AssertHelper.AssertMultiple(() => Assert.Empty(outputs[Phase.PostProcess]), () => Assert.Empty(outputs[Phase.Output]));
@@ -82,7 +82,7 @@ Article Content
             Bootstrapper.AddSetting("Environment", "Development");
             var result = await Bootstrapper.RunTestAsync(fileProvider);
 
-            Assert.Equal((int) ExitCode.Normal, result.ExitCode);
+            Assert.Equal((int)ExitCode.Normal, result.ExitCode);
             var outputs = result.Outputs[PipelineName];
 
             AssertHelper.AssertMultiple(() => Assert.Single(outputs[Phase.PostProcess]), () => Assert.Single(outputs[Phase.Output]));
@@ -97,7 +97,7 @@ Article Content
 
             var result = await Bootstrapper.RunTestAsync(fileProvider);
 
-            Assert.Equal((int) ExitCode.Normal, result.ExitCode);
+            Assert.Equal((int)ExitCode.Normal, result.ExitCode);
             var outputs = result.Outputs[PipelineName];
 
             AssertHelper.AssertMultiple(() => Assert.Single(outputs[Phase.PostProcess]), () => Assert.Single(outputs[Phase.Output]));
@@ -116,10 +116,10 @@ Article Content
 
             var result = await Bootstrapper.RunTestAsync(fileProvider);
 
-            Assert.Equal((int) ExitCode.Normal, result.ExitCode);
+            Assert.Equal((int)ExitCode.Normal, result.ExitCode);
             var document = result.Outputs[PipelineName][Phase.PostProcess].Single();
             var body = await document.GetContentStringAsync();
-            await Verifier.Verify(body);
+            await Verify(body);
         }
 
         [Fact]
@@ -135,10 +135,10 @@ Article Content
 
             var result = await Bootstrapper.RunTestAsync(fileProvider);
 
-            Assert.Equal((int) ExitCode.Normal, result.ExitCode);
+            Assert.Equal((int)ExitCode.Normal, result.ExitCode);
             var document = result.Outputs[PipelineName][Phase.PostProcess].Single();
             var body = await document.GetContentStringAsync();
-            await Verifier.Verify(body);
+            await Verify(body);
         }
 
         [Fact]
@@ -155,11 +155,11 @@ int foo = 1
 
             var result = await Bootstrapper.RunTestAsync(fileProvider);
 
-            Assert.Equal((int) ExitCode.Normal, result.ExitCode);
+            Assert.Equal((int)ExitCode.Normal, result.ExitCode);
             var document = result.Outputs[PipelineName][Phase.Process].Single();
 
             var body = await document.GetContentStringAsync();
-            await Verifier.Verify(body);
+            await Verify(body);
         }
 
         [Fact]
@@ -171,9 +171,9 @@ int foo = 1
 
             var result = await Bootstrapper.RunTestAsync(fileProvider);
 
-            Assert.Equal((int) ExitCode.Normal, result.ExitCode);
+            Assert.Equal((int)ExitCode.Normal, result.ExitCode);
             var document = result.Outputs[PipelineName][Phase.Output].Single();
-            Assert.Equal("blog/slug-mixed-caps.html", document.Destination);
+            Assert.Equal("blog/slug-mixed-caps.html", document.Destination.ToString());
         }
     }
 }

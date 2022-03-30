@@ -46,9 +46,9 @@ namespace StatiqHelpers.Unit.Tests.Pipelines
             var fileProvider = GetFileProvider();
             var result = await Bootstrapper.RunTestAsync(fileProvider);
 
-            Assert.Equal((int) ExitCode.Normal, result.ExitCode);
+            Assert.Equal((int)ExitCode.Normal, result.ExitCode);
             var document = result.Outputs[PipelineName][Phase.Output].Single();
-            Assert.Equal("blog.html", document.Destination);
+            Assert.Equal("blog.html", document.Destination.ToString());
         }
 
         private TestFileProvider GetFileProvider()

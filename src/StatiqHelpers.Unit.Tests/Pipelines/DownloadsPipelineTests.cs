@@ -53,10 +53,10 @@ namespace StatiqHelpers.Unit.Tests.Pipelines
 
             var result = await Bootstrapper.RunTestAsync(fileProvider);
 
-            Assert.Equal((int) ExitCode.Normal, result.ExitCode);
+            Assert.Equal((int)ExitCode.Normal, result.ExitCode);
             var document = result.Outputs[PipelineName][Phase.Output].Single();
 
-            Assert.Equal($"assets/downloads/filename.{extension}", document.Destination);
+            Assert.Equal($"assets/downloads/filename.{extension}", document.Destination.ToString());
         }
     }
 }

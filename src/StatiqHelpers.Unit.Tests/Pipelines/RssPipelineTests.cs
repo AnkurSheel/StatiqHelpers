@@ -47,7 +47,7 @@ namespace StatiqHelpers.Unit.Tests.Pipelines
 
             Assert.Equal((int) ExitCode.Normal, result.ExitCode);
             var document = result.Outputs[PipelineName][Phase.Output].Single();
-            Assert.Equal("rss.xml", document.Destination);
+            Assert.Equal("rss.xml", document.Destination.ToString());
         }
     }
 }

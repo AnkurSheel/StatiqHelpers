@@ -49,10 +49,10 @@ namespace StatiqHelpers.Unit.Tests.Pipelines
 
             var result = await Bootstrapper.RunTestAsync(fileProvider);
 
-            Assert.Equal((int) ExitCode.Normal, result.ExitCode);
+            Assert.Equal((int)ExitCode.Normal, result.ExitCode);
             var document = result.Outputs[PipelineName][Phase.Output].Single();
 
-            Assert.Equal("assets/js/scripts.js", document.Destination);
+            Assert.Equal("assets/js/scripts.js", document.Destination.ToString());
         }
 
         [Fact]
@@ -64,10 +64,10 @@ namespace StatiqHelpers.Unit.Tests.Pipelines
 
             var result = await Bootstrapper.RunTestAsync(fileProvider);
 
-            Assert.Equal((int) ExitCode.Normal, result.ExitCode);
+            Assert.Equal((int)ExitCode.Normal, result.ExitCode);
             var document = result.Outputs[PipelineName][Phase.Output].Single();
 
-            Assert.Equal("sw.js", document.Destination);
+            Assert.Equal("sw.js", document.Destination.ToString());
         }
     }
 }

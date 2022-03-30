@@ -65,7 +65,7 @@ public class SitemapPipelineTests : PipelineBaseFixture
 
         Assert.Equal((int)ExitCode.Normal, result.ExitCode);
 
-        Assert.Equal("sitemap.xml", document.Destination);
+        Assert.Equal("sitemap.xml", document.Destination.ToString());
     }
 
     private TestFileProvider GetFileProvider()

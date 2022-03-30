@@ -48,7 +48,6 @@ namespace StatiqHelpers.Unit.Tests.Pipelines
             await VerifyOutputModules(PipelineName);
         }
 
-
         [Fact]
         public async Task Image_links_are_created_correctly_for_images_in_the_page_folder()
         {
@@ -65,7 +64,7 @@ namespace StatiqHelpers.Unit.Tests.Pipelines
             Assert.Equal((int)ExitCode.Normal, result.ExitCode);
             var document = result.Outputs[PipelineName][Phase.PostProcess].Single();
             var body = await document.GetContentStringAsync();
-            await Verifier.Verify(body);
+            await Verify(body);
         }
 
         [Fact]
@@ -84,7 +83,7 @@ namespace StatiqHelpers.Unit.Tests.Pipelines
             Assert.Equal((int)ExitCode.Normal, result.ExitCode);
             var document = result.Outputs[PipelineName][Phase.PostProcess].Single();
             var body = await document.GetContentStringAsync();
-            await Verifier.Verify(body);
+            await Verify(body);
         }
 
         [Fact]
@@ -98,7 +97,7 @@ namespace StatiqHelpers.Unit.Tests.Pipelines
 
             Assert.Equal((int)ExitCode.Normal, result.ExitCode);
             var document = result.Outputs[PipelineName][Phase.Output].Single();
-            Assert.Equal("folder-1/slug-mixed-caps.html", document.Destination);
+            Assert.Equal("folder-1/slug-mixed-caps.html", document.Destination.ToString());
         }
 
         [Fact]
@@ -111,7 +110,7 @@ namespace StatiqHelpers.Unit.Tests.Pipelines
 
             Assert.Equal((int)ExitCode.Normal, result.ExitCode);
             var document = result.Outputs[PipelineName][Phase.Output].Single();
-            Assert.Equal($"{_slug}/filename.html", document.Destination);
+            Assert.Equal($"{_slug}/filename.html", document.Destination.ToString());
         }
     }
 }
