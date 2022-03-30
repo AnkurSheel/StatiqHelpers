@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using Statiq.Common;
+﻿using Statiq.Common;
 using Statiq.Core;
 using Statiq.Feeds;
 using StatiqHelpers.Extensions;

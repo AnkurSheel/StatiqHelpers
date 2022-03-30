@@ -1,10 +1,7 @@
-﻿using System.Linq;
-using System.Threading.Tasks;
-using Moq;
+﻿using Moq;
 using Statiq.Common;
 using Statiq.Testing;
 using StatiqHelpers.Modules.ReadingTime;
-using Xunit;
 
 namespace StatiqHelpers.Unit.Tests.Modules.ReadingTime
 {

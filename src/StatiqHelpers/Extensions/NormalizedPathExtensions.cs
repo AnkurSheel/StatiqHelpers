@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using System.Text.RegularExpressions;
+﻿using System.Text.RegularExpressions;
 using Statiq.Common;
 
 namespace StatiqHelpers.Extensions
@@ -11,15 +10,26 @@ namespace StatiqHelpers.Extensions
             var optimizedSegments = path.Segments.Select(
                     segment =>
                     {
-                        var optimizedSegment = Constants.StopWords.Aggregate(
-                            segment.ToString(),
-                            (current, word) => Regex.Replace(current, @$"\b{word}\b", "", RegexOptions.IgnoreCase));
+                        var optimizedSegment = Constants.StopWords.Aggregate(segment.ToString(), (current, word) => ReplaceWholeWord(current, $"{word}", ""));
 
-                        return NormalizedPath.OptimizeFileName(optimizedSegment);
+                        optimizedSegment = NormalizedPath.OptimizeFileName(optimizedSegment);
+
+                        if (optimizedSegment[0] == '-')
+                        {
+                            optimizedSegment = optimizedSegment.Substring(1);
+                        }
+
+                        return optimizedSegment;
                     })
                 .ToList();
 
             return string.Join("/", optimizedSegments);
+        }
+
+        private static string ReplaceWholeWord(string input, string wordToReplace, string replacementWord)
+        {
+            var pattern = $"\\b{wordToReplace}\\b";
+            return Regex.Replace(input, pattern, replacementWord, RegexOptions.IgnoreCase);
         }
     }
 }

@@ -1,5 +1,4 @@
-﻿using System;
-using Statiq.Common;
+﻿using Statiq.Common;
 
 namespace StatiqHelpers.Pipelines
 {

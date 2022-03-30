@@ -1,8 +1,5 @@
-﻿using System.IO;
-using System.Runtime.CompilerServices;
-using System.Threading.Tasks;
+﻿using System.Runtime.CompilerServices;
 using DiffEngine;
-using VerifyTests;
 
 namespace StatiqHelpers.Unit.Tests
 {

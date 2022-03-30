@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using Statiq.Common;
+﻿using Statiq.Common;
 using Statiq.Core;
 using Statiq.Razor;
 using StatiqHelpers.Extensions;
@@ -18,6 +17,7 @@ namespace StatiqHelpers.Pipelines
 
             ProcessModules = new ModuleList
             {
+                new OptimizeFileName(),
                 new SetDestination(".html"),
             };
 

@@ -1,8 +1,4 @@
-﻿using System.Collections.Generic;
-using System.IO;
-using System.Threading.Tasks;
-
-namespace StatiqHelpers.ImageHelpers
+﻿namespace StatiqHelpers.ImageHelpers
 {
     public interface IImageService
     {

@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using Statiq.Common;
+﻿using Statiq.Common;
 using Statiq.Core;
 using StatiqHelpers.ImageHelpers;
 using StatiqHelpers.Modules;

@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using Statiq.Common;
+﻿using Statiq.Common;
 using StatiqHelpers.Extensions;
 using StatiqHelpers.ImageHelpers;
 

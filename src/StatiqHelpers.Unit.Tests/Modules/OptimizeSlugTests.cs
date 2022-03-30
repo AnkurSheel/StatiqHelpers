@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.Logging;
 using Statiq.Common;
 using Statiq.Testing;
 using StatiqHelpers.Modules;
-using Xunit;
 
 namespace StatiqHelpers.Unit.Tests.Modules
 {
@@ -69,6 +64,19 @@ namespace StatiqHelpers.Unit.Tests.Modules
             Assert.Equal("folder-name/file-name", result[MetaDataKeys.Slug].ToString());
         }
 
+        [Fact]
+        public async Task Starting_underscore_is_removed()
+        {
+            const string slug = "-folder-name/-file-name";
+            var document = ModuleTestHelpersStatic.GetTestDocument(GetMetadata(slug));
+
+            var optimizeSlug = new OptimizeSlug();
+
+            var result = await ExecuteAsync(document, optimizeSlug).SingleAsync();
+
+            Assert.Equal("folder-name/file-name", result[MetaDataKeys.Slug].ToString());
+        }
+
         [Theory]
         [MemberData(nameof(FillerWords))]
         public async Task Filler_words_are_removed(string slug)
@@ -97,12 +105,25 @@ namespace StatiqHelpers.Unit.Tests.Modules
 
         private KeyValuePair<string, object>[] GetMetadata(string slug)
         {
-            return new[] { new KeyValuePair<string, object>(MetaDataKeys.Slug, slug) };
+            return new[]
+            {
+                new KeyValuePair<string, object>(MetaDataKeys.Slug, slug)
+            };
         }
 
-        public static readonly IEnumerable<object[]> FillerWords = Constants.StopWords.Select(x => new object[] { x }).ToArray();
+        public static readonly IEnumerable<object[]> FillerWords = Constants.StopWords.Select(
+                x => new object[]
+                {
+                    x
+                })
+            .ToArray();
 
-        public static readonly IEnumerable<object[]> ReservedChars =
-            NormalizedPath.OptimizeFileNameReservedChars.Where(x => x != '\\' && x != '/').Select(x => new object[] { x }).ToArray();
+        public static readonly IEnumerable<object[]> ReservedChars = NormalizedPath.OptimizeFileNameReservedChars.Where(x => x != '\\' && x != '/')
+            .Select(
+                x => new object[]
+                {
+                    x
+                })
+            .ToArray();
     }
 }

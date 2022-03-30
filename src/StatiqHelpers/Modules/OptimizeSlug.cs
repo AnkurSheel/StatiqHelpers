@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Statiq.Common;
+﻿using Statiq.Common;
 using StatiqHelpers.Extensions;
 
 namespace StatiqHelpers.Modules

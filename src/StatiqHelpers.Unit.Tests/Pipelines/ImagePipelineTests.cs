@@ -1,11 +1,7 @@
-﻿using System.Linq;
-using System.Threading.Tasks;
-using Statiq.App;
+﻿using Statiq.App;
 using Statiq.Common;
 using Statiq.Testing;
 using StatiqHelpers.Pipelines;
-using VerifyXunit;
-using Xunit;
 
 namespace StatiqHelpers.Unit.Tests.Pipelines
 {
@@ -53,10 +49,10 @@ namespace StatiqHelpers.Unit.Tests.Pipelines
 
             var result = await Bootstrapper.RunTestAsync(fileProvider);
 
-            Assert.Equal((int) ExitCode.Normal, result.ExitCode);
+            Assert.Equal((int)ExitCode.Normal, result.ExitCode);
             var document = result.Outputs[PipelineName][Phase.Output].Single();
 
-            Assert.Equal("favicon.ico", document.Destination);
+            Assert.Equal("favicon.ico", document.Destination.ToString());
         }
 
         [Fact]
@@ -68,10 +64,10 @@ namespace StatiqHelpers.Unit.Tests.Pipelines
 
             var result = await Bootstrapper.RunTestAsync(fileProvider);
 
-            Assert.Equal((int) ExitCode.Normal, result.ExitCode);
+            Assert.Equal((int)ExitCode.Normal, result.ExitCode);
             var document = result.Outputs[PipelineName][Phase.Output].Single();
 
-            Assert.Equal("assets/images/posts/slug/cover.jpg", document.Destination);
+            Assert.Equal("assets/images/posts/slug/cover.jpg", document.Destination.ToString());
         }
 
         [Fact]
@@ -83,10 +79,10 @@ namespace StatiqHelpers.Unit.Tests.Pipelines
 
             var result = await Bootstrapper.RunTestAsync(fileProvider);
 
-            Assert.Equal((int) ExitCode.Normal, result.ExitCode);
+            Assert.Equal((int)ExitCode.Normal, result.ExitCode);
             var document = result.Outputs[PipelineName][Phase.Output].Single();
 
-            Assert.Equal("assets/images/posts/slug/cover.jpg", document.Destination);
+            Assert.Equal("assets/images/posts/slug/cover.jpg", document.Destination.ToString());
         }
 
         [Fact]
@@ -98,10 +94,10 @@ namespace StatiqHelpers.Unit.Tests.Pipelines
 
             var result = await Bootstrapper.RunTestAsync(fileProvider);
 
-            Assert.Equal((int) ExitCode.Normal, result.ExitCode);
+            Assert.Equal((int)ExitCode.Normal, result.ExitCode);
             var document = result.Outputs[PipelineName][Phase.Output].Single();
 
-            Assert.Equal("assets/images/pages/slug/cover.jpg", document.Destination);
+            Assert.Equal("assets/images/pages/slug/cover.jpg", document.Destination.ToString());
         }
 
         [Fact]
@@ -113,10 +109,10 @@ namespace StatiqHelpers.Unit.Tests.Pipelines
 
             var result = await Bootstrapper.RunTestAsync(fileProvider);
 
-            Assert.Equal((int) ExitCode.Normal, result.ExitCode);
+            Assert.Equal((int)ExitCode.Normal, result.ExitCode);
             var document = result.Outputs[PipelineName][Phase.Output].Single();
 
-            Assert.Equal("assets/images/pages/slug/cover.jpg", document.Destination);
+            Assert.Equal("assets/images/pages/slug/cover.jpg", document.Destination.ToString());
         }
 
         [Fact]
@@ -128,10 +124,10 @@ namespace StatiqHelpers.Unit.Tests.Pipelines
 
             var result = await Bootstrapper.RunTestAsync(fileProvider);
 
-            Assert.Equal((int) ExitCode.Normal, result.ExitCode);
+            Assert.Equal((int)ExitCode.Normal, result.ExitCode);
             var document = result.Outputs[PipelineName][Phase.Output].Single();
 
-            Assert.Equal("assets/images/cover.jpg", document.Destination);
+            Assert.Equal("assets/images/cover.jpg", document.Destination.ToString());
         }
     }
 }

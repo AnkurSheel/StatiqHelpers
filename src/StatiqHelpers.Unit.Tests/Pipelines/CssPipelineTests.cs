@@ -1,11 +1,7 @@
-﻿using System.Linq;
-using System.Threading.Tasks;
-using Statiq.App;
+﻿using Statiq.App;
 using Statiq.Common;
 using Statiq.Testing;
 using StatiqHelpers.Pipelines;
-using VerifyXunit;
-using Xunit;
 
 namespace StatiqHelpers.Unit.Tests.Pipelines
 {
@@ -53,10 +49,10 @@ namespace StatiqHelpers.Unit.Tests.Pipelines
 
             var result = await Bootstrapper.RunTestAsync(fileProvider);
 
-            Assert.Equal((int) ExitCode.Normal, result.ExitCode);
+            Assert.Equal((int)ExitCode.Normal, result.ExitCode);
             var document = result.Outputs[PipelineName][Phase.Output].Single();
 
-            Assert.Equal("assets/styles.css", document.Destination);
+            Assert.Equal("assets/styles.css", document.Destination.ToString());
         }
 
         [Fact]
@@ -68,7 +64,7 @@ namespace StatiqHelpers.Unit.Tests.Pipelines
 
             var result = await Bootstrapper.RunTestAsync(fileProvider);
 
-            Assert.Equal((int) ExitCode.Normal, result.ExitCode);
+            Assert.Equal((int)ExitCode.Normal, result.ExitCode);
             var documents = result.Outputs[PipelineName][Phase.Output];
 
             Assert.Empty(documents);

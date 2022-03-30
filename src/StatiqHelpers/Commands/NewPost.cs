@@ -1,9 +1,6 @@
-﻿using System;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using System.Globalization;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Spectre.Console;
@@ -11,7 +8,6 @@ using Spectre.Console.Cli;
 using Statiq.App;
 using Statiq.Common;
 using StatiqHelpers.Extensions;
-using StatiqHelpers.Modules;
 
 namespace StatiqHelpers.Commands
 {
