@@ -19,17 +19,17 @@ namespace StatiqHelpers.Unit.Tests.Pipelines
         {
             var result = await Bootstrapper.RunTestAsync(new TestFileProvider());
 
-            Assert.Equal((int) ExitCode.Normal, result.ExitCode);
+            Assert.Equal((int)ExitCode.Normal, result.ExitCode);
 
             var pipeline = result.Engine.Pipelines[pipelineName];
-            await Verifier.Verify(pipeline.Dependencies);
+            await Verify(pipeline.Dependencies);
         }
 
         protected async Task VerifyInputModules(string pipelineName)
         {
             var result = await Bootstrapper.RunTestAsync(new TestFileProvider());
 
-            Assert.Equal((int) ExitCode.Normal, result.ExitCode);
+            Assert.Equal((int)ExitCode.Normal, result.ExitCode);
 
             var pipeline = result.Engine.Pipelines[pipelineName];
             await VerifyModule(pipeline.InputModules);
@@ -39,7 +39,7 @@ namespace StatiqHelpers.Unit.Tests.Pipelines
         {
             var result = await Bootstrapper.RunTestAsync(new TestFileProvider());
 
-            Assert.Equal((int) ExitCode.Normal, result.ExitCode);
+            Assert.Equal((int)ExitCode.Normal, result.ExitCode);
 
             var pipeline = result.Engine.Pipelines[pipelineName];
             var modules = pipeline.ProcessModules;
@@ -64,7 +64,7 @@ namespace StatiqHelpers.Unit.Tests.Pipelines
         {
             var result = await Bootstrapper.RunTestAsync(new TestFileProvider());
 
-            Assert.Equal((int) ExitCode.Normal, result.ExitCode);
+            Assert.Equal((int)ExitCode.Normal, result.ExitCode);
 
             var pipeline = result.Engine.Pipelines[pipelineName];
             await VerifyModule(pipeline.PostProcessModules);
@@ -74,7 +74,7 @@ namespace StatiqHelpers.Unit.Tests.Pipelines
         {
             var result = await Bootstrapper.RunTestAsync(new TestFileProvider());
 
-            Assert.Equal((int) ExitCode.Normal, result.ExitCode);
+            Assert.Equal((int)ExitCode.Normal, result.ExitCode);
 
             var pipeline = result.Engine.Pipelines[pipelineName];
             await VerifyModule(pipeline.OutputModules);
@@ -82,7 +82,7 @@ namespace StatiqHelpers.Unit.Tests.Pipelines
 
         private async Task VerifyModule(ModuleList moduleList)
         {
-            await Verifier.Verify(moduleList.Where(x => x is not GatherDocuments).Select(x => x.GetType().Name));
+            await Verify(moduleList.Where(x => x is not GatherDocuments).Select(x => x.GetType().Name));
         }
     }
 }
