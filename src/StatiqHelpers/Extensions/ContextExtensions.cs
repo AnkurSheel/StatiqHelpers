@@ -20,16 +20,16 @@ namespace StatiqHelpers.Extensions
                 var url = headerLink.GetString("Url");
                 var children = headerLink.GetDocumentList("Children");
 
-                if (children == null)
-                {
-                    navigationLinks.Add(NavigationLink.NavigationLinkWithoutChildren(title, url));
-                }
-                else
+                if (children.Any())
                 {
                     var childLinks = children.Select(child => NavigationLink.NavigationLinkWithoutChildren(child.GetString("Title"), child.GetString("Url")))
                         .ToList();
 
                     navigationLinks.Add(NavigationLink.NavigationLinkWithChildren(title, childLinks));
+                }
+                else
+                {
+                    navigationLinks.Add(NavigationLink.NavigationLinkWithoutChildren(title, url));
                 }
             }
 
