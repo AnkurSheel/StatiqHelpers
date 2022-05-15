@@ -25,8 +25,8 @@ namespace StatiqHelpers.Pipelines
                 }.Reverse(),
                 new SetMetadata("Title", Config.FromDocument((document, context) => $"Posts tagged as \"{document.GetString(Keys.GroupKey)}\"")),
                 new SetMetadata("Name", Config.FromDocument((document, context) => document.GetString(Keys.GroupKey))),
-                new SetDestination(Config.FromDocument((doc, ctx) => new NormalizedPath("tags").Combine($"{doc.GetString(Keys.GroupKey)}.html"))),
-                new OptimizeFileName()
+                new SetDestination(
+                    Config.FromDocument((doc, ctx) => new NormalizedPath("tags").Combine($"{doc.GetString(Keys.GroupKey)}.html").OptimizeSlug())),
             };
 
             PostProcessModules = new ModuleList
