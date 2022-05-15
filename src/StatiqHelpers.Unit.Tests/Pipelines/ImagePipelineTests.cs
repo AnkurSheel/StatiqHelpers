@@ -71,6 +71,21 @@ namespace StatiqHelpers.Unit.Tests.Pipelines
         }
 
         [Fact]
+        public async Task Post_image_in_the_post_folder_is_copied_to_a_folder_without_filler_words()
+        {
+            var path = "/input/posts/2021/2021-11-19-to-slug-from/cover.jpg";
+
+            var fileProvider = PipelineTestHelpersStatic.GetFileProvider(path);
+
+            var result = await Bootstrapper.RunTestAsync(fileProvider);
+
+            Assert.Equal((int)ExitCode.Normal, result.ExitCode);
+            var document = result.Outputs[PipelineName][Phase.Output].Single();
+
+            Assert.Equal("assets/images/posts/slug-/cover.jpg", document.Destination.ToString());
+        }
+
+        [Fact]
         public async Task Post_image_in_a_images_folder_under_the_post_folder_is_copied_to_the_correct_folder()
         {
             var path = "/input/posts/2021/2021-11-19-slug/images/cover.jpg";

@@ -29,7 +29,9 @@ namespace StatiqHelpers.Pipelines
                                         var postDetailsFromPath = doc.GetPostDetailsFromPath();
                                         var slug = postDetailsFromPath["slug"].ToString();
                                         slug = slug.Replace("/images", "");
-                                        return new NormalizedPath($"{Constants.PostImagesDirectory}/{slug}/{doc.Source.FileName}");
+                                        var path = new NormalizedPath(slug);
+                                        path = path.OptimizeSlug();
+                                        return new NormalizedPath($"{Constants.PostImagesDirectory}/{path}/{doc.Source.FileName}");
                                     })))
                         .ElseIf(
                             Config.FromDocument(doc => doc.Source.FullPath.Contains("pages")),
