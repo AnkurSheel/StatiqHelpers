@@ -1,5 +1,6 @@
 ﻿using System.Text.RegularExpressions;
 using Statiq.Common;
+using StatiqHelpers.Extensions;
 
 namespace StatiqHelpers.Modules
 {
@@ -17,11 +18,10 @@ namespace StatiqHelpers.Modules
             var currentDocumentContent = await input.GetContentStringAsync();
             var replaced = Regex.Replace(currentDocumentContent, @"!\[(?<alt>.*)\]\(./images/(?<imagePath>.*)\)", "![$1](./$2)", RegexOptions.None);
 
-            replaced = Regex.Replace(
-                replaced,
-                @"!\[(?<alt>.*)\]\(./(?<imagePath>.*)\)",
-                $"![$1](/{_imagesDirectory}/{input.GetString(MetaDataKeys.Slug)}/$2)",
-                RegexOptions.None);
+            var slug = input.GetString(MetaDataKeys.Slug);
+            var optimizedSlug = new NormalizedPath(slug).OptimizeSlug();
+
+            replaced = Regex.Replace(replaced, @"!\[(?<alt>.*)\]\(./(?<imagePath>.*)\)", $"![$1](/{_imagesDirectory}/{optimizedSlug}/$2)", RegexOptions.None);
             return input.Clone(context.GetContentProvider(replaced, input.ContentProvider.MediaType)).Yield();
         }
     }

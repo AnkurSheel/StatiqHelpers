@@ -20,7 +20,7 @@ namespace StatiqHelpers.Pipelines
             ProcessModules = new ModuleList
             {
                 new SetDestination("tags.html"),
-                new SetMetadata("Title", "All Tags")
+                new SetMetadata(Keys.Title, "All Tags")
             };
 
             PostProcessModules = new ModuleList

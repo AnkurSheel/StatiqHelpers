@@ -59,11 +59,21 @@ namespace StatiqHelpers.Extensions
         public static ReadingTimeData GetReadingTime(this IDocument document)
             => document.Get<ReadingTimeData>(Keys.ReadingTime);
 
-        public static string GetImageFacebook(this IDocument document)
-            => IExecutionContext.Current.GetLink($"{Constants.SocialImagesDirectory}/{document.GetSlug()}-facebook.png", true);
+        public static string? GetImageFacebook(this IDocument document)
+        {
+            var slug = document.GetSlug();
+            return !string.IsNullOrWhiteSpace(slug)
+                ? IExecutionContext.Current.GetLink($"{Constants.SocialImagesDirectory}/{slug}-facebook.png", true)
+                : null;
+        }
 
-        public static string GetImageTwitter(this IDocument document)
-            => IExecutionContext.Current.GetLink($"{Constants.SocialImagesDirectory}/{document.GetSlug()}-twitter.png", true);
+        public static string? GetImageTwitter(this IDocument document)
+        {
+            var slug = document.GetSlug();
+            return !string.IsNullOrWhiteSpace(slug)
+                ? IExecutionContext.Current.GetLink($"{Constants.SocialImagesDirectory}/{slug}-twitter.png", true)
+                : null;
+        }
 
         public static PageModel AsPagesModel(this IDocument document, IExecutionContext context, IReadOnlyList<IDocument> posts)
             => new PageModel(document, context, posts);

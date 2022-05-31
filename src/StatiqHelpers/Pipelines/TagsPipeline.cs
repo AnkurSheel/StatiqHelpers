@@ -23,8 +23,8 @@ namespace StatiqHelpers.Pipelines
                     new ReplaceDocuments(nameof(PostPipeline)),
                     new GroupDocuments("tags")
                 }.Reverse(),
-                new SetMetadata("Title", Config.FromDocument((document, context) => $"Posts tagged as \"{document.GetString(Keys.GroupKey)}\"")),
-                new SetMetadata("Name", Config.FromDocument((document, context) => document.GetString(Keys.GroupKey))),
+                new SetMetadata(Keys.Title, Config.FromDocument((document, context) => $"Posts tagged as \"{document.GetString(Keys.GroupKey)}\"")),
+                new SetMetadata(MetaDataKeys.TagName, Config.FromDocument((document, context) => document.GetString(Keys.GroupKey))),
                 new SetDestination(
                     Config.FromDocument((doc, ctx) => new NormalizedPath("tags").Combine($"{doc.GetString(Keys.GroupKey)}.html").OptimizeSlug())),
             };

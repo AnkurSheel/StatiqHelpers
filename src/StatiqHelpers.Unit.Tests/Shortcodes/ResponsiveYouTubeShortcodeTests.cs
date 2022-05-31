@@ -36,7 +36,7 @@ namespace StatiqHelpers.Unit.Tests.Shortcodes
 
             var result = shortcode.Execute(args, string.Empty, _document, _context);
 
-            await Verifier.Verify(result.ContentProvider.GetStream().ReadToEnd(), settings);
+            await Verify(result.ContentProvider.GetStream().ReadToEnd(), settings);
         }
     }
 }
