@@ -1,0 +1,6 @@
+﻿[
+  MergeDocuments,
+  SetMetadata,
+  SetMetadata,
+  SetDestination
+]
