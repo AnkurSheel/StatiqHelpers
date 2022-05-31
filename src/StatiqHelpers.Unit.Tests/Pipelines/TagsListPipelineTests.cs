@@ -41,7 +41,7 @@ public class TagsListPipelineTests : PipelineBaseFixture
     }
 
     [Fact]
-    public async Task Sets_destination_to_blog()
+    public async Task Sets_destination_to_tags()
     {
         var fileProvider = GetFileProvider();
         var result = await Bootstrapper.RunTestAsync(fileProvider);
