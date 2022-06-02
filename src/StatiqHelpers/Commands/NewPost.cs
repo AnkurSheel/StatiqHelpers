@@ -63,7 +63,7 @@ namespace StatiqHelpers.Commands
             var rootPath = fileSystem.GetRootPath();
 
             title = new NormalizedPath(title).OptimizeSlug().ToString();
-            var filePath = new NormalizedPath($"{rootPath}/input/posts/{date.Year}/{date:yyyy-MM-dd}-{title}/{title}.md");
+            var filePath = new NormalizedPath($"{rootPath}/content/posts/{date.Year}/{date:yyyy-MM-dd}-{title}/{title}.md");
 
             return fileSystem.GetFile(filePath);
         }
