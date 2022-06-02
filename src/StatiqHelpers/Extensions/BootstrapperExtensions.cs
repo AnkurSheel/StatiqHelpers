@@ -54,6 +54,7 @@ namespace StatiqHelpers.Extensions
                 services =>
                 {
                     services.AddTransient<IImageService, ImageService>();
+                    services.AddTransient<IFontHelper, FontHelper>();
                     services.AddTransient<IReadingTimeService, ReadingTimeService>();
                     services.AddSingleton(new PostListOptions(document => document.GetTitle()));
                 });

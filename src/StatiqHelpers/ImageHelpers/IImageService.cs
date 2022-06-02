@@ -7,7 +7,8 @@
             int height,
             string? coverImagePath,
             string siteTitle,
-            string centerText);
+            string centerText,
+            string fontPath);
 
         Task ResizeImages(IReadOnlyList<string> imagePaths, int newWidth, int newHeight);
     }

@@ -13,13 +13,13 @@ namespace StatiqHelpers.ImageHelpers
 {
     public class ImageService : IImageService
     {
-        private readonly FontFamily _cookieFont;
+        private readonly IFontHelper _fontHelper;
         private readonly ILogger<ImageService> _logger;
 
-        public ImageService(ILogger<ImageService> logger)
+        public ImageService(IFontHelper fontHelper, ILogger<ImageService> logger)
         {
+            _fontHelper = fontHelper;
             _logger = logger;
-            _cookieFont = new FontCollection().Install("./input/assets/fonts/Cookie-Regular.ttf");
         }
 
         public async Task<Stream> CreateImageDocument(
@@ -27,23 +27,33 @@ namespace StatiqHelpers.ImageHelpers
             int height,
             string? coverImagePath,
             string siteTitle,
-            string centerText)
+            string centerText,
+            string fontPath)
         {
             Image template = new Image<Rgb24>(width, height);
+            Image? coverImage = null;
+
+            var font = _fontHelper.InstallFont(fontPath);
+            var fontSize = height / 10;
+
+            if (coverImagePath != null)
+            {
+                coverImage = await Image.LoadAsync(coverImagePath);
+            }
 
             template.Mutate(
-                async imageContext =>
+                imageContext =>
                 {
                     AddGradient(width, height, imageContext);
 
-                    if (coverImagePath != null)
+                    if (coverImage != null)
                     {
-                        using var thumbnail = await AddThumbnail(width, height, coverImagePath);
+                        using var thumbnail = AddThumbnail(width, height, coverImage);
                         imageContext.DrawImage(thumbnail, new Point(0, 0), 1f);
                     }
 
-                    AddCenterText(imageContext, width, height, centerText);
-                    AddBrand(imageContext, width, height, siteTitle);
+                    AddCenterText(imageContext, width, height, centerText, new Font(font, fontSize, FontStyle.Bold));
+                    AddBrand(imageContext, width, height, siteTitle, new Font(font, fontSize, FontStyle.Regular));
                 });
 
             Stream output = new MemoryStream();
@@ -53,10 +63,8 @@ namespace StatiqHelpers.ImageHelpers
             return output;
         }
 
-        private async Task<Image> AddThumbnail(int width, int height, string coverImagePath)
+        private Image AddThumbnail(int width, int height, Image thumbnail)
         {
-            Image thumbnail = await Image.LoadAsync(coverImagePath);
-
             thumbnail.Mutate(
                 imageContext =>
                 {
@@ -91,8 +99,8 @@ namespace StatiqHelpers.ImageHelpers
 
                 var originalSize = image.Size();
 
-                if (originalSize.Width == newWidth && (newHeight == 0 || originalSize.Height == newHeight)
-                    || originalSize.Height == newHeight && (newWidth == 0 || originalSize.Width == newWidth))
+                if ((originalSize.Width == newWidth && (newHeight == 0 || originalSize.Height == newHeight))
+                    || (originalSize.Height == newHeight && (newWidth == 0 || originalSize.Width == newWidth)))
                 {
                     // _logger.Log(
                     //     LogLevel.Information,
@@ -143,7 +151,7 @@ namespace StatiqHelpers.ImageHelpers
                 var postSize = fileInfo.Length;
                 totalPost += postSize;
 
-                var percentChanged = Math.Abs(postSize - preSize) / (decimal) preSize;
+                var percentChanged = Math.Abs(postSize - preSize) / (decimal)preSize;
 
                 _logger.Log(
                     LogLevel.Information,
@@ -182,10 +190,9 @@ namespace StatiqHelpers.ImageHelpers
             IImageProcessingContext imageContext,
             int imageWidth,
             int imageHeight,
-            string centerText)
+            string centerText,
+            Font font)
         {
-            var fontSize = imageHeight / 10;
-            var titleFont = new Font(_cookieFont, fontSize, FontStyle.Bold);
 
             var xPadding = imageWidth / 30;
             var drawingOptions = new DrawingOptions
@@ -202,18 +209,19 @@ namespace StatiqHelpers.ImageHelpers
                 }
             };
 
-            var verticalCenter = (imageHeight - titleFont.Size) / 2;
-            imageContext.DrawText(drawingOptions, centerText, titleFont, Color.MediumPurple, new PointF(xPadding + 2, verticalCenter + 2));
-            imageContext.DrawText(drawingOptions, centerText, titleFont, Color.White, new PointF(xPadding, verticalCenter));
+            var verticalCenter = (imageHeight - font.Size) / 2;
+            imageContext.DrawText(drawingOptions, centerText, font, Color.MediumPurple, new PointF(xPadding + 2, verticalCenter + 2));
+            imageContext.DrawText(drawingOptions, centerText, font, Color.White, new PointF(xPadding, verticalCenter));
         }
 
         private void AddBrand(
             IImageProcessingContext imageProcessingContext,
             int imageWidth,
             int imageHeight,
-            string siteTitle)
+            string siteTitle,
+            Font font)
         {
-            DrawingOptions drawingOptions = new DrawingOptions
+            var drawingOptions = new DrawingOptions
             {
                 GraphicsOptions = new GraphicsOptions
                 {
@@ -228,7 +236,6 @@ namespace StatiqHelpers.ImageHelpers
 
             var fontSize = imageHeight / 20;
             var xPadding = imageWidth / 30;
-            var font = new Font(_cookieFont, fontSize, FontStyle.Regular);
 
             var height = fontSize * 2;
             var rectangularPolygon = new RectangularPolygon(0, imageHeight - height, imageWidth, height);
