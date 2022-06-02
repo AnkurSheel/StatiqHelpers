@@ -52,6 +52,7 @@ namespace StatiqHelpers.CustomExtensions
                 services =>
                 {
                     services.AddTransient<IImageService, ImageService>();
+                    services.AddTransient<IFontHelper, FontHelper>();
                     services.AddTransient<IReadingTimeService, ReadingTimeService>();
                     services.AddTransient<IRelatedPostsService, RelatedPostsService>();
                     services.AddTransient<IRelatedPostsPointCalculator, RelatedPostsPointCalculator>();
