@@ -26,7 +26,25 @@ namespace StatiqHelpers.Extensions
                 .AddPipeline<PostListPipeline>()
                 .AddPipeline<TagsListPipeline>()
                 .AddPipeline<TagsPipeline>()
-                .AddPipeline<SitemapPipeline>();
+                .AddPipeline<SitemapPipeline>()
+                .AddPipeline(
+                    nameof(AnalyzeContent),
+                    new Pipeline
+                    {
+                        Deployment = true,
+                        ExecutionPolicy = ExecutionPolicy.Normal,
+                        InputModules =
+                        {
+                            new ReplaceDocuments(
+                                nameof(ScriptsPipeline),
+                                nameof(HomePipeline),
+                                nameof(PagesPipeline),
+                                nameof(PostListPipeline),
+                                nameof(PostPipeline),
+                                nameof(TagsListPipeline),
+                                nameof(TagsPipeline)),
+                        }
+                    });
             return bootstrapper;
         }
 
@@ -57,24 +75,6 @@ namespace StatiqHelpers.Extensions
                     engine.Pipelines.Remove(nameof(Redirects));
                     engine.Pipelines.Remove(nameof(SearchIndex));
                     engine.Pipelines.Remove(nameof(AnalyzeContent));
-                    engine.Pipelines.Add(
-                        nameof(AnalyzeContent),
-                        new Pipeline
-                        {
-                            Deployment = true,
-                            ExecutionPolicy = ExecutionPolicy.Normal,
-                            InputModules =
-                            {
-                                new ReplaceDocuments(
-                                    nameof(ScriptsPipeline),
-                                    nameof(HomePipeline),
-                                    nameof(PagesPipeline),
-                                    nameof(PostListPipeline),
-                                    nameof(PostPipeline),
-                                    nameof(TagsListPipeline),
-                                    nameof(TagsPipeline)),
-                            }
-                        });
                 });
 
             return bootstrapper;
