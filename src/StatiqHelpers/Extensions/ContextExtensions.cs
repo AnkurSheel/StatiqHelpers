@@ -63,7 +63,7 @@ namespace StatiqHelpers.Extensions
                 : null;
 
         public static bool IsDevelopment(this IExecutionContext context)
-            => context.GetString("Environment")?.Equals("Development", StringComparison.InvariantCultureIgnoreCase) ?? true;
+            => context.GetString("Environment")?.Equals("Development", StringComparison.InvariantCultureIgnoreCase) ?? false;
 
         public static string? GetGoatCounterCode(this IExecutionContext context)
             => context.GetString("GoatCounterCode");

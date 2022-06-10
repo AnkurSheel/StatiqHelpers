@@ -73,6 +73,21 @@ Article Content
         }
 
         [Fact]
+        public async Task Filters_posts_in_the_future_for_if_environment_is_not_specified()
+        {
+            var publishedDate = DateTime.SpecifyKind(DateTime.Today.AddDays(1), DateTimeKind.Utc);
+            var path = $"/input/posts/{publishedDate.Year}/{publishedDate:yyyy-MM-dd}-{_slug}/filename.md";
+            var fileProvider = PipelineTestHelpersStatic.GetFileProvider(path, _content);
+
+            var result = await Bootstrapper.RunTestAsync(fileProvider);
+
+            Assert.Equal((int)ExitCode.Normal, result.ExitCode);
+            var outputs = result.Outputs[PipelineName];
+
+            AssertHelper.AssertMultiple(() => Assert.Empty(outputs[Phase.PostProcess]), () => Assert.Empty(outputs[Phase.Output]));
+        }
+
+        [Fact]
         public async Task Does_not_filter_posts_in_the_future_for_development_environment()
         {
             var publishedDate = DateTime.SpecifyKind(DateTime.Today.AddDays(1), DateTimeKind.Utc);
@@ -80,21 +95,6 @@ Article Content
             var fileProvider = PipelineTestHelpersStatic.GetFileProvider(path, _content);
 
             Bootstrapper.AddSetting("Environment", "Development");
-            var result = await Bootstrapper.RunTestAsync(fileProvider);
-
-            Assert.Equal((int)ExitCode.Normal, result.ExitCode);
-            var outputs = result.Outputs[PipelineName];
-
-            AssertHelper.AssertMultiple(() => Assert.Single(outputs[Phase.PostProcess]), () => Assert.Single(outputs[Phase.Output]));
-        }
-
-        [Fact]
-        public async Task Does_not_filter_posts_in_the_future_if_environment_setting_does_not_exist()
-        {
-            var publishedDate = DateTime.SpecifyKind(DateTime.Today.AddDays(1), DateTimeKind.Utc);
-            var path = $"/input/posts/{publishedDate.Year}/{publishedDate:yyyy-MM-dd}-{_slug}/filename.md";
-            var fileProvider = PipelineTestHelpersStatic.GetFileProvider(path, _content);
-
             var result = await Bootstrapper.RunTestAsync(fileProvider);
 
             Assert.Equal((int)ExitCode.Normal, result.ExitCode);
