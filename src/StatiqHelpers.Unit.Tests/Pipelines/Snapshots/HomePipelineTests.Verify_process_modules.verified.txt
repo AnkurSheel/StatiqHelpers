@@ -1,4 +1,5 @@
 ﻿[
   OptimizeFileName,
+  SetMetadata,
   SetDestination
 ]

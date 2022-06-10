@@ -18,6 +18,7 @@ namespace StatiqHelpers.Pipelines
             ProcessModules = new ModuleList
             {
                 new OptimizeFileName(),
+                new SetMetadata(MetaDataKeys.Excerpt, Config.FromContext(context => context.GetDescription())),
                 new SetDestination(".html"),
             };
 
