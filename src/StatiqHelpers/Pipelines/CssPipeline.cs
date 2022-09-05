@@ -1,7 +1,4 @@
-﻿using Statiq.Common;
-using Statiq.Core;
-
-namespace StatiqHelpers.Pipelines
+﻿namespace StatiqHelpers.Pipelines
 {
     public class CssPipeline : Pipeline
     {

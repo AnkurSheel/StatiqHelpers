@@ -1,8 +1,6 @@
-﻿using Statiq.Common;
-using Statiq.Web;
-using StatiqHelpers.Models;
+﻿using StatiqHelpers.Models;
 
-namespace StatiqHelpers.Extensions
+namespace StatiqHelpers.CustomExtensions
 {
     public static class ContextExtensions
     {

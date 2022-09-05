@@ -1,5 +1,4 @@
-﻿using Statiq.Common;
-using StatiqHelpers.Extensions;
+﻿using StatiqHelpers.CustomExtensions;
 using StatiqHelpers.ImageHelpers;
 
 namespace StatiqHelpers.Modules

@@ -1,6 +1,4 @@
 ﻿using System.Xml;
-using Statiq.App;
-using Statiq.Common;
 using Statiq.Testing;
 using StatiqHelpers.Pipelines;
 

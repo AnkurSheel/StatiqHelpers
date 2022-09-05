@@ -1,10 +1,8 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Moq;
-using Statiq.App;
-using Statiq.Common;
 using Statiq.Testing;
-using StatiqHelpers.Extensions;
+using StatiqHelpers.CustomExtensions;
 using StatiqHelpers.ImageHelpers;
 
 namespace StatiqHelpers.Unit.Tests.Pipelines
@@ -13,7 +11,7 @@ namespace StatiqHelpers.Unit.Tests.Pipelines
     {
         public static Bootstrapper GetBootstrapper()
         {
-            var bootstrapper = Bootstrapper.Factory.InitStatiq(Array.Empty<string>());
+            var bootstrapper = Bootstrapper.Factory.CreateBootstrapper(Array.Empty<string>());
             bootstrapper.ConfigureAnalyzers(
                 collection =>
                 {

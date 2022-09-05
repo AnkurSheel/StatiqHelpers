@@ -1,7 +1,5 @@
-﻿using Statiq.Common;
-using Statiq.Core;
-using Statiq.Razor;
-using StatiqHelpers.Extensions;
+﻿using Statiq.Razor;
+using StatiqHelpers.CustomExtensions;
 using StatiqHelpers.Models;
 
 namespace StatiqHelpers.Pipelines

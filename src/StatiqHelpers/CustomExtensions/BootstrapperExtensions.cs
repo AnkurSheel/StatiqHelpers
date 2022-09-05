@@ -1,14 +1,11 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using Statiq.App;
-using Statiq.Common;
-using Statiq.Core;
 using Statiq.Web.Pipelines;
 using StatiqHelpers.ImageHelpers;
 using StatiqHelpers.Modules.ReadingTime;
 using StatiqHelpers.Modules.RelatedPosts;
 using StatiqHelpers.Pipelines;
 
-namespace StatiqHelpers.Extensions
+namespace StatiqHelpers.CustomExtensions
 {
     public static class BootstrapperExtensions
     {

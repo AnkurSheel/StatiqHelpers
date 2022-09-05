@@ -1,6 +1,5 @@
 ﻿using System.ComponentModel;
 using Spectre.Console.Cli;
-using Statiq.App;
 
 namespace StatiqHelpers.ImageHelpers
 {

@@ -1,8 +1,7 @@
-﻿using Statiq.Common;
-using Statiq.Razor;
+﻿using Statiq.Razor;
 using StatiqHelpers.Models;
 
-namespace StatiqHelpers.Extensions
+namespace StatiqHelpers.CustomExtensions
 {
     public static class RazorExtensions
     {

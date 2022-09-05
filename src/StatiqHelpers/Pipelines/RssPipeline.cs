@@ -1,7 +1,5 @@
-﻿using Statiq.Common;
-using Statiq.Core;
-using Statiq.Feeds;
-using StatiqHelpers.Extensions;
+﻿using Statiq.Feeds;
+using StatiqHelpers.CustomExtensions;
 
 namespace StatiqHelpers.Pipelines
 {

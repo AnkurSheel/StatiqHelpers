@@ -1,6 +1,5 @@
-﻿using Statiq.Common;
-using Statiq.Testing;
-using StatiqHelpers.Extensions;
+﻿using Statiq.Testing;
+using StatiqHelpers.CustomExtensions;
 using StatiqHelpers.Modules.RelatedPosts;
 using Keys = Statiq.Common.Keys;
 

@@ -1,8 +1,6 @@
 ﻿using System.Xml;
 using Microsoft.Extensions.DependencyInjection;
 using Moq;
-using Statiq.App;
-using Statiq.Common;
 using Statiq.Testing;
 using StatiqHelpers.Modules.RelatedPosts;
 using StatiqHelpers.Pipelines;

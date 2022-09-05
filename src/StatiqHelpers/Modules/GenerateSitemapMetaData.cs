@@ -1,7 +1,5 @@
 ﻿using Microsoft.Extensions.Logging;
-using Statiq.Common;
-using Statiq.Core;
-using StatiqHelpers.Extensions;
+using StatiqHelpers.CustomExtensions;
 
 namespace StatiqHelpers.Modules;
 

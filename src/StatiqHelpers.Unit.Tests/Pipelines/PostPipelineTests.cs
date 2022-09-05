@@ -1,6 +1,4 @@
-﻿using Statiq.App;
-using Statiq.Common;
-using Statiq.Testing;
+﻿using Statiq.Testing;
 using StatiqHelpers.Pipelines;
 using xUnitHelpers;
 
