@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <ItemGroup>
-        <PackageReference Include="Codinators.XunitHelpers" Version="3.0.0"/>
+        <PackageReference Include="Codinators.XunitHelpers" Version="3.0.1"/>
         <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.7.1"/>
         <PackageReference Include="Moq" Version="4.16.1"/>
         <PackageReference Include="Verify.Xunit" Version="16.4.4"/>

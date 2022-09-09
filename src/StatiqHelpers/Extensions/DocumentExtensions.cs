@@ -2,6 +2,7 @@
 using Statiq.Common;
 using StatiqHelpers.Models;
 using StatiqHelpers.Modules.ReadingTime;
+using StatiqHelpers.Modules.RelatedPosts;
 using Keys = StatiqHelpers.Modules.ReadingTime.Keys;
 
 namespace StatiqHelpers.Extensions
@@ -58,6 +59,9 @@ namespace StatiqHelpers.Extensions
 
         public static ReadingTimeData GetReadingTime(this IDocument document)
             => document.Get<ReadingTimeData>(Keys.ReadingTime);
+
+        public static IReadOnlyList<RelatedPostInformation> GetRelatedPosts(this IDocument document)
+            => document.GetList<RelatedPostInformation>(Modules.RelatedPosts.Keys.RelatedPosts);
 
         public static string? GetImageFacebook(this IDocument document)
         {
