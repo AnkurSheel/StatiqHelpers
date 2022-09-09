@@ -1,7 +1,10 @@
 ﻿using System.Xml;
+using Microsoft.Extensions.DependencyInjection;
+using Moq;
 using Statiq.App;
 using Statiq.Common;
 using Statiq.Testing;
+using StatiqHelpers.Modules.RelatedPosts;
 using StatiqHelpers.Pipelines;
 
 namespace StatiqHelpers.Unit.Tests.Pipelines
@@ -10,6 +13,11 @@ namespace StatiqHelpers.Unit.Tests.Pipelines
     public class RssPipelineTests : PipelineBaseFixture
     {
         private const string PipelineName = nameof(RssPipeline);
+
+        public RssPipelineTests()
+        {
+            Bootstrapper.ConfigureServices(services => services.AddSingleton(Mock.Of<IRelatedPostsService>()));
+        }
 
         [Fact]
         public async Task Verify_dependencies()
