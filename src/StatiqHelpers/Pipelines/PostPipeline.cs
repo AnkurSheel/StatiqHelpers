@@ -7,12 +7,13 @@ using Statiq.Yaml;
 using StatiqHelpers.Extensions;
 using StatiqHelpers.Modules;
 using StatiqHelpers.Modules.ReadingTime;
+using StatiqHelpers.Modules.RelatedPosts;
 
 namespace StatiqHelpers.Pipelines
 {
     public class PostPipeline : Pipeline
     {
-        public PostPipeline(IReadingTimeService readingTimeService)
+        public PostPipeline(IReadingTimeService readingTimeService, IRelatedPostsService relatedPostsService)
         {
             InputModules = new ModuleList
             {
@@ -40,6 +41,7 @@ namespace StatiqHelpers.Pipelines
 
             PostProcessModules = new ModuleList
             {
+                new GenerateRelatedPosts(relatedPostsService),
                 new RenderRazor().WithBaseModel()
             };
 

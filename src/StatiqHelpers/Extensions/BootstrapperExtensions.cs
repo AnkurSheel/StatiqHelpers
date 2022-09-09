@@ -5,6 +5,7 @@ using Statiq.Core;
 using Statiq.Web.Pipelines;
 using StatiqHelpers.ImageHelpers;
 using StatiqHelpers.Modules.ReadingTime;
+using StatiqHelpers.Modules.RelatedPosts;
 using StatiqHelpers.Pipelines;
 
 namespace StatiqHelpers.Extensions
@@ -55,6 +56,8 @@ namespace StatiqHelpers.Extensions
                 {
                     services.AddTransient<IImageService, ImageService>();
                     services.AddTransient<IReadingTimeService, ReadingTimeService>();
+                    services.AddTransient<IRelatedPostsService, RelatedPostsService>();
+                    services.AddTransient<IRelatedPostsPointCalculator, RelatedPostsPointCalculator>();
                     services.AddSingleton(new PostListOptions(document => document.GetTitle()));
                 });
             return bootstrapper;
