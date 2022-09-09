@@ -33,6 +33,7 @@ An opinionated wrapper around Statiq
         - Images can be in the same folder as the markdown file or in a yyyy-mm-dd-slug/images folder.
     - Reading Time is generated for the articles.
     - Social share images for facebook and twitter are created.
+    - Related Posts are created based on category, tags and relative date from the post.
 - Index page is taken from Index.cshtml and has access to the list of posts.
 - Blog page is taken from Blog.cshtml and has access to the list of posts.
     - The grouping and ordering of the posts can be configured.
@@ -76,3 +77,7 @@ An opinionated wrapper around Statiq
 9. GenerateSocialImages
     - Creates images to share on facebook and twitter.
     - Can pass in a cover image to use as the background
+10. Related Posts Module
+     - Generates related posts based on category, tags and relative date from the post.
+     - Number of posts to show can be set as a setting  *NumberOfRelatedPosts*. Defaults to 4.
+     - Does not condier posts that do not have a matching category or tag.
