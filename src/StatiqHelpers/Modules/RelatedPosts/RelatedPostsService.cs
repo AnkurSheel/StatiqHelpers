@@ -25,7 +25,7 @@ public class RelatedPostsService : IRelatedPostsService
 
             var points = _relatedPostsPointCalculator.GetPoints(input, document);
 
-            var relativeDate = Math.Abs(input.GetPublishedDate().Subtract(document.GetPublishedDate()).Days);
+            var relativeDate = Math.Abs(input.GetLastUpdatedDate().Subtract(document.GetLastUpdatedDate()).Days);
             postRanks.Add(new PostRank(document, points, relativeDate));
         }
 
