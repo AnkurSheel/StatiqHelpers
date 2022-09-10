@@ -40,7 +40,7 @@ namespace StatiqHelpers.Extensions
         public static string? GetCoverImageLink(this IDocument document)
         {
             var coverImagePath = document.GetCoverImagePath();
-
+        
             if (coverImagePath != null)
             {
                 return coverImagePath.StartsWith(Constants.ImagesDirectory)
@@ -55,7 +55,7 @@ namespace StatiqHelpers.Extensions
             => document.GetList<string>(MetaDataKeys.Tags);
 
         public static string GetCategory(this IDocument document)
-            => document.GetString(MetaDataKeys.Category) ?? "Uncategorized";
+            => document.GetString(MetaDataKeys.Category) ?? Constants.DefaultCategory;
 
         public static ReadingTimeData GetReadingTime(this IDocument document)
             => document.Get<ReadingTimeData>(Keys.ReadingTime);

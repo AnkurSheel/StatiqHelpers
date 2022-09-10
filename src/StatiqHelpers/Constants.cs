@@ -12,6 +12,8 @@
         public static readonly string DownloadsDirectory = $"{AssetsDirectory}/downloads";
         public static readonly string BlogPath = "blog";
 
+        public static readonly string DefaultCategory = "Uncategorized";
+
         public static readonly string[] StopWords =
         {
             "how",

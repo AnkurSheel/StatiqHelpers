@@ -11,7 +11,10 @@ public class RelatedPostsPointCalculator : IRelatedPostsPointCalculator
     {
         var points = 0;
 
-        if (string.Equals(input.GetCategory(), document.GetCategory(), StringComparison.OrdinalIgnoreCase))
+        var category = input.GetCategory();
+
+        if (!string.Equals(category, Constants.DefaultCategory, StringComparison.Ordinal)
+            && string.Equals(category, document.GetCategory(), StringComparison.OrdinalIgnoreCase))
         {
             points += MatchingCategoryPoints;
         }
