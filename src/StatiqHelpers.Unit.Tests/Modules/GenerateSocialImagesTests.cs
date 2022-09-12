@@ -1,5 +1,4 @@
 ﻿using Moq;
-using Statiq.Common;
 using Statiq.Testing;
 using StatiqHelpers.ImageHelpers;
 using StatiqHelpers.Modules;

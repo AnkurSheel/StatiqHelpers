@@ -1,11 +1,10 @@
 ﻿using System.Text.RegularExpressions;
-using Statiq.Common;
 using StatiqHelpers.Models;
 using StatiqHelpers.Modules.ReadingTime;
 using StatiqHelpers.Modules.RelatedPosts;
 using Keys = StatiqHelpers.Modules.ReadingTime.Keys;
 
-namespace StatiqHelpers.Extensions
+namespace StatiqHelpers.CustomExtensions
 {
     public static class DocumentExtensions
     {

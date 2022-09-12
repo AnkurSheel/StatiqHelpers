@@ -1,9 +1,7 @@
-﻿using Statiq.Common;
-using Statiq.Core;
-using Statiq.Markdown;
+﻿using Statiq.Markdown;
 using Statiq.Razor;
 using Statiq.Yaml;
-using StatiqHelpers.Extensions;
+using StatiqHelpers.CustomExtensions;
 using StatiqHelpers.Modules;
 
 namespace StatiqHelpers.Pipelines

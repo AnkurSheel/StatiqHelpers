@@ -1,7 +1,6 @@
 ﻿using System.Text.RegularExpressions;
-using Statiq.Common;
 
-namespace StatiqHelpers.Extensions
+namespace StatiqHelpers.CustomExtensions
 {
     public static class NormalizedPathExtensions
     {

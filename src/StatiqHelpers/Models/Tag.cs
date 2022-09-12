@@ -1,6 +1,4 @@
-﻿using Statiq.Common;
-
-namespace StatiqHelpers.Models
+﻿namespace StatiqHelpers.Models
 {
     public record Tag : BaseModel
     {

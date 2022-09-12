@@ -5,9 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Spectre.Console;
 using Spectre.Console.Cli;
-using Statiq.App;
-using Statiq.Common;
-using StatiqHelpers.Extensions;
+using StatiqHelpers.CustomExtensions;
 
 namespace StatiqHelpers.Commands
 {

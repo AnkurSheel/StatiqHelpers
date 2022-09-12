@@ -1,6 +1,4 @@
-﻿using Statiq.Common;
-using Statiq.Core;
-using Statiq.Testing;
+﻿using Statiq.Testing;
 using StatiqHelpers.Modules;
 using xUnitHelpers;
 

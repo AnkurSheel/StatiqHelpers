@@ -1,5 +1,4 @@
 ﻿using System.Xml.Linq;
-using Statiq.Common;
 
 namespace StatiqHelpers.Shortcodes
 {

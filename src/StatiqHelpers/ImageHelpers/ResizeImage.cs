@@ -3,8 +3,6 @@ using LibGit2Sharp;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Spectre.Console.Cli;
-using Statiq.App;
-using Statiq.Common;
 using LogLevel = Microsoft.Extensions.Logging.LogLevel;
 
 namespace StatiqHelpers.ImageHelpers

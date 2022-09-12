@@ -1,6 +1,4 @@
-﻿using Statiq.Common;
-using Statiq.Core;
-using StatiqHelpers.Extensions;
+﻿using StatiqHelpers.CustomExtensions;
 
 namespace StatiqHelpers.Pipelines
 {

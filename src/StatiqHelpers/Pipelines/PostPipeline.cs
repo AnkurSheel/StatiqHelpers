@@ -1,10 +1,8 @@
-﻿using Statiq.Common;
-using Statiq.Core;
-using Statiq.Highlight;
+﻿using Statiq.Highlight;
 using Statiq.Markdown;
 using Statiq.Razor;
 using Statiq.Yaml;
-using StatiqHelpers.Extensions;
+using StatiqHelpers.CustomExtensions;
 using StatiqHelpers.Modules;
 using StatiqHelpers.Modules.ReadingTime;
 using StatiqHelpers.Modules.RelatedPosts;

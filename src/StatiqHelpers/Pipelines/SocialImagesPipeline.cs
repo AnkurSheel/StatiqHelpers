@@ -1,6 +1,4 @@
-﻿using Statiq.Common;
-using Statiq.Core;
-using StatiqHelpers.ImageHelpers;
+﻿using StatiqHelpers.ImageHelpers;
 using StatiqHelpers.Modules;
 
 namespace StatiqHelpers.Pipelines

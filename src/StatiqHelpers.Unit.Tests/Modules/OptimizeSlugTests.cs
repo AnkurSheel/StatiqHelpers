@@ -1,5 +1,4 @@
 ﻿using Microsoft.Extensions.Logging;
-using Statiq.Common;
 using Statiq.Testing;
 using StatiqHelpers.Modules;
 

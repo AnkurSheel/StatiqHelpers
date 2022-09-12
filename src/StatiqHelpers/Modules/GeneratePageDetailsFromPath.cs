@@ -1,5 +1,4 @@
 ﻿using Microsoft.Extensions.Logging;
-using Statiq.Common;
 
 namespace StatiqHelpers.Modules
 {
