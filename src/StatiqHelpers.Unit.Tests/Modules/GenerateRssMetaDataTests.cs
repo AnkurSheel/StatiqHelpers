@@ -44,7 +44,7 @@ namespace StatiqHelpers.Unit.Tests.Modules
 
             var result = await ExecuteAsync(_input, _module).SingleAsync();
 
-            AssertProperties(result, $"/assets/images/posts/{Slug}/{imageFileName}");
+            AssertProperties(result, $"/assets/images/social/{Slug}-facebook.png");
         }
 
         [Fact]
