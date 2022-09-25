@@ -28,12 +28,11 @@ namespace StatiqHelpers.Pipelines
                     new GenerateRssMetaData(),
                     new ReplaceImageLinks(Constants.PostImagesDirectory),
                     new GenerateReadingTime(readingTimeService),
-                    new RenderMarkdown().UseExtensions(),
                     new ProcessShortcodes(),
+                    new RenderMarkdown().UseExtensions(),
                     new HighlightCode().WithAutoHighlightUnspecifiedLanguage(true),
                     new OptimizeSlug(),
-                    new SetDestination(
-                        Config.FromDocument((doc, ctx) => new NormalizedPath(Constants.BlogPath).Combine($"{doc.GetString(MetaDataKeys.Slug)}.html"))),
+                    new SetDestination(Config.FromDocument((doc, ctx) => new NormalizedPath(Constants.BlogPath).Combine($"{doc.GetSlug()}.html"))),
                 }
             };
 
