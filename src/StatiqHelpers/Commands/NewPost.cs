@@ -39,7 +39,8 @@ namespace StatiqHelpers.Commands
             var date = GetDate();
 
             AddCoverImageToFrontMatter(frontMatter);
-            AddTagsToFrontmatter(frontMatter);
+            AddCategoryToFrontMatter(frontMatter);
+            AddTagsToFrontMatter(frontMatter);
 
             frontMatter.AppendLine();
             frontMatter.AppendLine("---");
@@ -76,7 +77,17 @@ namespace StatiqHelpers.Commands
             }
         }
 
-        private void AddTagsToFrontmatter(StringBuilder frontMatter)
+        private void AddCategoryToFrontMatter(StringBuilder frontMatter)
+        {
+            var coverImage = AnsiConsole.Ask<string>("Enter [green]category[/]");
+
+            if (!string.IsNullOrWhiteSpace(coverImage))
+            {
+                frontMatter.AppendLine(@$"category: ""{coverImage}""");
+            }
+        }
+
+        private void AddTagsToFrontMatter(StringBuilder frontMatter)
         {
             var tagsAsString = AnsiConsole.Ask<string>("Enter comma seperated [green]tags[/]");
             var tags = tagsAsString.Split(
