@@ -28,8 +28,8 @@ namespace StatiqHelpers.Pipelines
                     new GenerateRssMetaData(),
                     new ReplaceImageLinks(Constants.PostImagesDirectory),
                     new GenerateReadingTime(readingTimeService),
-                    new RenderMarkdown().UseExtensions(),
                     new ProcessShortcodes(),
+                    new RenderMarkdown().UseExtensions(),
                     new HighlightCode().WithAutoHighlightUnspecifiedLanguage(true),
                     new OptimizeSlug(),
                     new SetDestination(
