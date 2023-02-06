@@ -78,6 +78,11 @@ namespace StatiqHelpers.Unit.Tests.Pipelines
                 line => line.Contains("<lastBuildDate>")
                     ? "<lastBuildDate>lastBuildDate</lastBuildDate>"
                     : line);
+            
+            settings.ScrubLinesWithReplace(
+                line => line.Contains("<copyright>")
+                    ? "<copyright>year</copyright>"
+                    : line);
 
             var fileProvider = GetFileProvider();
             var result = await Bootstrapper.RunTestAsync(fileProvider);
