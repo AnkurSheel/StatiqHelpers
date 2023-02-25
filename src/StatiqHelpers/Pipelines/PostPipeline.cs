@@ -7,46 +7,45 @@ using StatiqHelpers.Modules;
 using StatiqHelpers.Modules.ReadingTime;
 using StatiqHelpers.Modules.RelatedPosts;
 
-namespace StatiqHelpers.Pipelines
+namespace StatiqHelpers.Pipelines;
+
+public class PostPipeline : Pipeline
 {
-    public class PostPipeline : Pipeline
+    public PostPipeline(IReadingTimeService readingTimeService, IRelatedPostsService relatedPostsService)
     {
-        public PostPipeline(IReadingTimeService readingTimeService, IRelatedPostsService relatedPostsService)
+        InputModules = new ModuleList
         {
-            InputModules = new ModuleList
-            {
-                new ReadFiles("posts/**/*.{md,mdx}")
-            };
+            new ReadFiles("posts/**/*.{md,mdx}")
+        };
 
-            ProcessModules = new ModuleList
+        ProcessModules = new ModuleList
+        {
+            new CacheDocuments
             {
-                new CacheDocuments
-                {
-                    new ExtractFrontMatter(new ParseYaml()),
-                    new GeneratePostDetailsFromPath(),
-                    new FilterDocuments(Config.FromDocument((document, context) => context.IsDevelopment() || document.GetPublishedDate() <= DateTime.UtcNow.Date)),
-                    new GenerateRssMetaData(),
-                    new ReplaceImageLinks(Constants.PostImagesDirectory),
-                    new GenerateReadingTime(readingTimeService),
-                    new ProcessShortcodes(),
-                    new RenderMarkdown().UseExtensions(),
-                    new HighlightCode().WithAutoHighlightUnspecifiedLanguage(true),
-                    new OptimizeSlug(),
-                    new SetDestination(
-                        Config.FromDocument((doc, ctx) => new NormalizedPath(Constants.BlogPath).Combine($"{doc.GetString(MetaDataKeys.Slug)}.html"))),
-                }
-            };
+                new ExtractFrontMatter(new ParseYaml()),
+                new GeneratePostDetailsFromPath(),
+                new FilterDocuments(Config.FromDocument((document, context) => context.IsDevelopment() || document.GetPublishedDate() <= DateTime.UtcNow.Date)),
+                new GenerateRssMetaData(),
+                new ReplaceImageLinks(Constants.PostImagesDirectory),
+                new GenerateReadingTime(readingTimeService),
+                new ProcessShortcodes(),
+                new RenderMarkdown().UseExtensions(),
+                new OptimizeSlug(),
+                new SetDestination(
+                    Config.FromDocument((doc, ctx) => new NormalizedPath(Constants.BlogPath).Combine($"{doc.GetString(MetaDataKeys.Slug)}.html")))
+            }
+        };
 
-            PostProcessModules = new ModuleList
-            {
-                new GenerateRelatedPosts(relatedPostsService),
-                new RenderRazor().WithBaseModel()
-            };
+        PostProcessModules = new ModuleList
+        {
+            new GenerateRelatedPosts(relatedPostsService),
+            new RenderRazor().WithBaseModel(),
+            new HighlightCode().WithAutoHighlightUnspecifiedLanguage(true)
+        };
 
-            OutputModules = new ModuleList
-            {
-                new WriteFiles()
-            };
-        }
+        OutputModules = new ModuleList
+        {
+            new WriteFiles()
+        };
     }
 }

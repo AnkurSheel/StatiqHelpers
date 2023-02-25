@@ -8,7 +8,6 @@
   GenerateReadingTime,
   ProcessShortcodes,
   RenderMarkdown,
-  HighlightCode,
   OptimizeSlug,
   SetDestination
 ]

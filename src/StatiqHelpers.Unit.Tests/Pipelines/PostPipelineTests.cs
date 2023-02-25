@@ -154,7 +154,28 @@ int foo = 1
             var result = await Bootstrapper.RunTestAsync(fileProvider);
 
             Assert.Equal((int)ExitCode.Normal, result.ExitCode);
-            var document = result.Outputs[PipelineName][Phase.Process].Single();
+            var document = result.Outputs[PipelineName][Phase.Output].Single();
+
+            var body = await document.GetContentStringAsync();
+            await Verify(body);
+        }
+        
+        [Fact]
+        public async Task Code_blocks_with_language_are_highlighted()
+        {
+            var content = @"
+---
+```cpp
+int foo = 1
+```
+";
+
+            var fileProvider = PipelineTestHelpersStatic.GetFileProvider(_path, content);
+
+            var result = await Bootstrapper.RunTestAsync(fileProvider);
+
+            Assert.Equal((int)ExitCode.Normal, result.ExitCode);
+            var document = result.Outputs[PipelineName][Phase.Output].Single();
 
             var body = await document.GetContentStringAsync();
             await Verify(body);
