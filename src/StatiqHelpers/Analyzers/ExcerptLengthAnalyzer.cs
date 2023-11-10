@@ -6,6 +6,8 @@ namespace StatiqHelpers.Analyzers;
 
 public class ExcerptLengthAnalyzer : Analyzer
 {
+    private const int MaxLength = 160;
+
     public ExcerptLengthAnalyzer()
     {
         PipelinePhases.Add(nameof(AnalyzeContent), Phase.Process);
@@ -22,14 +24,10 @@ public class ExcerptLengthAnalyzer : Analyzer
 
         var excerpt = document.GetExcerpt();
 
-        if (excerpt== null)
+        if (excerpt?.Length > MaxLength)
         {
-            // context.AddAnalyzerResult(document, $"Missing excerpt");
-            return Task.CompletedTask;
-        }
-        if (excerpt.Length > 155)
-        {
-            context.AddAnalyzerResult(document, $"Max Excerpt Length : 155: Reduce excerpt length by {excerpt.Length - 155} characters : '{excerpt}'");
+            context.AddAnalyzerResult(document,
+                $"Max Excerpt Length : {MaxLength}: Reduce excerpt length by {excerpt.Length - MaxLength} characters : '{excerpt}'");
         }
 
         return Task.CompletedTask;
