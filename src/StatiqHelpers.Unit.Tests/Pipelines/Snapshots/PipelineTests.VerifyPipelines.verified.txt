@@ -1,0 +1,19 @@
+﻿[
+  AnalyzeContent,
+  CssPipeline,
+  Deployment,
+  DirectoryMetadata,
+  DownloadsPipeline,
+  FontsPipeline,
+  HomePipeline,
+  ImagesPipeline,
+  PagesPipeline,
+  PostListPipeline,
+  PostPipeline,
+  RssPipeline,
+  ScriptsPipeline,
+  SitemapPipeline,
+  SocialImagesPipeline,
+  TagsListPipeline,
+  TagsPipeline
+]
