@@ -14,16 +14,18 @@
         <RepositoryUrl>https://github.com/AnkurSheel/StatiqHelpers</RepositoryUrl>
         <RepositoryType>git</RepositoryType>
         <PackageTags>c#, Statiq, Static Site Generation</PackageTags>
-        <PackageReleaseNotes />
+        <PackageReleaseNotes/>
+        <RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
+
     </PropertyGroup>
     <ItemGroup>
-        <None Include="..\..\LICENSE" Pack="true" PackagePath="" />
+        <None Include="..\..\LICENSE" Pack="true" PackagePath=""/>
     </ItemGroup>
     <ItemGroup>
-        <PackageReference Include="ByteSize" Version="2.1.0" />
-        <PackageReference Include="LibGit2Sharp" Version="0.26.2" />
-        <PackageReference Include="SixLabors.ImageSharp" Version="1.0.4" />
-        <PackageReference Include="SixLabors.ImageSharp.Drawing" Version="1.0.0-beta13" />
+        <PackageReference Include="ByteSize" Version="2.1.0"/>
+        <PackageReference Include="LibGit2Sharp" Version="0.26.2"/>
+        <PackageReference Include="SixLabors.ImageSharp" Version="1.0.4"/>
+        <PackageReference Include="SixLabors.ImageSharp.Drawing" Version="1.0.0-beta13"/>
         <PackageReference Include="Statiq.Highlight" Version="1.0.0-beta.71"/>
         <PackageReference Include="Statiq.Web" Version="1.0.0-beta.59"/>
     </ItemGroup>
