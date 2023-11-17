@@ -1,85 +1,92 @@
 ﻿using Statiq.Testing;
 
-namespace StatiqHelpers.Unit.Tests.Pipelines
+namespace StatiqHelpers.Unit.Tests.Pipelines;
+
+public abstract class PipelineBaseFixture : BaseFixture
 {
-    public abstract class PipelineBaseFixture : BaseFixture
+    protected readonly Bootstrapper Bootstrapper;
+
+    protected PipelineBaseFixture()
     {
-        protected readonly Bootstrapper Bootstrapper;
-
-        protected PipelineBaseFixture()
+        Bootstrapper = PipelineTestHelpersStatic.GetBootstrapper();
+        Bootstrapper.ConfigureEngine(engine =>
         {
-            Bootstrapper = PipelineTestHelpersStatic.GetBootstrapper();
-            BaseSetUp();
+            engine.Pipelines.RemoveAll(x => x.Key != PipelineName && !DependentPipelineNames.Contains(x.Key));
+        });
+        BaseSetUp();
+    }
+
+    protected abstract string PipelineName { get; }
+
+    protected virtual string[] DependentPipelineNames => Array.Empty<string>();
+
+    protected async Task VerifyDependencies()
+    {
+        var result = await Bootstrapper.RunTestAsync(new TestFileProvider());
+
+        Assert.Equal((int)ExitCode.Normal, result.ExitCode);
+
+        var pipeline = result.Engine.Pipelines[PipelineName];
+        await Verify(pipeline.Dependencies);
+    }
+
+    protected async Task VerifyInputModules()
+    {
+        var result = await Bootstrapper.RunTestAsync(new TestFileProvider());
+
+        Assert.Equal((int)ExitCode.Normal, result.ExitCode);
+
+        var pipeline = result.Engine.Pipelines[PipelineName];
+        await VerifyModule(pipeline.InputModules);
+    }
+
+    protected async Task VerifyProcessModules()
+    {
+        var result = await Bootstrapper.RunTestAsync(new TestFileProvider());
+
+        Assert.Equal((int)ExitCode.Normal, result.ExitCode);
+
+        var pipeline = result.Engine.Pipelines[PipelineName];
+        var modules = pipeline.ProcessModules;
+
+        if (modules.SingleOrDefault(x => x is CacheDocuments) is CacheDocuments cacheDocumentsModule)
+        {
+            modules.Append(cacheDocumentsModule.Children.ToArray());
         }
 
-        protected async Task VerifyDependencies(string pipelineName)
+        if (modules.SingleOrDefault(x => x is ExecuteIf) is ExecuteIf executeIfModule)
         {
-            var result = await Bootstrapper.RunTestAsync(new TestFileProvider());
-
-            Assert.Equal((int)ExitCode.Normal, result.ExitCode);
-
-            var pipeline = result.Engine.Pipelines[pipelineName];
-            await Verify(pipeline.Dependencies);
-        }
-
-        protected async Task VerifyInputModules(string pipelineName)
-        {
-            var result = await Bootstrapper.RunTestAsync(new TestFileProvider());
-
-            Assert.Equal((int)ExitCode.Normal, result.ExitCode);
-
-            var pipeline = result.Engine.Pipelines[pipelineName];
-            await VerifyModule(pipeline.InputModules);
-        }
-
-        protected async Task VerifyProcessModules(string pipelineName)
-        {
-            var result = await Bootstrapper.RunTestAsync(new TestFileProvider());
-
-            Assert.Equal((int)ExitCode.Normal, result.ExitCode);
-
-            var pipeline = result.Engine.Pipelines[pipelineName];
-            var modules = pipeline.ProcessModules;
-
-            if (modules.SingleOrDefault(x => x is CacheDocuments) is CacheDocuments cacheDocumentsModule)
+            foreach (var condition in executeIfModule)
             {
-                modules.Append(cacheDocumentsModule.Children.ToArray());
+                modules.Append(condition.ToArray());
             }
-
-            if (modules.SingleOrDefault(x => x is ExecuteIf) is ExecuteIf executeIfModule)
-            {
-                foreach (var condition in executeIfModule)
-                {
-                    modules.Append(condition.ToArray());
-                }
-            }
-
-            await VerifyModule(modules);
         }
 
-        protected async Task VerifyPostProcessModules(string pipelineName)
-        {
-            var result = await Bootstrapper.RunTestAsync(new TestFileProvider());
+        await VerifyModule(modules);
+    }
 
-            Assert.Equal((int)ExitCode.Normal, result.ExitCode);
+    protected async Task VerifyPostProcessModules()
+    {
+        var result = await Bootstrapper.RunTestAsync(new TestFileProvider());
 
-            var pipeline = result.Engine.Pipelines[pipelineName];
-            await VerifyModule(pipeline.PostProcessModules);
-        }
+        Assert.Equal((int)ExitCode.Normal, result.ExitCode);
 
-        protected async Task VerifyOutputModules(string pipelineName)
-        {
-            var result = await Bootstrapper.RunTestAsync(new TestFileProvider());
+        var pipeline = result.Engine.Pipelines[PipelineName];
+        await VerifyModule(pipeline.PostProcessModules);
+    }
 
-            Assert.Equal((int)ExitCode.Normal, result.ExitCode);
+    protected async Task VerifyOutputModules()
+    {
+        var result = await Bootstrapper.RunTestAsync(new TestFileProvider());
 
-            var pipeline = result.Engine.Pipelines[pipelineName];
-            await VerifyModule(pipeline.OutputModules);
-        }
+        Assert.Equal((int)ExitCode.Normal, result.ExitCode);
 
-        private async Task VerifyModule(ModuleList moduleList)
-        {
-            await Verify(moduleList.Where(x => x is not GatherDocuments).Select(x => x.GetType().Name));
-        }
+        var pipeline = result.Engine.Pipelines[PipelineName];
+        await VerifyModule(pipeline.OutputModules);
+    }
+
+    private async Task VerifyModule(ModuleList moduleList)
+    {
+        await Verify(moduleList.Where(x => x is not GatherDocuments).Select(x => x.GetType().Name));
     }
 }

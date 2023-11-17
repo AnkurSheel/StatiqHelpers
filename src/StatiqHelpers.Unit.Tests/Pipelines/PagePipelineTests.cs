@@ -6,7 +6,7 @@ namespace StatiqHelpers.Unit.Tests.Pipelines
     [UsesVerify]
     public class PagePipelineTests : PipelineBaseFixture
     {
-        private const string PipelineName = nameof(PagesPipeline);
+        protected override string PipelineName => nameof(PagesPipeline);
         private readonly NormalizedPath _path;
         private readonly string _slug;
 
@@ -19,31 +19,31 @@ namespace StatiqHelpers.Unit.Tests.Pipelines
         [Fact]
         public async Task Verify_dependencies()
         {
-            await VerifyDependencies(PipelineName);
+            await VerifyDependencies();
         }
 
         [Fact]
         public async Task Verify_input_modules()
         {
-            await VerifyInputModules(PipelineName);
+            await VerifyInputModules();
         }
 
         [Fact]
         public async Task Verify_process_modules()
         {
-            await VerifyProcessModules(PipelineName);
+            await VerifyProcessModules();
         }
 
         [Fact]
         public async Task Verify_post_process_modules()
         {
-            await VerifyPostProcessModules(PipelineName);
+            await VerifyPostProcessModules();
         }
 
         [Fact]
         public async Task Verify_output_modules()
         {
-            await VerifyOutputModules(PipelineName);
+            await VerifyOutputModules();
         }
 
         [Fact]

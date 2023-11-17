@@ -10,7 +10,12 @@ jobs:
       steps:
           - checkout: self
             lfs: false
-
+            
+          - task: NuGetCommand@2
+            inputs:
+              command: 'restore'
+              restoreSolution: '**/*.sln'
+                
           - script: dotnet test --logger trx
             displayName: Run tests
 

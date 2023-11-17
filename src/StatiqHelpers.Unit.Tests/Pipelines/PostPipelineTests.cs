@@ -7,7 +7,7 @@ namespace StatiqHelpers.Unit.Tests.Pipelines
     [UsesVerify]
     public class PostPipelineTests : PipelineBaseFixture
     {
-        private const string PipelineName = nameof(PostPipeline);
+        protected override string PipelineName => nameof(PostPipeline);
         private readonly NormalizedPath _path;
         private readonly string _content;
         private readonly string _slug;
@@ -27,31 +27,31 @@ Article Content
         [Fact]
         public async Task Verify_dependencies()
         {
-            await VerifyDependencies(PipelineName);
+            await VerifyDependencies();
         }
 
         [Fact]
         public async Task Verify_input_modules()
         {
-            await VerifyInputModules(PipelineName);
+            await VerifyInputModules();
         }
 
         [Fact]
         public async Task Verify_process_modules()
         {
-            await VerifyProcessModules(PipelineName);
+            await VerifyProcessModules();
         }
 
         [Fact]
         public async Task Verify_post_process_modules()
         {
-            await VerifyPostProcessModules(PipelineName);
+            await VerifyPostProcessModules();
         }
 
         [Fact]
         public async Task Verify_output_modules()
         {
-            await VerifyOutputModules(PipelineName);
+            await VerifyOutputModules();
         }
 
         [Fact]
@@ -67,7 +67,8 @@ Article Content
             Assert.Equal((int)ExitCode.Normal, result.ExitCode);
             var outputs = result.Outputs[PipelineName];
 
-            AssertHelper.AssertMultiple(() => Assert.Empty(outputs[Phase.PostProcess]), () => Assert.Empty(outputs[Phase.Output]));
+            AssertHelper.AssertMultiple(() => Assert.Empty(outputs[Phase.PostProcess]),
+                () => Assert.Empty(outputs[Phase.Output]));
         }
 
         [Fact]
@@ -82,7 +83,8 @@ Article Content
             Assert.Equal((int)ExitCode.Normal, result.ExitCode);
             var outputs = result.Outputs[PipelineName];
 
-            AssertHelper.AssertMultiple(() => Assert.Empty(outputs[Phase.PostProcess]), () => Assert.Empty(outputs[Phase.Output]));
+            AssertHelper.AssertMultiple(() => Assert.Empty(outputs[Phase.PostProcess]),
+                () => Assert.Empty(outputs[Phase.Output]));
         }
 
         [Fact]
@@ -98,7 +100,8 @@ Article Content
             Assert.Equal((int)ExitCode.Normal, result.ExitCode);
             var outputs = result.Outputs[PipelineName];
 
-            AssertHelper.AssertMultiple(() => Assert.Single(outputs[Phase.PostProcess]), () => Assert.Single(outputs[Phase.Output]));
+            AssertHelper.AssertMultiple(() => Assert.Single(outputs[Phase.PostProcess]),
+                () => Assert.Single(outputs[Phase.Output]));
         }
 
         [Fact]
@@ -159,7 +162,7 @@ int foo = 1
             var body = await document.GetContentStringAsync();
             await Verify(body);
         }
-        
+
         [Fact]
         public async Task Code_blocks_with_language_are_highlighted()
         {
@@ -185,7 +188,8 @@ int foo = 1
         public async Task Destination_is_taken_from_the_slug_and_is_placed_in_the_blog_path()
         {
             var slug = "Slug MiXeD CapS";
-            var path = $"/input/posts/{_publishedDate.Year}/{_publishedDate:yyyy-MM-dd}-{slug}/FileName With MiXeD CapS.md";
+            var path =
+                $"/input/posts/{_publishedDate.Year}/{_publishedDate:yyyy-MM-dd}-{slug}/FileName With MiXeD CapS.md";
             var fileProvider = PipelineTestHelpersStatic.GetFileProvider(path, _content);
 
             var result = await Bootstrapper.RunTestAsync(fileProvider);

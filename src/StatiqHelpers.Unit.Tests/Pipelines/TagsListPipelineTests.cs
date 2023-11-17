@@ -6,36 +6,37 @@ namespace StatiqHelpers.Unit.Tests.Pipelines;
 [UsesVerify]
 public class TagsListPipelineTests : PipelineBaseFixture
 {
-    private const string PipelineName = nameof(TagsListPipeline);
+    protected override string PipelineName => nameof(TagsListPipeline);
+    protected override string[] DependentPipelineNames => new[] { nameof(TagsPipeline), nameof(PostPipeline) };
 
     [Fact]
     public async Task Verify_dependencies()
     {
-        await VerifyDependencies(PipelineName);
+        await VerifyDependencies();
     }
 
     [Fact]
     public async Task Verify_input_modules()
     {
-        await VerifyInputModules(PipelineName);
+        await VerifyInputModules();
     }
 
     [Fact]
     public async Task Verify_process_modules()
     {
-        await VerifyProcessModules(PipelineName);
+        await VerifyProcessModules();
     }
 
     [Fact]
     public async Task Verify_post_process_modules()
     {
-        await VerifyPostProcessModules(PipelineName);
+        await VerifyPostProcessModules();
     }
 
     [Fact]
     public async Task Verify_output_modules()
     {
-        await VerifyOutputModules(PipelineName);
+        await VerifyOutputModules();
     }
 
     [Fact]
@@ -64,7 +65,7 @@ public class TagsListPipelineTests : PipelineBaseFixture
     {
         var fileProvider = new TestFileProvider
         {
-            "/input/TagsList.cshtml",
+            "/input/TagsList.cshtml"
         };
         return fileProvider;
     }

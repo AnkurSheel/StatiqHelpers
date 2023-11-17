@@ -17,36 +17,37 @@ tags:
 ";
     }
 
-    private const string PipelineName = nameof(TagsPipeline);
+    protected override string PipelineName => nameof(TagsPipeline);
+    protected override string[] DependentPipelineNames => new[] { nameof(PostPipeline) };
 
     [Fact]
     public async Task Verify_dependencies()
     {
-        await VerifyDependencies(PipelineName);
+        await VerifyDependencies();
     }
 
     [Fact]
     public async Task Verify_input_modules()
     {
-        await VerifyInputModules(PipelineName);
+        await VerifyInputModules();
     }
 
     [Fact]
     public async Task Verify_process_modules()
     {
-        await VerifyProcessModules(PipelineName);
+        await VerifyProcessModules();
     }
 
     [Fact]
     public async Task Verify_post_process_modules()
     {
-        await VerifyPostProcessModules(PipelineName);
+        await VerifyPostProcessModules();
     }
 
     [Fact]
     public async Task Verify_output_modules()
     {
-        await VerifyOutputModules(PipelineName);
+        await VerifyOutputModules();
     }
 
     [Fact]
@@ -97,7 +98,7 @@ tags:
         {
             "/input/Tags.cshtml",
             { "/input/posts/2021/2021-11-19-slug2/slug1.md", _content },
-            { "/input/posts/2021/2021-11-19-slug1/slug2.md", _content },
+            { "/input/posts/2021/2021-11-19-slug1/slug2.md", _content }
         };
         var result = await Bootstrapper.RunTestAsync(fileProvider);
 
@@ -132,7 +133,7 @@ tags:
         var fileProvider = new TestFileProvider
         {
             "/input/Tags.cshtml",
-            { "/input/posts/2021/2021-11-19-slug/slug.md", content },
+            { "/input/posts/2021/2021-11-19-slug/slug.md", content }
         };
         return fileProvider;
     }
