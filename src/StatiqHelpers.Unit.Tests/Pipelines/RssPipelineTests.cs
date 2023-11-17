@@ -4,6 +4,7 @@ using Moq;
 using Statiq.Testing;
 using StatiqHelpers.Modules.RelatedPosts;
 using StatiqHelpers.Pipelines;
+using Keys = Statiq.Common.Keys;
 
 namespace StatiqHelpers.Unit.Tests.Pipelines;
 
@@ -12,7 +13,8 @@ public class RssPipelineTests : PipelineBaseFixture
 {
     public RssPipelineTests()
     {
-        Bootstrapper.ConfigureServices(services => services.AddSingleton(Mock.Of<IRelatedPostsService>()));
+        Bootstrapper.ConfigureServices(services => services.AddSingleton(Mock.Of<IRelatedPostsService>()))
+            .AddSetting(Keys.Host, "statiqhelpers.com");
     }
 
     protected override string PipelineName => nameof(RssPipeline);
