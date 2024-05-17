@@ -31,7 +31,9 @@
             "an",
             "my",
             "or",
-            "as"
+            "as",
+            "within",
+            "using"
         };
     }
 }
