@@ -2,44 +2,41 @@
 using StatiqHelpers.CustomExtensions;
 using StatiqHelpers.Models;
 
-namespace StatiqHelpers.Pipelines
+namespace StatiqHelpers.Pipelines;
+
+public class TagsListPipeline : Pipeline
 {
-    public class TagsListPipeline : Pipeline
+    public TagsListPipeline(PipelineOptions options)
     {
-        public TagsListPipeline()
+        Dependencies.Add(nameof(TagsPipeline));
+
+        InputModules = new ModuleList
         {
-            Dependencies.Add(nameof(TagsPipeline));
+            new ReadFiles("TagsList.cshtml")
+        };
 
-            InputModules = new ModuleList
-            {
-                new ReadFiles("TagsList.cshtml")
-            };
+        ProcessModules = new ModuleList
+        {
+            new SetDestination("tags.html"),
+            new SetMetadata(Keys.Title, "All Tags")
+        };
 
-            ProcessModules = new ModuleList
+        PostProcessModules = new ModuleList
+        {
+            new RenderRazor().WithModel(Config.FromDocument((document, context) =>
             {
-                new SetDestination("tags.html"),
-                new SetMetadata(Keys.Title, "All Tags")
-            };
+                var tags = context.Outputs.FromPipeline(nameof(TagsPipeline))
+                    .Select(x => x.AsTag(options, context))
+                    .OrderByDescending(x => x.Posts.Count)
+                    .ThenBy(x => x.Name)
+                    .ToList();
+                return new Tags(document, context, tags);
+            }))
+        };
 
-            PostProcessModules = new ModuleList
-            {
-                new RenderRazor().WithModel(
-                    Config.FromDocument(
-                        (document, context) =>
-                        {
-                            var tags = context.Outputs.FromPipeline(nameof(TagsPipeline))
-                                .Select(x => x.AsTag(context))
-                                .OrderByDescending(x => x.Posts.Count)
-                                .ThenBy(x => x.Name)
-                                .ToList();
-                            return new Tags(document, context, tags);
-                        })),
-            };
-
-            OutputModules = new ModuleList
-            {
-                new WriteFiles()
-            };
-        }
+        OutputModules = new ModuleList
+        {
+            new WriteFiles()
+        };
     }
 }

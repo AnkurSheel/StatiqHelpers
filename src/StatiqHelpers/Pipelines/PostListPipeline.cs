@@ -7,7 +7,7 @@ namespace StatiqHelpers.Pipelines
 {
     public class PostListPipeline : Pipeline
     {
-        public PostListPipeline(PostListOptions options)
+        public PostListPipeline(PipelineOptions options)
         {
             Dependencies.Add(nameof(PostPipeline));
 
@@ -24,19 +24,15 @@ namespace StatiqHelpers.Pipelines
 
             PostProcessModules = new ModuleList
             {
-                new RenderRazor().WithModel(
-                    Config.FromDocument(
-                        (document, context) =>
-                        {
-                            var documentList = context.Outputs.FromPipeline(nameof(PostPipeline));
+                new RenderRazor().WithModel(Config.FromDocument((document, context) =>
+                {
+                    var documentList = context.Outputs.FromPipeline(nameof(PostPipeline));
 
-                            documentList = options.Descending
-                                ? documentList.OrderByDescending(options.OrderFunction).ToDocumentList()
-                                : documentList.OrderBy(options.OrderFunction).ToDocumentList();
+                    documentList = options.OrderFunction(documentList);
 
-                            var allPosts = documentList.Select(x => x.AsBaseModel(context)).ToList();
-                            return new Posts(allPosts, document, context);
-                        })),
+                    var allPosts = documentList.Select(x => x.AsBaseModel(context)).ToList();
+                    return new Posts(allPosts, document, context);
+                })),
             };
 
             OutputModules = new ModuleList
