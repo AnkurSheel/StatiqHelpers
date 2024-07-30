@@ -1,8 +1,8 @@
 ﻿namespace StatiqHelpers
 {
-    public class Constants
+    public static class Constants
     {
-        public const string AssetsDirectory = "assets";
+        private const string AssetsDirectory = "assets";
         public static readonly string ImagesDirectory = $"{AssetsDirectory}/images";
         public static readonly string JsDirectory = $"{AssetsDirectory}/js";
         public static readonly string PostImagesDirectory = $"{ImagesDirectory}/posts";
