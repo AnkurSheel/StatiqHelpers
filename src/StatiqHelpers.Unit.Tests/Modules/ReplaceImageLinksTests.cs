@@ -5,12 +5,7 @@ namespace StatiqHelpers.Unit.Tests.Modules
 {
     public class ReplaceImageLinksTests : BaseFixture
     {
-        private readonly ReplaceImageLinks _module;
-
-        public ReplaceImageLinksTests()
-        {
-            _module = new ReplaceImageLinks("imagesDir");
-        }
+        private readonly ReplaceImageLinks _module = new("imagesDir");
 
         [Fact]
         public async Task Image_links_are_replaced_correctly_for_images_in_the_same_folder()
@@ -34,6 +29,18 @@ namespace StatiqHelpers.Unit.Tests.Modules
             var result = await ExecuteAsync(document, _module).SingleAsync();
 
             await AssertContents(result, "![Alt text 1](/imagesDir/slug/image1.jpg)");
+        }
+
+        [Fact]
+        public async Task Image_links_are_replaced_correctly_for_images_in_the_images_folder_without_alt_text()
+        {
+            var content = "![](./images/image1.jpg)";
+
+            var document = GetTestDocument(content);
+
+            var result = await ExecuteAsync(document, _module).SingleAsync();
+
+            await AssertContents(result, "![](/imagesDir/slug/image1.jpg)");
         }
 
         [Fact]

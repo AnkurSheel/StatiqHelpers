@@ -24,7 +24,7 @@ namespace StatiqHelpers.Modules
 
             // !\[(?<alt>[^\]]+)\]\(\./(?<imagepath>[^)]*)\)
 
-            replaced = Regex.Replace(replaced, @"!\[(?<alt>[^\]]+)\]\(\./(?<imagePath>[^)]*)\)",
+            replaced = Regex.Replace(replaced, @"!\[(?<alt>.*?)\]\(\./(?<imagePath>.*?)\)",
                 $"![$1](/{_imagesDirectory}/{optimizedSlug}/$2)", RegexOptions.None);
             return input.Clone(context.GetContentProvider(replaced, input.ContentProvider.MediaType)).Yield();
         }
