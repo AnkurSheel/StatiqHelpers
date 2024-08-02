@@ -60,6 +60,20 @@ namespace StatiqHelpers.Unit.Tests.Modules
             await AssertContents(result, "![Alt text 1](/folder/image1.jpg)");
         }
 
+        [Fact]
+        public async Task Image_links_are_replaced_correctly_for_multiple_images_in_the_same_line()
+        {
+            var content =
+                "| ![Old Instructions Screen](./old_instructions.jpg) | ![Old Instructions Screen](./old_instructions.jpg) |";
+
+            var document = GetTestDocument(content);
+
+            var result = await ExecuteAsync(document, _module).SingleAsync();
+
+            await AssertContents(result,
+                "| ![Old Instructions Screen](/imagesDir/slug/old_instructions.jpg) | ![Old Instructions Screen](/imagesDir/slug/old_instructions.jpg) |");
+        }
+
         private TestDocument GetTestDocument(string content, string slug = "slug")
         {
             var document = new TestDocument(new NormalizedPath("a.txt"), content)
