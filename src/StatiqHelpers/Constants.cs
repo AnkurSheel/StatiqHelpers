@@ -2,7 +2,7 @@
 {
     public static class Constants
     {
-        private const string AssetsDirectory = "assets";
+        public const string AssetsDirectory = "assets";
         public static readonly string ImagesDirectory = $"{AssetsDirectory}/images";
         public static readonly string JsDirectory = $"{AssetsDirectory}/js";
         public static readonly string PostImagesDirectory = $"{ImagesDirectory}/posts";
