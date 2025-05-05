@@ -1,0 +1,70 @@
+name: PR Workflow
+
+on:
+  pull_request:
+    branches:
+      - main
+
+env:
+  BuildConfiguration: Release
+  libraryProject: ./src/StatiqHelpers/StatiqHelpers.csproj
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+#      - name: Restore NuGet packages
+#        uses: nuget/setup-nuget@v1
+#
+#      - name: Restore solution
+#        run: nuget restore '**/*.sln'
+
+      - name: Run tests
+        run: dotnet test --logger trx
+
+      - name: Publish test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: TestResults
+          path: '**/*.trx'
+
+      - name: Install GitVersion
+        run: dotnet tool restore
+
+      - name: Get Build Version
+        run: dotnet dotnet-gitversion -l console -output buildserver -nofetch
+
+      - name: Echo NuGetVersionV2
+        run: |
+          echo "NuGetVersionV2: ${{ steps.get_version.outputs.NuGetVersionV2 }}"
+             
+#      - name: Build Library
+#        run: dotnet build ${{ env.libraryProject }} --configuration ${{ env.BuildConfiguration }} /p:Version=${{ steps.get_version.outputs.NuGetVersionV2 }}
+#
+#      - name: Build NuGet Package
+#        run: dotnet pack ${{ env.libraryProject }} --configuration ${{ env.BuildConfiguration }} --include-symbols --no-build --output ${{ github.workspace }}/artifacts /p:Version=${{ steps.get_version.outputs.NuGetVersionV2 }}
+#
+#      - name: Publish NuGet Package
+#        uses: nuget/publish-nuget@v1
+#        with:
+#          nuget-api-key: ${{ secrets.NUGET_API_KEY }}
+#          packages: ${{ github.workspace }}/artifacts/**/*.nupkg
+#          skip-symbols: true
+#
+#      - name: Create GitHub Release
+#        if: github.ref == 'refs/heads/main'
+#        uses: actions/create-release@v1
+#        with:
+#          tag_name: v${{ steps.get_version.outputs.NuGetVersionV2 }}
+#          release_name: v${{ steps.get_version.outputs.NuGetVersionV2 }}
+#          body: |
+#            Changelog:
+#            - Auto-generated release notes.
+#          draft: false
+#          prerelease: false
+
