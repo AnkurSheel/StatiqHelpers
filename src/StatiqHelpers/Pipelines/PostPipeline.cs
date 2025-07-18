@@ -32,7 +32,8 @@ public class PostPipeline : Pipeline
                 new RenderMarkdown().UseExtensions(),
                 new OptimizeSlug(),
                 new SetDestination(
-                    Config.FromDocument((doc, ctx) => new NormalizedPath(Constants.BlogPath).Combine($"{doc.GetString(MetaDataKeys.Slug)}.html")))
+                    Config.FromDocument((doc, ctx)
+                        => new NormalizedPath(Constants.BlogPath).Combine($"{doc.GetSlug()}.html"))),
             }
         };
 
