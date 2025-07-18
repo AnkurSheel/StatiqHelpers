@@ -1,5 +1,4 @@
-﻿using Statiq.Highlight;
-using Statiq.Markdown;
+﻿using Statiq.Markdown;
 using Statiq.Razor;
 using Statiq.Yaml;
 using StatiqHelpers.CustomExtensions;
@@ -41,7 +40,6 @@ public class PostPipeline : Pipeline
         {
             new GenerateRelatedPosts(relatedPostsService),
             new RenderRazor().WithBaseModel(),
-            new HighlightCode().WithAutoHighlightUnspecifiedLanguage(true)
         };
 
         OutputModules = new ModuleList
