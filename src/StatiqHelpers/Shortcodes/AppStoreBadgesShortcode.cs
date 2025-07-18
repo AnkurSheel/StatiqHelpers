@@ -46,7 +46,7 @@ namespace StatiqHelpers.Shortcodes
             {
                 var playStoreLink = CreateBadgeLink(
                     $"https://play.google.com/store/apps/details?id={arguments.GetString(GooglePlayLinkUrl)}",
-                    "/assets/images/download-app-store-badge.png",
+                    "/assets/images/download-play-store-badge.png",
                     arguments.GetString(GooglePlayLinkText));
                 containerDiv.Add(playStoreLink);
             }
