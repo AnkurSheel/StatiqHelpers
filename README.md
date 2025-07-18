@@ -52,10 +52,7 @@ An opinionated wrapper around Statiq
     - Generates reading time for articles.
     - WPM can be set as a setting  *ReadingTimeWordsPerMinute*. Defaults to 238.
     - Reading time is returned as Minutes and seconds as well as rounded minutes where 30 or more is rounded up.
-2. Responsive YouTube Shortcode
-    - Makes you tube videos responsive with a 16:9 aspect ratio and full width.
-    - pass in the id and the title.
-3. Optimize Slug
+2. Optimize Slug
     - Optimizes the destination slug by
         - converting reserved characters to -.
         - converting to lower case.
@@ -63,25 +60,32 @@ An opinionated wrapper around Statiq
         - turning spaces into dashes.
         - removing multiple dashes.
         - removing filler words.
-4. Replace Image Links
+3. Replace Image Links
     - Replaces relative Image Links in markdown file to point to the correct folder in the images directory.
     - Absolute Image Links in markdown file are not replaced.
-5. GenerateRssMetaData
+4. GenerateRssMetaData
     - Sets the title, description, updatedDate and image for the RSS feed from the post metadata.
-6. GenerateSitemapMetaData
+5. GenerateSitemapMetaData
     - Sets the path and last modified date from the document.
-7. GeneratePageDetailsFromPath
+6. GeneratePageDetailsFromPath
     - Sets the slug from the folder path for pages.
-8. GeneratePostDetailsFromPath
+7. GeneratePostDetailsFromPath
     - Sets the slug and published date from the path.
-9. GenerateSocialImages
+8. GenerateSocialImages
     - Creates images to share on facebook and twitter.
     - Can pass in a cover image to use as the background
-10. Related Posts Module
+9. Related Posts Module
      - Generates related posts based on category, tags and relative date from the post.
      - Number of posts to show can be set as a setting  *NumberOfRelatedPosts*. Defaults to 4.
      - Does not consider posts that do not have a matching category or tag.
-11. App Store Badge Shortcode
-     - Generates badges for the Apple App Store and Google Play Store.
-     - Specify the app's URL and alt text.
-     - Add a `appstore-badges-container` class to the css to style the div container.
+
+## Shortcodes
+
+1. Responsive YouTube Shortcode
+    - Makes you tube videos responsive with a 16:9 aspect ratio and full width.
+    - pass in the id and the title.
+
+2. App Store Badge Shortcode
+    - Generates badges for the Apple App Store and Google Play Store.
+    - Specify the app's URL and alt text.
+    - Add a `appstore-badges-container` class to the css to style the div container.
