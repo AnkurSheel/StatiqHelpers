@@ -1,0 +1,8 @@
+﻿<pre><code class="language-java">static final String MyFeatureFlagKey = &quot;feature.key&quot;;`
+
+&#64;FeatureFlagWillMakeThisObsolete(MyFeatureFlagKey)
+void deleteMe()
+{
+    // old code
+}
+</code></pre>

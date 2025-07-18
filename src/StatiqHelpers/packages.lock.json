@@ -33,15 +33,6 @@
           "SixLabors.ImageSharp": "1.0.3"
         }
       },
-      "Statiq.Highlight": {
-        "type": "Direct",
-        "requested": "[1.0.0-beta.71, )",
-        "resolved": "1.0.0-beta.71",
-        "contentHash": "VM5HBaAkMdmv2+gpqKCllhlOCQAfUG5r9oRl675CE9O4Bpu0eD/njBiE0ZSJQq104CnI5XdEKeAlmVR5iJD6OQ==",
-        "dependencies": {
-          "Statiq.Common": "1.0.0-beta.71"
-        }
-      },
       "Statiq.Web": {
         "type": "Direct",
         "requested": "[1.0.0-beta.59, )",
@@ -1265,6 +1256,14 @@
         "contentHash": "FX3HPbYjGzA/N9ZE9gxvzx9xwnN9r3F9P2+fSxriCz3AYBuG+QjvOlZA3RV/tJqFvwK3+3IYrnVEiE0yKYYdSQ==",
         "dependencies": {
           "Handlebars.Net": "1.10.1",
+          "Statiq.Common": "1.0.0-beta.71"
+        }
+      },
+      "Statiq.Highlight": {
+        "type": "Transitive",
+        "resolved": "1.0.0-beta.71",
+        "contentHash": "VM5HBaAkMdmv2+gpqKCllhlOCQAfUG5r9oRl675CE9O4Bpu0eD/njBiE0ZSJQq104CnI5XdEKeAlmVR5iJD6OQ==",
+        "dependencies": {
           "Statiq.Common": "1.0.0-beta.71"
         }
       },

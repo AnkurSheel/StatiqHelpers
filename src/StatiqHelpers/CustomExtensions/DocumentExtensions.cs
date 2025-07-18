@@ -48,20 +48,6 @@ public static class DocumentExtensions
         return document.GetLink(!relative);
     }
 
-    public static string? GetCoverImageLink(this IDocument document)
-    {
-        var coverImagePath = document.GetCoverImagePath();
-
-        if (coverImagePath != null)
-        {
-            return coverImagePath.StartsWith(Constants.ImagesDirectory)
-                ? coverImagePath
-                : $"/{Constants.PostImagesDirectory}/{document.GetSlug()}/{coverImagePath}";
-        }
-
-        return null;
-    }
-
     public static IReadOnlyList<string> GetTags(this IDocument document)
     {
         return document.GetList<string>(MetaDataKeys.Tags);

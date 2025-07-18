@@ -183,6 +183,33 @@ int foo = 1
             var body = await document.GetContentStringAsync();
             await Verify(body);
         }
+        
+        [Fact]
+        public async Task Code_blocks_with_atSign_are_correctly_parsed()
+        {
+            var content = @"
+---
+```java
+static final String MyFeatureFlagKey = ""feature.key"";`
+
+@FeatureFlagWillMakeThisObsolete(MyFeatureFlagKey)
+void deleteMe()
+{
+    // old code
+}
+```
+";
+
+            var fileProvider = PipelineTestHelpersStatic.GetFileProvider(_path, content);
+
+            var result = await Bootstrapper.RunTestAsync(fileProvider);
+
+            Assert.Equal((int)ExitCode.Normal, result.ExitCode);
+            var document = result.Outputs[PipelineName][Phase.Output].Single();
+
+            var body = await document.GetContentStringAsync();
+            await Verify(body);
+        }
 
         [Fact]
         public async Task Destination_is_taken_from_the_slug_and_is_placed_in_the_blog_path()

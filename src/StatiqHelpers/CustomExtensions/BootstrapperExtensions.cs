@@ -25,16 +25,24 @@ public static class BootstrapperExtensions
             .AddPipeline<TagsListPipeline>()
             .AddPipeline<TagsPipeline>()
             .AddPipeline<SitemapPipeline>()
-            .AddPipeline(nameof(AnalyzeContent), new Pipeline
-            {
-                Deployment = true,
-                ExecutionPolicy = ExecutionPolicy.Normal,
-                InputModules =
+            .AddPipeline(
+                nameof(AnalyzeContent),
+                new Pipeline
                 {
-                    new ReplaceDocuments(nameof(ScriptsPipeline), nameof(HomePipeline), nameof(PagesPipeline),
-                        nameof(PostListPipeline), nameof(PostPipeline), nameof(TagsListPipeline), nameof(TagsPipeline))
-                }
-            });
+                    Deployment = true,
+                    ExecutionPolicy = ExecutionPolicy.Normal,
+                    InputModules =
+                    {
+                        new ReplaceDocuments(
+                            nameof(ScriptsPipeline),
+                            nameof(HomePipeline),
+                            nameof(PagesPipeline),
+                            nameof(PostListPipeline),
+                            nameof(PostPipeline),
+                            nameof(TagsListPipeline),
+                            nameof(TagsPipeline))
+                    }
+                });
         return bootstrapper;
     }
 
@@ -43,11 +51,13 @@ public static class BootstrapperExtensions
         bootstrapper.ConfigureServices(services =>
         {
             services.AddTransient<IImageService, ImageService>();
+            services.AddTransient<IFontHelper, FontHelper>();
             services.AddTransient<IReadingTimeService, ReadingTimeService>();
             services.AddTransient<IRelatedPostsService, RelatedPostsService>();
             services.AddTransient<IRelatedPostsPointCalculator, RelatedPostsPointCalculator>();
-            services.AddSingleton(new PipelineOptions(documentList =>
-                documentList.OrderBy(document => document.GetTitle()).ToDocumentList()));
+            services.AddSingleton(
+                new PipelineOptions(documentList
+                    => documentList.OrderBy(document => document.GetTitle()).ToDocumentList()));
         });
         return bootstrapper;
     }

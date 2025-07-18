@@ -44,8 +44,8 @@ public class GenerateSocialImagesTests : BaseFixture
         var result = await ExecuteAsync(input, GetTestContext(), _module);
 
         AssertHelper.AssertMultiple(
-            () => _imageService.Verify(x => x.CreateImageDocument(1200, 630, It.IsAny<string?>(), It.IsAny<string>(), It.IsAny<string>()), Times.Once),
-            () => _imageService.Verify(x => x.CreateImageDocument(440, 220, It.IsAny<string?>(), It.IsAny<string>(), It.IsAny<string>()), Times.Once),
+            () => _imageService.Verify(x => x.CreateImageDocument(1200, 630, It.IsAny<string?>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()), Times.Once),
+            () => _imageService.Verify(x => x.CreateImageDocument(440, 220, It.IsAny<string?>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()), Times.Once),
             () => _imageService.VerifyNoOtherCalls());
     }
 
@@ -61,7 +61,7 @@ public class GenerateSocialImagesTests : BaseFixture
         var expectedCenterText = $"{filename.ToUpper()}{Environment.NewLine}1 min";
         AssertHelper.AssertMultiple(
             () => _imageService.Verify(
-                x => x.CreateImageDocument(It.IsAny<int>(), It.IsAny<int>(), It.IsAny<string?>(), It.IsAny<string>(), expectedCenterText),
+                x => x.CreateImageDocument(It.IsAny<int>(), It.IsAny<int>(), It.IsAny<string?>(), It.IsAny<string>(), expectedCenterText, It.IsAny<string>()),
                 Times.Exactly(2)));
     }
 
@@ -75,7 +75,7 @@ public class GenerateSocialImagesTests : BaseFixture
 
         AssertHelper.AssertMultiple(
             () => _imageService.Verify(
-                x => x.CreateImageDocument(It.IsAny<int>(), It.IsAny<int>(), It.IsAny<string?>(), It.IsAny<string>(), expectedCenterText),
+                x => x.CreateImageDocument(It.IsAny<int>(), It.IsAny<int>(), It.IsAny<string?>(), It.IsAny<string>(), expectedCenterText, It.IsAny<string>()),
                 Times.Exactly(2)));
     }
 
@@ -89,7 +89,7 @@ public class GenerateSocialImagesTests : BaseFixture
 
         AssertHelper.AssertMultiple(
             () => _imageService.Verify(
-                x => x.CreateImageDocument(It.IsAny<int>(), It.IsAny<int>(), It.IsAny<string?>(), siteTitle, It.IsAny<string>()),
+                x => x.CreateImageDocument(It.IsAny<int>(), It.IsAny<int>(), It.IsAny<string?>(), siteTitle, It.IsAny<string>(), It.IsAny<string>()),
                 Times.Exactly(2)));
     }
 
@@ -102,7 +102,7 @@ public class GenerateSocialImagesTests : BaseFixture
 
         AssertHelper.AssertMultiple(
             () => _imageService.Verify(
-                x => x.CreateImageDocument(It.IsAny<int>(), It.IsAny<int>(), It.IsAny<string?>(), "", It.IsAny<string>()),
+                x => x.CreateImageDocument(It.IsAny<int>(), It.IsAny<int>(), It.IsAny<string?>(), "", It.IsAny<string>(), It.IsAny<string>()),
                 Times.Exactly(2)));
     }
 
@@ -115,7 +115,7 @@ public class GenerateSocialImagesTests : BaseFixture
 
         AssertHelper.AssertMultiple(
             () => _imageService.Verify(
-                x => x.CreateImageDocument(It.IsAny<int>(), It.IsAny<int>(), null, It.IsAny<string>(), It.IsAny<string>()),
+                x => x.CreateImageDocument(It.IsAny<int>(), It.IsAny<int>(), null, It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()),
                 Times.Exactly(2)));
     }
 
@@ -129,7 +129,7 @@ public class GenerateSocialImagesTests : BaseFixture
 
         AssertHelper.AssertMultiple(
             () => _imageService.Verify(
-                x => x.CreateImageDocument(It.IsAny<int>(), It.IsAny<int>(), $"/input/folder/slug/{coverImage}", It.IsAny<string>(), It.IsAny<string>()),
+                x => x.CreateImageDocument(It.IsAny<int>(), It.IsAny<int>(), $"/input/folder/slug/{coverImage}", It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()),
                 Times.Exactly(2)));
     }
 
@@ -148,6 +148,7 @@ public class GenerateSocialImagesTests : BaseFixture
                     It.IsAny<int>(),
                     It.IsAny<int>(),
                     $"{context.FileSystem.RootPath}/input/{coverImage}",
+                    It.IsAny<string>(),
                     It.IsAny<string>(),
                     It.IsAny<string>()),
                 Times.Exactly(2)));

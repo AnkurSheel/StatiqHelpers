@@ -1,3 +1,2 @@
-﻿<html><head></head><body><pre><code class="language-cpp hljs"><span class="hljs-type">int</span> foo = <span class="hljs-number">1</span>
+﻿<pre><code>int foo = 1
 </code></pre>
-</body></html>

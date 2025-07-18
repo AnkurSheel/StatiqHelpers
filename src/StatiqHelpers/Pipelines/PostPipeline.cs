@@ -1,5 +1,4 @@
-﻿using Statiq.Highlight;
-using Statiq.Markdown;
+﻿using Statiq.Markdown;
 using Statiq.Razor;
 using Statiq.Yaml;
 using StatiqHelpers.CustomExtensions;
@@ -32,7 +31,8 @@ public class PostPipeline : Pipeline
                 new RenderMarkdown().UseExtensions(),
                 new OptimizeSlug(),
                 new SetDestination(
-                    Config.FromDocument((doc, ctx) => new NormalizedPath(Constants.BlogPath).Combine($"{doc.GetString(MetaDataKeys.Slug)}.html")))
+                    Config.FromDocument((doc, ctx)
+                        => new NormalizedPath(Constants.BlogPath).Combine($"{doc.GetSlug()}.html"))),
             }
         };
 
@@ -40,7 +40,6 @@ public class PostPipeline : Pipeline
         {
             new GenerateRelatedPosts(relatedPostsService),
             new RenderRazor().WithBaseModel(),
-            new HighlightCode().WithAutoHighlightUnspecifiedLanguage(true)
         };
 
         OutputModules = new ModuleList
