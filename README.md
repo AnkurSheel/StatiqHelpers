@@ -80,4 +80,8 @@ An opinionated wrapper around Statiq
 10. Related Posts Module
      - Generates related posts based on category, tags and relative date from the post.
      - Number of posts to show can be set as a setting  *NumberOfRelatedPosts*. Defaults to 4.
-     - Does not condier posts that do not have a matching category or tag.
+     - Does not consider posts that do not have a matching category or tag.
+11. App Store Badge Shortcode
+     - Generates badges for the Apple App Store and Google Play Store.
+     - Specify the app's URL and alt text.
+     - Add a `appstore-badges-container` class to the css to style the div container.
