@@ -1,0 +1,105 @@
+name: 'CI'
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+env:
+  BUILD_CONFIGURATION: 'Release'
+  LIBRARY_PROJECT: './src/StatiqHelpers/StatiqHelpers.csproj'
+
+jobs:
+  build:
+    runs-on: windows-latest
+    outputs:
+      nuget-version: ${{ steps.gitversion.outputs.nuget_version }}
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Required for GitVersion
+      
+      - name: Restore dependencies
+        run: dotnet restore
+      
+      - name: Restore dotnet tools
+        run: dotnet tool restore
+      
+      - name: Run GitVersion
+        id: gitversion
+        run: |
+          dotnet dotnet-gitversion -l console -output buildserver -nofetch
+          $version = dotnet dotnet-gitversion -showvariable NuGetVersionV2
+          echo "nuget_version=$version" >> $env:GITHUB_OUTPUT
+        shell: pwsh
+      
+      - name: Run tests
+        run: dotnet test --logger trx --configuration ${{ env.BUILD_CONFIGURATION }}
+      
+      - name: Upload test results
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: test-results
+          path: '**/*.trx'
+          retention-days: 7
+      
+      - name: Build library
+        run: dotnet build ${{ env.LIBRARY_PROJECT }} --configuration ${{ env.BUILD_CONFIGURATION }} /p:Version=${{ steps.gitversion.outputs.nuget_version }}
+      
+      - name: Pack NuGet package
+        run: dotnet pack ${{ env.LIBRARY_PROJECT }} --configuration ${{ env.BUILD_CONFIGURATION }} --include-symbols --no-build --output ./artifacts /p:Version=${{ steps.gitversion.outputs.nuget_version }}
+      
+      - name: Upload NuGet package artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: nuget-package
+          path: |
+            ./artifacts/*.nupkg
+            ./artifacts/*.snupkg
+          retention-days: 7
+  
+  publish:
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write  # Required for OIDC authentication with NuGet.org
+      contents: write  # Required for creating releases (only used on push to main)
+    
+    steps:
+      - name: Download NuGet package artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: nuget-package
+          path: ./artifacts
+      
+      - name: NuGet login (OIDC → temp API key)
+        uses: NuGet/login@v1
+        id: login
+        with:
+          # Secret is your NuGet username, e.g. your-nuget-username
+          user: ${{ secrets.NUGET_USER }}
+      
+      - name: Publish to NuGet.org
+        run: |
+          # Publish main package
+          dotnet nuget push ./artifacts/*.nupkg --source https://api.nuget.org/v3/index.json --api-key "${{ steps.login.outputs.NUGET_API_KEY }}" --skip-duplicate
+          # Publish symbol packages (NuGet.org accepts .snupkg on the same endpoint)
+          dotnet nuget push ./artifacts/*.snupkg --source https://api.nuget.org/v3/index.json --api-key "${{ steps.login.outputs.NUGET_API_KEY }}" --skip-duplicate
+        shell: pwsh
+      
+      - name: Create GitHub Release
+        if: github.event_name == 'push'
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: v${{ needs.build.outputs.nuget-version }}
+          name: v${{ needs.build.outputs.nuget-version }}
+          generate_release_notes: true
+          files: |
+            ./artifacts/*.nupkg
+            ./artifacts/*.snupkg
