@@ -1,5 +1,0 @@
-variables:
-    - name: 'BuildConfiguration'
-      value: 'Release'
-    - name: 'libraryProject'
-      value: '.\src\StatiqHelpers\StatiqHelpers.csproj'
