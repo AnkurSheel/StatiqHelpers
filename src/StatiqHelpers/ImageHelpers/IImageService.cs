@@ -8,8 +8,14 @@
             string? coverImagePath,
             string siteTitle,
             string centerText,
-            string fontPath);
+            string fontPath
+        );
 
-        Task ResizeImages(IReadOnlyList<string> imagePaths, int newWidth, int newHeight);
+        Task ResizeImages(
+            IReadOnlyList<string> imagePaths,
+            int newWidth,
+            int newHeight,
+            bool increaseImageSizes
+        );
     }
 }

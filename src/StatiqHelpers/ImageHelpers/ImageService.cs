@@ -1,5 +1,7 @@
 ﻿using ByteSizeLib;
+
 using Microsoft.Extensions.Logging;
+
 using SixLabors.Fonts;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Drawing;
@@ -28,7 +30,8 @@ namespace StatiqHelpers.ImageHelpers
             string? coverImagePath,
             string siteTitle,
             string centerText,
-            string fontPath)
+            string fontPath
+        )
         {
             Image template = new Image<Rgb24>(width, height);
             Image? coverImage = null;
@@ -41,20 +44,19 @@ namespace StatiqHelpers.ImageHelpers
                 coverImage = await Image.LoadAsync(coverImagePath);
             }
 
-            template.Mutate(
-                imageContext =>
+            template.Mutate(imageContext =>
+            {
+                AddGradient(width, height, imageContext);
+
+                if (coverImage != null)
                 {
-                    AddGradient(width, height, imageContext);
+                    using var thumbnail = AddThumbnail(width, height, coverImage);
+                    imageContext.DrawImage(thumbnail, new Point(0, 0), 1f);
+                }
 
-                    if (coverImage != null)
-                    {
-                        using var thumbnail = AddThumbnail(width, height, coverImage);
-                        imageContext.DrawImage(thumbnail, new Point(0, 0), 1f);
-                    }
-
-                    AddCenterText(imageContext, width, height, centerText, new Font(font, fontSize, FontStyle.Bold));
-                    AddBrand(imageContext, width, height, siteTitle, new Font(font, fontSize, FontStyle.Regular));
-                });
+                AddCenterText(imageContext, width, height, centerText, new Font(font, fontSize, FontStyle.Bold));
+                AddBrand(imageContext, width, height, siteTitle, new Font(font, fontSize, FontStyle.Regular));
+            });
 
             Stream output = new MemoryStream();
 
@@ -65,48 +67,69 @@ namespace StatiqHelpers.ImageHelpers
 
         private Image AddThumbnail(int width, int height, Image thumbnail)
         {
-            thumbnail.Mutate(
-                imageContext =>
-                {
-                    imageContext.SetGraphicsOptions(
-                        new GraphicsOptions
-                        {
-                            Antialias = true
-                        });
+            thumbnail.Mutate(imageContext =>
+            {
+                imageContext.SetGraphicsOptions(
+                    new GraphicsOptions
+                    {
+                        Antialias = true
+                    });
 
-                    imageContext.Resize(
-                        new ResizeOptions
-                        {
-                            Position = AnchorPositionMode.Center,
-                            Size = new Size(width, height),
-                            Mode = ResizeMode.Pad,
-                        });
-                    DarkenImage(imageContext);
-                });
+                imageContext.Resize(
+                    new ResizeOptions
+                    {
+                        Position = AnchorPositionMode.Center,
+                        Size = new Size(width, height),
+                        Mode = ResizeMode.Pad,
+                    });
+                DarkenImage(imageContext);
+            });
             return thumbnail;
         }
 
-        public async Task ResizeImages(IReadOnlyList<string> imagePaths, int newWidth, int newHeight)
+        public async Task ResizeImages(
+            IReadOnlyList<string> imagePaths,
+            int newWidth,
+            int newHeight,
+            bool increaseImageSizes
+        )
         {
             var totalPre = 0L;
             var totalPost = 0L;
+
+            var skippedImages = 0;
 
             foreach (var imagePath in imagePaths)
             {
                 var fileInfo = new FileInfo(imagePath);
                 var preSize = 0L;
-                var image = await Image.LoadAsync(imagePath);
+                Image image;
+                try
+                {
+                    image = await Image.LoadAsync(imagePath);
+                }
+                catch (Exception e)
+                {
+                    _logger.Log(LogLevel.Error, "Error loading image {Path}: {Message}", imagePath, e.Message);
+                    continue;
+                }
 
                 var originalSize = image.Size();
 
-                if ((originalSize.Width == newWidth && (newHeight == 0 || originalSize.Height == newHeight))
-                    || (originalSize.Height == newHeight && (newWidth == 0 || originalSize.Width == newWidth)))
+                if (originalSize.Width == newWidth && (newHeight == 0 || originalSize.Height == newHeight)
+                    || originalSize.Height == newHeight && (newWidth == 0 || originalSize.Width == newWidth))
                 {
                     // _logger.Log(
                     //     LogLevel.Information,
                     //     "No change in size for {Path}. Ignoring",
                     //     imagePath);
 
+                    continue;
+                }
+
+                if ((newWidth > originalSize.Width || newHeight > originalSize.Height) && !increaseImageSizes)
+                {
+                    skippedImages++;
                     continue;
                 }
 
@@ -143,7 +166,11 @@ namespace StatiqHelpers.ImageHelpers
                             });
                         break;
                     default:
-                        _logger.Log(LogLevel.Error, "No support for extension {Extension} in {Path}", fileInfo.Extension, imagePath);
+                        _logger.Log(
+                            LogLevel.Error,
+                            "No support for extension {Extension} in {Path}",
+                            fileInfo.Extension,
+                            imagePath);
                         break;
                 }
 
@@ -155,9 +182,10 @@ namespace StatiqHelpers.ImageHelpers
 
                 _logger.Log(
                     LogLevel.Information,
-                    "Resized {Path} with {Size}. Changed from {PreSize} to {PostSize} ({PercentChanged:P})",
+                    "Resized {Path} with {Size} to {NewSize}. Changed from {PreSize} to {PostSize} ({PercentChanged:P})",
                     imagePath,
                     originalSize,
+                    image.Size(),
                     ByteSize.FromBytes(preSize).ToString(),
                     ByteSize.FromBytes(postSize).ToString(),
                     percentChanged);
@@ -165,9 +193,10 @@ namespace StatiqHelpers.ImageHelpers
 
             _logger.Log(
                 LogLevel.Information,
-                "Resizing complete. Updated Size from {PreSize} to {PostSize}",
+                "Resizing complete. Updated from {PreSize} to {PostSize}. Skipped Images: {SkippedImages}.",
                 ByteSize.FromBytes(totalPre).ToString(),
-                ByteSize.FromBytes(totalPost).ToString());
+                ByteSize.FromBytes(totalPost).ToString(),
+                skippedImages);
         }
 
         private void AddGradient(int width, int height, IImageProcessingContext imageContext)
@@ -191,9 +220,9 @@ namespace StatiqHelpers.ImageHelpers
             int imageWidth,
             int imageHeight,
             string centerText,
-            Font font)
+            Font font
+        )
         {
-
             var xPadding = imageWidth / 30;
             var drawingOptions = new DrawingOptions
             {
@@ -210,7 +239,12 @@ namespace StatiqHelpers.ImageHelpers
             };
 
             var verticalCenter = (imageHeight - font.Size) / 2;
-            imageContext.DrawText(drawingOptions, centerText, font, Color.MediumPurple, new PointF(xPadding + 2, verticalCenter + 2));
+            imageContext.DrawText(
+                drawingOptions,
+                centerText,
+                font,
+                Color.MediumPurple,
+                new PointF(xPadding + 2, verticalCenter + 2));
             imageContext.DrawText(drawingOptions, centerText, font, Color.White, new PointF(xPadding, verticalCenter));
         }
 
@@ -219,7 +253,8 @@ namespace StatiqHelpers.ImageHelpers
             int imageWidth,
             int imageHeight,
             string siteTitle,
-            Font font)
+            Font font
+        )
         {
             var drawingOptions = new DrawingOptions
             {

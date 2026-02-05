@@ -17,5 +17,9 @@ namespace StatiqHelpers.ImageHelpers
         [CommandOption("-c")]
         [Description("Compress all files, not just uncommitted files")]
         public bool AllFiles { get; set; }
+        
+        [CommandOption("--increaseSize")]
+        [Description("Update images to larger size")]
+        public bool IncreaseImageSizes { get; set; }
     }
 }

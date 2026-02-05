@@ -1,8 +1,12 @@
 ﻿using System.ComponentModel;
+
 using LibGit2Sharp;
+
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+
 using Spectre.Console.Cli;
+
 using LogLevel = Microsoft.Extensions.Logging.LogLevel;
 
 namespace StatiqHelpers.ImageHelpers
@@ -34,7 +38,7 @@ namespace StatiqHelpers.ImageHelpers
                 : "checked out files";
             engineManager.Engine.Logger.Log(LogLevel.Information, "Beginning resizing of images on {message} : {count}", message, images.Count);
 
-            await _imageService.ResizeImages(images, commandSettings.Width, commandSettings.Height);
+            await _imageService.ResizeImages(images, commandSettings.Width, commandSettings.Height, commandSettings.IncreaseImageSizes);
 
             return 0;
         }
