@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel;
+
 using Spectre.Console.Cli;
 
 namespace StatiqHelpers.ImageHelpers
@@ -9,12 +10,16 @@ namespace StatiqHelpers.ImageHelpers
         [Description("Specify the target width")]
         public int Width { get; set; }
 
-        [CommandArgument(0, "<height>")]
+        [CommandArgument(1, "<height>")]
         [Description("Specify the target height")]
         public int Height { get; set; }
 
         [CommandOption("-c")]
         [Description("Compress all files, not just uncommitted files")]
         public bool AllFiles { get; set; }
+        
+        [CommandOption("--increaseSize")]
+        [Description("Update images to larger size")]
+        public bool IncreaseImageSizes { get; set; }
     }
 }

@@ -14,15 +14,16 @@ namespace StatiqHelpers.Modules
 
         protected override async Task<IEnumerable<IDocument>> ExecuteInputAsync(IDocument input, IExecutionContext context)
         {
-            const string fontPath = "./input/assets/fonts/Cookie-Regular.ttf";
-            
+            var fontPath = context.GetSocialImageFont();
+
             var siteTitle = context.GetSiteTitle();
             var readingTimeData = input.GetReadingTime();
-            var centerText = $"{input.GetTitle().ToUpper()}{Environment.NewLine}";
-
-            centerText += readingTimeData.RoundedMinutes < 1
+            var readingTimeText = readingTimeData.RoundedMinutes < 1
                 ? $"{readingTimeData.Seconds} sec"
                 : $"{readingTimeData.RoundedMinutes} min";
+
+            var centerText = input.GetTitle();
+            var secondaryText = readingTimeText;
 
             var coverImagePath = input.GetCoverImagePath();
 
@@ -39,6 +40,7 @@ namespace StatiqHelpers.Modules
                 coverImagePath,
                 siteTitle,
                 centerText,
+                secondaryText,
                 fontPath);
 
             var facebookDoc = context.CreateDocument(
@@ -52,6 +54,7 @@ namespace StatiqHelpers.Modules
                 coverImagePath,
                 siteTitle,
                 centerText,
+                secondaryText,
                 fontPath);
 
             var twitterDoc = context.CreateDocument(

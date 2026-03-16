@@ -1,5 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+
 using Statiq.Web.Pipelines;
+
 using StatiqHelpers.ImageHelpers;
 using StatiqHelpers.Modules.ReadingTime;
 using StatiqHelpers.Modules.RelatedPosts;
@@ -51,6 +53,10 @@ public static class BootstrapperExtensions
         bootstrapper.ConfigureServices(services =>
         {
             services.AddTransient<IImageService, ImageService>();
+            services.AddTransient<IImageProcessingService, ImageProcessingService>();
+            services.AddTransient<IImageDrawingService, ImageDrawingService>();
+            services.AddTransient<IImageLayoutService, ImageLayoutService>();
+            services.AddTransient<IGitService, GitService>();
             services.AddTransient<IFontHelper, FontHelper>();
             services.AddTransient<IReadingTimeService, ReadingTimeService>();
             services.AddTransient<IRelatedPostsService, RelatedPostsService>();

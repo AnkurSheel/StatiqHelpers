@@ -65,5 +65,8 @@ namespace StatiqHelpers.CustomExtensions
 
         public static string? GetGoatCounterCode(this IExecutionContext context)
             => context.GetString("GoatCounterCode");
+
+        public static string GetSocialImageFont(this IExecutionContext context)
+            => context.GetString("SocialImageFont", "Arial");
     }
 }
