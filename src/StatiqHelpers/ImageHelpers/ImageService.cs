@@ -2,14 +2,7 @@
 
 using Microsoft.Extensions.Logging;
 
-using SixLabors.Fonts;
-using SixLabors.ImageSharp;
-using SixLabors.ImageSharp.Drawing;
-using SixLabors.ImageSharp.Drawing.Processing;
-using SixLabors.ImageSharp.Formats.Jpeg;
-using SixLabors.ImageSharp.Formats.Png;
-using SixLabors.ImageSharp.PixelFormats;
-using SixLabors.ImageSharp.Processing;
+using SkiaSharp;
 
 namespace StatiqHelpers.ImageHelpers
 {
@@ -33,58 +26,53 @@ namespace StatiqHelpers.ImageHelpers
             string fontPath
         )
         {
-            Image template = new Image<Rgb24>(width, height);
-            Image? coverImage = null;
+            using var surface = SKSurface.Create(new SKImageInfo(width, height));
+            var canvas = surface.Canvas;
 
-            var font = _fontHelper.InstallFont(fontPath);
-            var fontSize = height / 10;
+            using var typeface = _fontHelper.InstallFont(fontPath);
+            var fontSize = height / 10f;
+
+            AddGradient(width, height, canvas);
 
             if (coverImagePath != null)
             {
-                coverImage = await Image.LoadAsync(coverImagePath);
-            }
-
-            template.Mutate(imageContext =>
-            {
-                AddGradient(width, height, imageContext);
-
+                using var coverImage = SKBitmap.Decode(coverImagePath);
                 if (coverImage != null)
                 {
-                    using var thumbnail = AddThumbnail(width, height, coverImage);
-                    imageContext.DrawImage(thumbnail, new Point(0, 0), 1f);
+                    using var thumbnail = ResizeBitmap(width, height, coverImage);
+                    DarkenBitmap(thumbnail);
+                    canvas.DrawBitmap(thumbnail, 0, 0);
                 }
+            }
 
-                AddCenterText(imageContext, width, height, centerText, new Font(font, fontSize, FontStyle.Bold));
-                AddBrand(imageContext, width, height, siteTitle, new Font(font, fontSize, FontStyle.Regular));
-            });
+            AddCenterText(canvas, width, height, centerText, typeface, fontSize);
+            AddBrand(canvas, width, height, siteTitle, typeface, fontSize);
 
-            Stream output = new MemoryStream();
+            var output = new MemoryStream();
+            using var image = surface.Snapshot();
+            using var data = image.Encode(SKEncodedImageFormat.Png, 100);
+            data.SaveTo(output);
+            output.Seek(0, SeekOrigin.Begin);
 
-            await template.SaveAsPngAsync(output);
-
-            return output;
+            return await Task.FromResult(output);
         }
 
-        private Image AddThumbnail(int width, int height, Image thumbnail)
+        private SKBitmap ResizeBitmap(int width, int height, SKBitmap original)
         {
-            thumbnail.Mutate(imageContext =>
-            {
-                imageContext.SetGraphicsOptions(
-                    new GraphicsOptions
-                    {
-                        Antialias = true
-                    });
+            var resized = new SKBitmap(width, height);
+            original.ScalePixels(resized, SKFilterQuality.High);
+            return resized;
+        }
 
-                imageContext.Resize(
-                    new ResizeOptions
-                    {
-                        Position = AnchorPositionMode.Center,
-                        Size = new Size(width, height),
-                        Mode = ResizeMode.Pad,
-                    });
-                DarkenImage(imageContext);
-            });
-            return thumbnail;
+        private void DarkenBitmap(SKBitmap bitmap)
+        {
+            using var canvas = new SKCanvas(bitmap);
+            using var paint = new SKPaint
+            {
+                Color = SKColors.Black.WithAlpha((byte)(255 * 0.5)),
+                Style = SKPaintStyle.Fill
+            };
+            canvas.DrawRect(0, 0, bitmap.Width, bitmap.Height, paint);
         }
 
         public async Task ResizeImages(
@@ -103,10 +91,14 @@ namespace StatiqHelpers.ImageHelpers
             {
                 var fileInfo = new FileInfo(imagePath);
                 var preSize = 0L;
-                Image image;
+                SKBitmap bitmap;
                 try
                 {
-                    image = await Image.LoadAsync(imagePath);
+                    bitmap = SKBitmap.Decode(imagePath);
+                    if (bitmap == null)
+                    {
+                        throw new Exception("Failed to decode image");
+                    }
                 }
                 catch (Exception e)
                 {
@@ -114,64 +106,68 @@ namespace StatiqHelpers.ImageHelpers
                     continue;
                 }
 
-                var originalSize = image.Size();
-
-                if (originalSize.Width == newWidth && (newHeight == 0 || originalSize.Height == newHeight)
-                    || originalSize.Height == newHeight && (newWidth == 0 || originalSize.Width == newWidth))
+                using (bitmap)
                 {
-                    // _logger.Log(
-                    //     LogLevel.Information,
-                    //     "No change in size for {Path}. Ignoring",
-                    //     imagePath);
+                    var originalWidth = bitmap.Width;
+                    var originalHeight = bitmap.Height;
 
-                    continue;
-                }
+                    if (originalWidth == newWidth && (newHeight == 0 || originalHeight == newHeight)
+                        || originalHeight == newHeight && (newWidth == 0 || originalWidth == newWidth))
+                    {
+                        continue;
+                    }
 
-                if ((newWidth > originalSize.Width || newHeight > originalSize.Height) && !increaseImageSizes)
-                {
-                    skippedImages++;
-                    continue;
-                }
+                    if ((newWidth > originalWidth || newHeight > originalHeight) && !increaseImageSizes)
+                    {
+                        skippedImages++;
+                        continue;
+                    }
 
-                preSize = fileInfo.Length;
+                    preSize = fileInfo.Length;
+                    totalPre += preSize;
 
-                totalPre += preSize;
+                    var finalWidth = newWidth;
+                    var finalHeight = newHeight;
 
-                var resizeOptions = new ResizeOptions
-                {
-                    Size = new Size(newWidth, newHeight),
-                    Compand = true
-                };
+                    if (newHeight == 0)
+                    {
+                        finalHeight = (int)(originalHeight * (float)newWidth / originalWidth);
+                    }
+                    else if (newWidth == 0)
+                    {
+                        finalWidth = (int)(originalWidth * (float)newHeight / originalHeight);
+                    }
 
-                image.Mutate(imageContext => imageContext.Resize(resizeOptions));
+                    using var resizedBitmap = new SKBitmap(finalWidth, finalHeight);
+                    bitmap.ScalePixels(resizedBitmap, SKFilterQuality.High);
 
-                switch (fileInfo.Extension)
-                {
-                    case ".jpg":
-                    case ".jpeg":
-                        await image.SaveAsJpegAsync(
-                            imagePath,
-                            new JpegEncoder
-                            {
-                                Quality = 80,
-                                Subsample = JpegSubsample.Ratio444
-                            });
-                        break;
-                    case ".png":
-                        await image.SaveAsPngAsync(
-                            imagePath,
-                            new PngEncoder
-                            {
-                                CompressionLevel = PngCompressionLevel.BestCompression
-                            });
-                        break;
-                    default:
-                        _logger.Log(
-                            LogLevel.Error,
-                            "No support for extension {Extension} in {Path}",
-                            fileInfo.Extension,
-                            imagePath);
-                        break;
+                    SKEncodedImageFormat format;
+                    int quality = 80;
+
+                    switch (fileInfo.Extension.ToLower())
+                    {
+                        case ".jpg":
+                        case ".jpeg":
+                            format = SKEncodedImageFormat.Jpeg;
+                            break;
+                        case ".png":
+                            format = SKEncodedImageFormat.Png;
+                            quality = 100;
+                            break;
+                        default:
+                            _logger.Log(
+                                LogLevel.Error,
+                                "No support for extension {Extension} in {Path}",
+                                fileInfo.Extension,
+                                imagePath);
+                            continue;
+                    }
+
+                    using var image = SKImage.FromBitmap(resizedBitmap);
+                    using var data = image.Encode(format, quality);
+                    using var stream = File.OpenWrite(imagePath);
+                    stream.SetLength(0);
+                    data.SaveTo(stream);
                 }
 
                 fileInfo = new FileInfo(imagePath);
@@ -184,8 +180,8 @@ namespace StatiqHelpers.ImageHelpers
                     LogLevel.Information,
                     "Resized {Path} with {Size} to {NewSize}. Changed from {PreSize} to {PostSize} ({PercentChanged:P})",
                     imagePath,
-                    originalSize,
-                    image.Size(),
+                    $"{bitmap.Width}x{bitmap.Height}",
+                    $"{newWidth}x{newHeight}",
                     ByteSize.FromBytes(preSize).ToString(),
                     ByteSize.FromBytes(postSize).ToString(),
                     percentChanged);
@@ -199,88 +195,125 @@ namespace StatiqHelpers.ImageHelpers
                 skippedImages);
         }
 
-        private void AddGradient(int width, int height, IImageProcessingContext imageContext)
+        private void AddGradient(int width, int height, SKCanvas canvas)
         {
-            imageContext.Fill(
-                new LinearGradientBrush(
-                    new PointF(0, 0),
-                    new PointF(width / 2, height / 2),
-                    GradientRepetitionMode.Reflect,
-                    new ColorStop(0f, Color.ParseHex("#16222A")),
-                    new ColorStop(0.5f, Color.ParseHex("#3A6073"))));
-        }
-
-        private void DarkenImage(IImageProcessingContext imageContext)
-        {
-            imageContext.Brightness(0.5f);
+            using var paint = new SKPaint
+            {
+                Shader = SKShader.CreateLinearGradient(
+                    new SKPoint(0, 0),
+                    new SKPoint(width / 2f, height / 2f),
+                    new[] { SKColor.Parse("#16222A"), SKColor.Parse("#3A6073") },
+                    new[] { 0f, 0.5f },
+                    SKShaderTileMode.Mirror)
+            };
+            canvas.DrawRect(0, 0, width, height, paint);
         }
 
         private void AddCenterText(
-            IImageProcessingContext imageContext,
+            SKCanvas canvas,
             int imageWidth,
             int imageHeight,
             string centerText,
-            Font font
+            SKTypeface typeface,
+            float fontSize
         )
         {
-            var xPadding = imageWidth / 30;
-            var drawingOptions = new DrawingOptions
+            var xPadding = imageWidth / 30f;
+            using var paint = new SKPaint
             {
-                GraphicsOptions = new GraphicsOptions
-                {
-                    Antialias = true
-                },
-                TextOptions = new TextOptions
-                {
-                    WrapTextWidth = imageWidth - xPadding * 2,
-                    VerticalAlignment = VerticalAlignment.Center,
-                    HorizontalAlignment = HorizontalAlignment.Center,
-                }
+                Typeface = typeface,
+                TextSize = fontSize,
+                Color = SKColors.White,
+                IsAntialias = true,
+                TextAlign = SKTextAlign.Center
             };
 
-            var verticalCenter = (imageHeight - font.Size) / 2;
-            imageContext.DrawText(
-                drawingOptions,
-                centerText,
-                font,
-                Color.MediumPurple,
-                new PointF(xPadding + 2, verticalCenter + 2));
-            imageContext.DrawText(drawingOptions, centerText, font, Color.White, new PointF(xPadding, verticalCenter));
+            var wrapWidth = imageWidth - xPadding * 2;
+            var lines = WrapText(centerText, wrapWidth, paint);
+
+            var totalHeight = lines.Count * fontSize;
+            var y = (imageHeight - totalHeight) / 2f + fontSize;
+
+            foreach (var line in lines)
+            {
+                // Shadow
+                paint.Color = SKColors.MediumPurple;
+                canvas.DrawText(line, imageWidth / 2f + 2, y + 2, paint);
+
+                // Text
+                paint.Color = SKColors.White;
+                canvas.DrawText(line, imageWidth / 2f, y, paint);
+
+                y += fontSize;
+            }
+        }
+
+        private List<string> WrapText(string text, float maxWidth, SKPaint paint)
+        {
+            var resultLines = new List<string>();
+
+            foreach (var paragraph in text.ReplaceLineEndings().Split(Environment.NewLine))
+            {
+                var currentLine = string.Empty;
+
+                foreach (var word in paragraph.Split(' '))
+                {
+                    var testLine = string.IsNullOrWhiteSpace(currentLine) ? word : $"{currentLine} {word}";
+
+                    if (paint.MeasureText(testLine) <= maxWidth)
+                    {
+                        currentLine = testLine;
+                    }
+                    else
+                    {
+                        if (!string.IsNullOrWhiteSpace(currentLine))
+                        {
+                            resultLines.Add(currentLine);
+                        }
+
+                        currentLine = word;
+                    }
+                }
+
+                if (!string.IsNullOrWhiteSpace(currentLine))
+                {
+                    resultLines.Add(currentLine);
+                }
+            }
+
+            return resultLines;
         }
 
         private void AddBrand(
-            IImageProcessingContext imageProcessingContext,
+            SKCanvas canvas,
             int imageWidth,
             int imageHeight,
             string siteTitle,
-            Font font
+            SKTypeface typeface,
+            float fontSize
         )
         {
-            var drawingOptions = new DrawingOptions
+            var brandFontSize = imageHeight / 20f;
+            var xPadding = imageWidth / 30f;
+            var footerHeight = brandFontSize * 2f;
+
+            using var rectPaint = new SKPaint
             {
-                GraphicsOptions = new GraphicsOptions
-                {
-                    Antialias = true
-                },
-                TextOptions = new TextOptions
-                {
-                    VerticalAlignment = VerticalAlignment.Center,
-                    HorizontalAlignment = HorizontalAlignment.Right
-                }
+                Color = SKColor.Parse("#134e5e"),
+                Style = SKPaintStyle.Fill
+            };
+            canvas.DrawRect(0, imageHeight - footerHeight, imageWidth, footerHeight, rectPaint);
+
+            using var textPaint = new SKPaint
+            {
+                Typeface = typeface,
+                TextSize = brandFontSize,
+                Color = SKColor.Parse("#c44225"),
+                IsAntialias = true,
+                TextAlign = SKTextAlign.Right
             };
 
-            var fontSize = imageHeight / 20;
-            var xPadding = imageWidth / 30;
-
-            var height = fontSize * 2;
-            var rectangularPolygon = new RectangularPolygon(0, imageHeight - height, imageWidth, height);
-            imageProcessingContext.Fill(Color.ParseHex("#134e5e"), rectangularPolygon);
-            imageProcessingContext.DrawText(
-                drawingOptions,
-                siteTitle,
-                font,
-                Color.ParseHex("#c44225"),
-                new PointF(imageWidth - xPadding, imageHeight - fontSize));
+            canvas.DrawText(siteTitle, imageWidth - xPadding, imageHeight - (footerHeight - brandFontSize) / 2f, textPaint);
         }
     }
 }

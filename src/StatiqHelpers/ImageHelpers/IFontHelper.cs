@@ -1,8 +1,8 @@
-﻿using SixLabors.Fonts;
+﻿using SkiaSharp;
 
 namespace StatiqHelpers.ImageHelpers;
 
 public interface IFontHelper
 {
-    FontFamily InstallFont(string fontPath);
+    SKTypeface InstallFont(string fontPath);
 }

@@ -14,15 +14,15 @@ namespace StatiqHelpers.Modules
 
         protected override async Task<IEnumerable<IDocument>> ExecuteInputAsync(IDocument input, IExecutionContext context)
         {
-            const string fontPath = "./input/assets/fonts/Cookie-Regular.ttf";
+            const string fontPath = "./input/assets/fonts/Inter-VariableFont.woff2";
             
             var siteTitle = context.GetSiteTitle();
             var readingTimeData = input.GetReadingTime();
-            var centerText = $"{input.GetTitle().ToUpper()}{Environment.NewLine}";
-
-            centerText += readingTimeData.RoundedMinutes < 1
+            var readingTimeText = readingTimeData.RoundedMinutes < 1
                 ? $"{readingTimeData.Seconds} sec"
                 : $"{readingTimeData.RoundedMinutes} min";
+
+            var centerText = $"{input.GetTitle().ToUpper()}{Environment.NewLine}{readingTimeText}";
 
             var coverImagePath = input.GetCoverImagePath();
 
