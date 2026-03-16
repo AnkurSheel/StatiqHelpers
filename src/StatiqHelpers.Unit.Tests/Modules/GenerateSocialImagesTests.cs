@@ -1,9 +1,13 @@
 ﻿using Moq;
+
 using Statiq.Testing;
+
 using StatiqHelpers.ImageHelpers;
 using StatiqHelpers.Modules;
 using StatiqHelpers.Modules.ReadingTime;
+
 using xUnitHelpers;
+
 using Keys = Statiq.Common.Keys;
 
 namespace StatiqHelpers.Unit.Tests.Modules;
@@ -44,8 +48,10 @@ public class GenerateSocialImagesTests : BaseFixture
         var result = await ExecuteAsync(input, GetTestContext(), _module);
 
         AssertHelper.AssertMultiple(
-            () => _imageService.Verify(x => x.CreateImageDocument(1200, 630, It.IsAny<string?>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()), Times.Once),
-            () => _imageService.Verify(x => x.CreateImageDocument(440, 220, It.IsAny<string?>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()), Times.Once),
+            () => _imageService.Verify(x => x.CreateImageDocument(1200, 630, It.IsAny<string?>(), It.IsAny<string>(), It.IsAny<string>(),
+                It.IsAny<string>(), It.IsAny<string>()), Times.Once),
+            () => _imageService.Verify(x => x.CreateImageDocument(440, 220, It.IsAny<string?>(), It.IsAny<string>(), It.IsAny<string>(),
+                It.IsAny<string>(), It.IsAny<string>()), Times.Once),
             () => _imageService.VerifyNoOtherCalls());
     }
 
@@ -58,16 +64,17 @@ public class GenerateSocialImagesTests : BaseFixture
 
         var result = await ExecuteAsync(input, GetTestContext(), _module);
 
-        var expectedCenterText = $"{filename.ToUpper()}{Environment.NewLine}1 min";
+        var expectedCenterText = filename;
         AssertHelper.AssertMultiple(
             () => _imageService.Verify(
-                x => x.CreateImageDocument(It.IsAny<int>(), It.IsAny<int>(), It.IsAny<string?>(), It.IsAny<string>(), expectedCenterText, It.IsAny<string>()),
+                x => x.CreateImageDocument(It.IsAny<int>(), It.IsAny<int>(), It.IsAny<string?>(), It.IsAny<string>(), expectedCenterText,
+                    "1 min", It.IsAny<string>()),
                 Times.Exactly(2)));
     }
 
     [Theory]
     [MemberData(nameof(ReadingTimeData))]
-    public async Task Center_text_contains_the_reading_time(ReadingTimeData readingTimeData, string expectedCenterText)
+    public async Task Center_text_contains_the_reading_time(ReadingTimeData readingTimeData, string expectedSecondaryText)
     {
         var input = GetTestDocument(readingTimeData: readingTimeData);
 
@@ -75,7 +82,8 @@ public class GenerateSocialImagesTests : BaseFixture
 
         AssertHelper.AssertMultiple(
             () => _imageService.Verify(
-                x => x.CreateImageDocument(It.IsAny<int>(), It.IsAny<int>(), It.IsAny<string?>(), It.IsAny<string>(), expectedCenterText, It.IsAny<string>()),
+                x => x.CreateImageDocument(It.IsAny<int>(), It.IsAny<int>(), It.IsAny<string?>(), It.IsAny<string>(), "Filename",
+                    expectedSecondaryText, It.IsAny<string>()),
                 Times.Exactly(2)));
     }
 
@@ -89,7 +97,8 @@ public class GenerateSocialImagesTests : BaseFixture
 
         AssertHelper.AssertMultiple(
             () => _imageService.Verify(
-                x => x.CreateImageDocument(It.IsAny<int>(), It.IsAny<int>(), It.IsAny<string?>(), siteTitle, It.IsAny<string>(), It.IsAny<string>()),
+                x => x.CreateImageDocument(It.IsAny<int>(), It.IsAny<int>(), It.IsAny<string?>(), siteTitle, It.IsAny<string>(),
+                    It.IsAny<string>(), It.IsAny<string>()),
                 Times.Exactly(2)));
     }
 
@@ -102,7 +111,8 @@ public class GenerateSocialImagesTests : BaseFixture
 
         AssertHelper.AssertMultiple(
             () => _imageService.Verify(
-                x => x.CreateImageDocument(It.IsAny<int>(), It.IsAny<int>(), It.IsAny<string?>(), "", It.IsAny<string>(), It.IsAny<string>()),
+                x => x.CreateImageDocument(It.IsAny<int>(), It.IsAny<int>(), It.IsAny<string?>(), "", It.IsAny<string>(),
+                    It.IsAny<string>(), It.IsAny<string>()),
                 Times.Exactly(2)));
     }
 
@@ -115,7 +125,8 @@ public class GenerateSocialImagesTests : BaseFixture
 
         AssertHelper.AssertMultiple(
             () => _imageService.Verify(
-                x => x.CreateImageDocument(It.IsAny<int>(), It.IsAny<int>(), null, It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()),
+                x => x.CreateImageDocument(It.IsAny<int>(), It.IsAny<int>(), null, It.IsAny<string>(), It.IsAny<string>(),
+                    It.IsAny<string>(), It.IsAny<string>()),
                 Times.Exactly(2)));
     }
 
@@ -129,7 +140,8 @@ public class GenerateSocialImagesTests : BaseFixture
 
         AssertHelper.AssertMultiple(
             () => _imageService.Verify(
-                x => x.CreateImageDocument(It.IsAny<int>(), It.IsAny<int>(), $"/input/folder/slug/{coverImage}", It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()),
+                x => x.CreateImageDocument(It.IsAny<int>(), It.IsAny<int>(), $"/input/folder/slug/{coverImage}", It.IsAny<string>(), It.IsAny<string>(),
+                    It.IsAny<string>(), It.IsAny<string>()),
                 Times.Exactly(2)));
     }
 
@@ -148,6 +160,7 @@ public class GenerateSocialImagesTests : BaseFixture
                     It.IsAny<int>(),
                     It.IsAny<int>(),
                     $"{context.FileSystem.RootPath}/input/{coverImage}",
+                    It.IsAny<string>(),
                     It.IsAny<string>(),
                     It.IsAny<string>(),
                     It.IsAny<string>()),
@@ -192,17 +205,17 @@ public class GenerateSocialImagesTests : BaseFixture
         new object[]
         {
             new ReadingTimeData(0, 10, 0),
-            $"FILENAME{Environment.NewLine}10 sec"
+            "10 sec"
         },
         new object[]
         {
             new ReadingTimeData(5, 10, 0),
-            $"FILENAME{Environment.NewLine}5 min"
+            "5 min"
         },
         new object[]
         {
             new ReadingTimeData(5, 40, 0),
-            $"FILENAME{Environment.NewLine}6 min"
+            "6 min"
         },
     };
 }

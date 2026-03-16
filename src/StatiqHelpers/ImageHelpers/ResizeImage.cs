@@ -1,7 +1,5 @@
 ﻿using System.ComponentModel;
 
-using LibGit2Sharp;
-
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 
@@ -15,15 +13,18 @@ namespace StatiqHelpers.ImageHelpers
         "Resizes the jpegs. Passing zero for one of height or width within the resize options will automatically preserve the aspect ratio of the original image or the nearest possible ratio")]
     public class ResizeImage : EngineCommand<ResizeImageSettings>
     {
+        private readonly IGitService _gitService;
         private IImageService? _imageService;
 
         public ResizeImage(
+            IGitService gitService,
             IConfiguratorCollection configurators,
             Settings settings,
             IServiceCollection serviceCollection,
             IFileSystem fileSystem,
             Bootstrapper bootstrapper) : base(configurators, settings, serviceCollection, fileSystem, bootstrapper)
         {
+            _gitService = gitService;
         }
 
         protected override async Task<int> ExecuteEngineAsync(CommandContext commandContext, ResizeImageSettings commandSettings, IEngineManager engineManager)
@@ -50,16 +51,15 @@ namespace StatiqHelpers.ImageHelpers
             if (onlyCheckedOutFiles)
             {
                 var rootPath = fileSystem.RootPath.Parent.Parent.FullPath;
-                using var repo = new Repository(rootPath);
-                var status = repo.RetrieveStatus();
+                var modifiedFiles = _gitService.GetModifiedFiles(rootPath);
 
-                var modifiedImages = status.Where(
+                var modifiedImages = modifiedFiles.Where(
                         x =>
                         {
-                            var extension = Path.GetExtension((string?) x.FilePath);
-                            return extension is ".jpg" or ".jpeg" or ".png" && x.State != FileStatus.Ignored;
+                            var extension = Path.GetExtension(x);
+                            return extension is ".jpg" or ".jpeg" or ".png";
                         })
-                    .Select(x => new NormalizedPath(Path.Combine(rootPath, x.FilePath)))
+                    .Select(x => new NormalizedPath(Path.Combine(rootPath, x)))
                     .ToList();
 
                 images = images.Where(x => modifiedImages.Contains(x)).ToList();

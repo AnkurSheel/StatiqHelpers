@@ -8,6 +8,7 @@
             string? coverImagePath,
             string siteTitle,
             string centerText,
+            string secondaryText,
             string fontPath
         );
 
