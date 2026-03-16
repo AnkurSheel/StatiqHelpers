@@ -1166,6 +1166,14 @@
           "SkiaSharp.NativeAssets.macOS": "2.88.9"
         }
       },
+      "SkiaSharp.NativeAssets.Linux.NoDependencies": {
+        "type": "Transitive",
+        "resolved": "2.88.9",
+        "contentHash": "ZA9syMvIuoqxPhyFTgde/bNV6VMdeYT9gRdNQT5O+ZjPK+a/nVkKRrqBbn7EVA7XQiW+xIycyT4gW/sea9eh+w==",
+        "dependencies": {
+          "SkiaSharp": "2.88.9"
+        }
+      },
       "SkiaSharp.NativeAssets.macOS": {
         "type": "Transitive",
         "resolved": "2.88.9",
@@ -2573,6 +2581,7 @@
           "ByteSize": "[2.1.0, )",
           "LibGit2Sharp": "[0.26.2, )",
           "SkiaSharp": "[2.88.9, )",
+          "SkiaSharp.NativeAssets.Linux.NoDependencies": "[2.88.9, )",
           "Statiq.Web": "[1.0.0-beta.59, )"
         }
       }
