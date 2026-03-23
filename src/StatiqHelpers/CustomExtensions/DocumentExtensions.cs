@@ -1,8 +1,10 @@
 ﻿using System.Text.RegularExpressions;
+
 using StatiqHelpers.Models;
 using StatiqHelpers.Modules.ReadingTime;
 using StatiqHelpers.Modules.RelatedPosts;
 using StatiqHelpers.Pipelines;
+
 using Keys = StatiqHelpers.Modules.ReadingTime.Keys;
 
 namespace StatiqHelpers.CustomExtensions;
@@ -82,6 +84,11 @@ public static class DocumentExtensions
         return !string.IsNullOrWhiteSpace(slug)
             ? IExecutionContext.Current.GetLink($"{Constants.SocialImagesDirectory}/{slug}-twitter.png", true)
             : null;
+    }
+
+    public static IReadOnlyList<TocEntry> GetTableOfContents(this IDocument document)
+    {
+        return document.GetList<TocEntry>(Modules.TableOfContents.Keys.TableOfContents);
     }
 
     public static PageModel AsPagesModel(this IDocument document, IExecutionContext context,
