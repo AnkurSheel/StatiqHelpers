@@ -16,27 +16,26 @@
 
         public static readonly string[] StopWords =
         {
-            "how",
-            "to",
             "a",
-            "from",
-            "I",
+            "an",
             "and",
+            "as",
+            "from",
+            "how",
+            "I",
+            "in",
+            "is",
+            "my",
+            "of",
+            "or",
+            "own",
+            "the",
+            "to",
+            "using",
             "why",
             "with",
-            "of",
-            "the",
-            "is",
-            "in",
-            "an",
-            "my",
-            "or",
-            "as",
             "within",
-            "using",
             "your",
-            "own",
-            "and"
         };
     }
 }
