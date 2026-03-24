@@ -33,7 +33,10 @@
             "or",
             "as",
             "within",
-            "using"
+            "using",
+            "your",
+            "own",
+            "and"
         };
     }
 }
