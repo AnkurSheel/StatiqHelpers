@@ -1,10 +1,12 @@
 ﻿using Statiq.Markdown;
 using Statiq.Razor;
 using Statiq.Yaml;
+
 using StatiqHelpers.CustomExtensions;
 using StatiqHelpers.Modules;
 using StatiqHelpers.Modules.ReadingTime;
 using StatiqHelpers.Modules.RelatedPosts;
+using StatiqHelpers.Modules.TableOfContents;
 
 namespace StatiqHelpers.Pipelines;
 
@@ -28,6 +30,7 @@ public class PostPipeline : Pipeline
                 new ReplaceImageLinks(Constants.PostImagesDirectory),
                 new GenerateReadingTime(readingTimeService),
                 new ProcessShortcodes(),
+                new GenerateTableOfContents(),
                 new RenderMarkdown().UseExtensions(),
                 new OptimizeSlug(),
                 new SetDestination(

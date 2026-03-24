@@ -7,6 +7,7 @@
   ReplaceImageLinks,
   GenerateReadingTime,
   ProcessShortcodes,
+  GenerateTableOfContents,
   RenderMarkdown,
   OptimizeSlug,
   SetDestination
