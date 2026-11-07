@@ -45,7 +45,7 @@ namespace StatiqHelpers.Modules
 
             var facebookDoc = context.CreateDocument(
                 input.Source,
-                $"./{Constants.SocialImagesDirectory}/{input.Destination.FileNameWithoutExtension}-facebook.png",
+                $"./{Constants.SocialImagesDirectory}/{input.Destination.FileNameWithoutExtension}-facebook.jpg",
                 context.GetContentProvider(stream));
 
             stream = await _imageService.CreateImageDocument(
@@ -59,7 +59,7 @@ namespace StatiqHelpers.Modules
 
             var twitterDoc = context.CreateDocument(
                 input.Source,
-                $"./{Constants.SocialImagesDirectory}/{input.Destination.FileNameWithoutExtension}-twitter.png",
+                $"./{Constants.SocialImagesDirectory}/{input.Destination.FileNameWithoutExtension}-twitter.jpg",
                 context.GetContentProvider(stream));
 
             return new[]

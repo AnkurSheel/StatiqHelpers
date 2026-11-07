@@ -35,7 +35,7 @@ namespace StatiqHelpers.ImageHelpers
             var message = commandSettings.AllFiles
                 ? "all files"
                 : "checked out files";
-            engineManager.Engine.Logger.Log(LogLevel.Information, "Beginning resizing of images on {message} : {count}", message, images.Count);
+            engineManager.Engine.Logger.Log(LogLevel.Information, "Beginning resizing of images on {message} : {count} : {increase}", message, images.Count, commandSettings.IncreaseImageSizes);
 
             await _imageService.ResizeImages(images, commandSettings.Width, commandSettings.Height, commandSettings.IncreaseImageSizes);
 
@@ -48,7 +48,7 @@ namespace StatiqHelpers.ImageHelpers
             IGitService gitService
         )
         {
-            var images = fileSystem.GetInputFiles("**/*.{jpg,jpeg,png}").Select(x => x.Path).ToList();
+            var images = fileSystem.GetInputFiles("**/*.{jpg,jpeg,png,webp}").Select(x => x.Path).ToList();
 
             if (onlyCheckedOutFiles)
             {
@@ -59,7 +59,7 @@ namespace StatiqHelpers.ImageHelpers
                         x =>
                         {
                             var extension = Path.GetExtension(x);
-                            return extension is ".jpg" or ".jpeg" or ".png";
+                            return extension is ".jpg" or ".jpeg" or ".png" or ".webp";
                         })
                     .Select(x => new NormalizedPath(Path.Combine(rootPath, x)))
                     .ToList();

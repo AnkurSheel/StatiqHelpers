@@ -34,8 +34,8 @@ public class GenerateSocialImagesTests : BaseFixture
         AssertHelper.AssertUnorderedCollection(
             new[]
             {
-                "assets/images/social/FileName-facebook.png",
-                "assets/images/social/FileName-twitter.png",
+                "assets/images/social/FileName-facebook.jpg",
+                "assets/images/social/FileName-twitter.jpg"
             },
             result.Select(x => x.Destination.ToString()).ToList());
     }
