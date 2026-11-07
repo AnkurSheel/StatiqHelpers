@@ -17,7 +17,7 @@ public class ImageProcessingService : IImageProcessingService
     {
         var output = new MemoryStream();
         using var image = surface.Snapshot();
-        using var data = image.Encode(SKEncodedImageFormat.Png, 100);
+        using var data = image.Encode(SKEncodedImageFormat.Jpeg, 85);
         data.SaveTo(output);
         output.Seek(0, SeekOrigin.Begin);
         return await Task.FromResult(output);
@@ -47,20 +47,80 @@ public class ImageProcessingService : IImageProcessingService
                     continue;
                 }
 
-                if (!increaseImageSizes && bitmap.Width <= newWidth && (newHeight == 0 || bitmap.Height <= newHeight))
+                var targetWidth = newWidth;
+                var targetHeight = newHeight;
+
+                if (targetWidth == 0 && targetHeight == 0)
+                {
+                    targetWidth = bitmap.Width;
+                    targetHeight = bitmap.Height;
+                }
+                else if (targetWidth == 0)
+                {
+                    targetWidth = (int)(bitmap.Width * (float)targetHeight / bitmap.Height);
+                }
+                else if (targetHeight == 0)
+                {
+                    targetHeight = (int)(bitmap.Height * (float)targetWidth / bitmap.Width);
+                }
+
+                if (!increaseImageSizes && bitmap.Width < targetWidth && bitmap.Height < targetHeight)
                 {
                     continue;
                 }
 
-                using var resized = new SKBitmap(
-                    newWidth,
-                    newHeight == 0 ? (int)(bitmap.Height * (float)newWidth / bitmap.Width) : newHeight);
+                var oldWidth = bitmap.Width;
+                var oldHeight = bitmap.Height;
+                var fileInfo = new FileInfo(path);
+                var oldSize = fileInfo.Length;
+
+                using var resized = new SKBitmap(targetWidth, targetHeight);
                 bitmap.ScalePixels(resized, SKFilterQuality.High);
                 using var image = SKImage.FromBitmap(resized);
-                using var data = image.Encode(SKEncodedImageFormat.Png, 100);
-                await using var stream = File.OpenWrite(path);
-                stream.SetLength(0);
-                data.SaveTo(stream);
+                if (image == null)
+                {
+                    continue;
+                }
+
+                var extension = Path.GetExtension(path).ToLowerInvariant();
+                var targetExtension = extension switch
+                {
+                    ".jpg" or ".jpeg" => ".jpg",
+                    _ => ".webp"
+                };
+                var (format, quality) = targetExtension switch
+                {
+                    ".jpg" => (SKEncodedImageFormat.Jpeg, 80),
+                    _ => (SKEncodedImageFormat.Webp, 80)
+                };
+
+                var targetPath = Path.ChangeExtension(path, targetExtension);
+
+                using var data = image.Encode(format, quality);
+                await using (var stream = File.OpenWrite(targetPath))
+                {
+                    stream.SetLength(0);
+                    data.SaveTo(stream);
+                }
+
+                if (!string.Equals(path, targetPath, StringComparison.OrdinalIgnoreCase))
+                {
+                    File.Delete(path);
+                }
+
+                var targetFileInfo = new FileInfo(targetPath);
+                var newSize = targetFileInfo.Length;
+
+                _logger.LogInformation(
+                    "Resized {Path}: dimensions {OldWidth}x{OldHeight} -> {NewWidth}x{NewHeight}, size on disk {OldSize} -> {NewSize}",
+                    targetPath,
+                    oldWidth,
+                    oldHeight,
+                    targetWidth,
+                    targetHeight,
+                    oldSize,
+                    newSize
+                );
             }
             catch (Exception e)
             {

@@ -1,5 +1,7 @@
 ﻿using Microsoft.Extensions.Logging;
+
 using Statiq.Feeds;
+
 using StatiqHelpers.CustomExtensions;
 
 namespace StatiqHelpers.Modules
@@ -30,7 +32,7 @@ namespace StatiqHelpers.Modules
             {
                 return coverImagePath.StartsWith(Constants.ImagesDirectory)
                     ? coverImagePath
-                    : $"/{Constants.SocialImagesDirectory}/{document.GetSlug()}-facebook.png";
+                    : $"/{Constants.SocialImagesDirectory}/{document.GetSlug()}-facebook.jpg";
             }
 
             return null;

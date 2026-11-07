@@ -74,7 +74,7 @@ public static class DocumentExtensions
     {
         var slug = document.GetSlug();
         return !string.IsNullOrWhiteSpace(slug)
-            ? IExecutionContext.Current.GetLink($"{Constants.SocialImagesDirectory}/{slug}-facebook.png", true)
+            ? IExecutionContext.Current.GetLink($"{Constants.SocialImagesDirectory}/{slug}-facebook.jpg", true)
             : null;
     }
 
@@ -82,7 +82,7 @@ public static class DocumentExtensions
     {
         var slug = document.GetSlug();
         return !string.IsNullOrWhiteSpace(slug)
-            ? IExecutionContext.Current.GetLink($"{Constants.SocialImagesDirectory}/{slug}-twitter.png", true)
+            ? IExecutionContext.Current.GetLink($"{Constants.SocialImagesDirectory}/{slug}-twitter.jpg", true)
             : null;
     }
 

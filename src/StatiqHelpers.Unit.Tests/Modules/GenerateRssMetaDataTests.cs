@@ -1,6 +1,8 @@
 ﻿using Statiq.Feeds;
 using Statiq.Testing;
+
 using StatiqHelpers.Modules;
+
 using xUnitHelpers;
 
 namespace StatiqHelpers.Unit.Tests.Modules
@@ -44,7 +46,7 @@ namespace StatiqHelpers.Unit.Tests.Modules
 
             var result = await ExecuteAsync(_input, _module).SingleAsync();
 
-            AssertProperties(result, $"/assets/images/social/{Slug}-facebook.png");
+            AssertProperties(result, $"/assets/images/social/{Slug}-facebook.jpg");
         }
 
         [Fact]
